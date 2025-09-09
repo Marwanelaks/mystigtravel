@@ -117,10 +117,7 @@ export enum TravelerType {
 }
 // Traveler Interfaces
 export interface Traveler {
-  fullName: string;
-  age: number;
-  gender: Gender;
-  type: TravelerType;
+  age?: number;
 }
 
 export interface MainTraveler {
@@ -134,6 +131,8 @@ export interface ClientInfo {
   mainTraveler: MainTraveler;
   travelers: Traveler[];
   tripPeriod: number;
+  tripStartDate: string; // Ajouté
+  tripEndDate: string;   // Ajouté
 }
 
 export interface CitySelection {

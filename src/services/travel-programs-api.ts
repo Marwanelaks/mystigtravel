@@ -55,7 +55,7 @@ export const transportsAPI = {
 // Activities API
 export const activitiesAPI = {
   getAll: async (cityId?: string) => cityId
-    ? apiRequest(`/activities?cityId=${cityId}`)
+    ? apiRequest(`/activities/city/${cityId}`)
     : apiRequest('/activities'),
   getById: async (id: string) => apiRequest(`/activities/${id}`),
   create: async (data: Partial<Activity>) => apiRequest('/activities', {
@@ -185,6 +185,20 @@ export const demandsAPI = {
       },
     }),
 
+  updateBenefitPercentage: async (demandId: string, benefitPercentage: number): Promise<Demand> =>
+    apiRequest(`/demands/${demandId}/benefit-percentage`, {
+      method: 'PATCH',
+      body: JSON.stringify(benefitPercentage),
+      headers: { 'Content-Type': 'application/json' },
+    }),
+
+  updateTaxPercentage: async (demandId: string, taxPercentage: number): Promise<Demand> =>
+    apiRequest(`/demands/${demandId}/tax-percentage`, {
+      method: 'PATCH',
+      body: JSON.stringify(taxPercentage),
+      headers: { 'Content-Type': 'application/json' },
+    }),
+
   // Frontend-only percentage management (no API calls needed)
   // benefitPercentage and taxPercentage are now managed in frontend state
 
@@ -209,7 +223,7 @@ export const demandsAPI = {
         'Content-Type': 'application/json',
       },
     }),
-  };
+};
 
 // Special Packages API (Plan B)
 export const packagesAPI = {
