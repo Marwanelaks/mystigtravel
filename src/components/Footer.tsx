@@ -100,7 +100,7 @@ const Footer = () => {
 
         {/* Bottom Bar */}
         <div className="border-t border-border/20 mt-12 pt-8 flex flex-col md:flex-row justify-between items-center text-sm text-muted-foreground">
-          <p>© 2024 MysticTravel. All rights reserved.</p>
+          <p>© 2025 MysticTravel. All rights reserved.</p>
           <div className="flex space-x-6 mt-4 md:mt-0">
             <a href="#" className="hover:text-primary transition-colors duration-300">
               Privacy Policy
