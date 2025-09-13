@@ -97,14 +97,14 @@ export const demandsAPI = {
   }),
   
   // Step 1: Client creates demand with basic information
-  createClientDemand: async (clientInfo: ClientInfo, cities: DemandCity[], comment?: string): Promise<Demand> => 
+  createClientDemand: async (clientInfo: ClientInfo, cities: DemandCity[], comment?: string,  hotelStars?: string[]): Promise<Demand> => 
     apiRequest('/demands/client', {
       method: 'POST',
-      body: JSON.stringify({ clientInfo, cities, comment }),
+      body: JSON.stringify({ clientInfo, cities, comment, hotelStars }),
       headers: {
         'Content-Type': 'application/json',
       },
-    }),
+  }),
 
   update: async (id: string, data: Partial<Demand>): Promise<Demand> => apiRequest(`/demands/${id}`, {
     method: 'PUT',

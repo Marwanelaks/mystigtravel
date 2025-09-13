@@ -18,6 +18,9 @@ interface DisplayDemand extends Demand {
   phone: string;
   travelers: number;
   periodDays: number;
+  durationType?: string; // NEW: Add durationType
+  flexibleMonth?: string; // NEW: Add flexibleMonth
+  hotelStars?: string[]; // NEW: Add hotelStars
 }
 
 const Demands = () => {
@@ -59,7 +62,10 @@ const Demands = () => {
       email: demand.clientInfo?.mainTraveler?.email || 'N/A',
       phone: demand.clientInfo?.mainTraveler?.phone || 'N/A',
       travelers: demand.clientInfo?.travelers?.length || 0,
-      periodDays: demand.clientInfo?.tripPeriod || 0
+      periodDays: demand.clientInfo?.tripPeriod || 0,
+      durationType: demand.clientInfo?.durationType, // NEW: Add durationType
+      flexibleMonth: demand.clientInfo?.flexibleMonth, // NEW: Add flexibleMonth
+      hotelStars: demand?.hotelStars // NEW: Add hotelStars (check both locations)
     };
   };
 
@@ -448,133 +454,129 @@ const handleTaxPercentageChange = async (demandId: string, value: number) => {
     setGeneratingPdf(demand.id);
     try {
       const doc = new jsPDF();
-      
+
       // Header
-      doc.setFontSize(22);
-      doc.setTextColor(40, 103, 160);
-      doc.text('VOYAGE MAROC', 105, 25, { align: 'center' });
-      
+      doc.setFontSize(24);
+      doc.setTextColor(44, 62, 80);
+      doc.text('MyticTravel', 105, 25, { align: 'center' });
+
       doc.setFontSize(12);
       doc.setTextColor(100, 100, 100);
       doc.text('Votre partenaire de voyage au Maroc', 105, 32, { align: 'center' });
-      
+
       doc.setFontSize(10);
-      doc.text('123 Avenue Mohammed V, Casablanca, Maroc', 105, 40, { align: 'center' });
-      doc.text('Tél: +212 5 22 123 456 | Email: contact@voyagemaroc.ma', 105, 45, { align: 'center' });
-      
+      doc.setTextColor(80, 80, 80);
+      doc.text('Residence Emeraude, Building 6, Floor 1, Office 3', 105, 40, { align: 'center' });
+      doc.text('Wlah Hlal Hssain, Sala Al Jadida, Morocco', 105, 45, { align: 'center' });
+
+      // Decorative line
+      doc.setDrawColor(44, 62, 80);
+      doc.setLineWidth(0.8);
+      doc.line(20, 50, 190, 50);
+
       // Title
-      doc.setFontSize(16);
-      doc.setTextColor(40, 40, 40);
-      doc.text('DEVIS', 105, 60, { align: 'center' });
-      
+      doc.setFontSize(18);
+      doc.setTextColor(44, 62, 80);
+      doc.text('DEVIS VOYAGE', 105, 60, { align: 'center' });
+
       // Details
-      doc.setFontSize(10);
+      doc.setFontSize(11);
       doc.setTextColor(80, 80, 80);
       doc.text(`Devis N°: ${demand.id?.slice(0, 8).toUpperCase() || 'N/A'}`, 20, 70);
       doc.text(`Date: ${new Date().toLocaleDateString('fr-FR')}`, 20, 75);
-      
+
       // Client info
-      doc.setFontSize(12);
-      doc.setTextColor(40, 40, 40);
+      doc.setFontSize(13);
+      doc.setTextColor(44, 62, 80);
       doc.text('CLIENT:', 20, 85);
-      
-      doc.setFontSize(10);
+
+      doc.setFontSize(11);
       doc.setTextColor(80, 80, 80);
       doc.text(`${demand?.fullName}`, 20, 92);
       doc.text(`${demand?.email}`, 20, 97);
       if (demand?.phone) doc.text(`${demand?.phone}`, 20, 102);
-      
+
       // Trip details
-      doc.setFontSize(12);
-      doc.setTextColor(40, 40, 40);
+      doc.setFontSize(13);
+      doc.setTextColor(44, 62, 80);
       doc.text('DÉTAILS DU VOYAGE:', 20, 115);
-      
-      doc.setFontSize(10);
+
+      doc.setFontSize(11);
       doc.setTextColor(80, 80, 80);
       doc.text(`Nombre de voyageurs: ${demand.travelers}`, 20, 122);
       doc.text(`Période: ${demand.periodDays} nuitées`, 20, 127);
-      
+
       if (demand.comment) {
         doc.text(`Commentaire: ${demand.comment}`, 20, 132);
       }
-      
-      // Table
-      const tableColumn = ["Destination", "Nuitées", "Voyageurs", "Hébergement", "Expériences", "Montant"];
+
+      // Table: Only show destination, nuitées, voyageurs, hébergement, expériences (no prices)
+      const tableColumn = ["Destination", "Nuitées", "Voyageurs", "Hébergement", "Expériences"];
       const tableRows: any[] = [];
-      
+
       demand.cities?.forEach((city: any) => {
         const cityName = city.city.name;
         const nights = city.durationDays;
         const travelers = demand.travelers;
-        
         const hotelInfo = city.selectedHotel 
           ? `${city.selectedHotel.name} (${city.roomSelections?.map((rs: any) => `${rs.count} ${getRoomTypeLabel(rs.roomType)}`).join(', ') || 'N/A'})` 
           : '-';
-        
         const activitiesList = city.activities?.map((a: any) => a.name).join(', ') || '-';
-        const amount = `${calcCityPrice(city)} MAD`;
-        
-        tableRows.push([cityName, nights, travelers, hotelInfo, activitiesList, amount]);
+        tableRows.push([cityName, nights, travelers, hotelInfo, activitiesList]);
       });
-      
-      // Transport row
-      if (demand.selectedTransport) {
-        const transportAmount = calcTransportPrice(demand);
-        tableRows.push(['Transport général', demand.periodDays, demand.travelers, demand.selectedTransport.type, '-', `${transportAmount} MAD`]);
-      }
-      
-      // Global services row
-      if (demand.globalServices && demand.globalServices.length > 0) {
-        const globalServicesList = demand.globalServices.map((gs: any) => `${gs.service.type} (x${gs.quantity})`).join(', ');
-        const globalServicesAmount = `${calcGlobalServicesPrice(demand)} MAD`;
-        tableRows.push(['Services généraux', '-', '-', globalServicesList, '-', globalServicesAmount]);
-      }
-      
-      // Benefit row
-      const basePrice = calcBasePrice(demand);
-      const benefitAmount = basePrice * (benefitPercentage / 100);
-      if (benefitPercentage > 0) {
-        tableRows.push(['Bénéfice', '-', '-', '-', '-', `${benefitAmount.toFixed(2)} MAD`]);
-      }
-      
-      // Tax row
-      const taxAmount = basePrice * (taxPercentage / 100);
-      tableRows.push(['Taxes', '-', '-', '-', '-', `${taxAmount.toFixed(2)} MAD`]);
-      
-      // Total row
-      tableRows.push(['COÛT DE REVIENS GLOBAL', '-', '-', '-', '-', `${calcTotalPrice(demand).toFixed(2)} MAD`]);
-      
-      // Price per traveler
-      tableRows.push(['Coût par voyageur', '-', '-', '-', '-', `${calcPricePerTraveler(demand).toFixed(2)} MAD`]);
-      
-      // Generate table
+
       autoTable(doc, {
         head: [tableColumn],
         body: tableRows,
         startY: demand.comment ? 140 : 135,
-        theme: 'striped',
+        theme: 'grid',
         headStyles: {
-          fillColor: [40, 103, 160],
+          fillColor: [44, 62, 80],
           textColor: 255,
           fontStyle: 'bold'
         },
         alternateRowStyles: {
-          fillColor: [240, 240, 240]
+          fillColor: [245, 245, 245]
+        },
+        styles: {
+          fontSize: 10,
+          cellPadding: 2,
         }
       });
-      
+
+      // Decorative line before price
+      doc.setDrawColor(44, 62, 80);
+      doc.setLineWidth(0.5);
+      doc.line(20, doc.lastAutoTable.finalY + 8, 190, doc.lastAutoTable.finalY + 8);
+
+      // Global price
+      doc.setFontSize(15);
+      doc.setTextColor(39, 174, 96);
+      doc.text('Coût de revient global:', 20, doc.lastAutoTable.finalY + 18);
+      doc.setFontSize(15);
+      doc.setTextColor(44, 62, 80);
+      doc.text(`${calcTotalPrice(demand).toFixed(2)} MAD`, 105, doc.lastAutoTable.finalY + 18, { align: 'center' });
+
+      // Price per traveler
+      doc.setFontSize(12);
+      doc.setTextColor(44, 62, 80);
+      doc.text('Coût par voyageur:', 20, doc.lastAutoTable.finalY + 28);
+      doc.setFontSize(12);
+      doc.setTextColor(52, 152, 219);
+      doc.text(`${calcPricePerTraveler(demand).toFixed(2)} MAD`, 105, doc.lastAutoTable.finalY + 28, { align: 'center' });
+
       // Footer
       const pageCount = doc.getNumberOfPages();
       for (let i = 1; i <= pageCount; i++) {
         doc.setPage(i);
-        doc.setFontSize(8);
+        doc.setFontSize(9);
         doc.setTextColor(100, 100, 100);
-        doc.text('Merci pour votre confiance!', 105, doc.internal.pageSize.height - 10, { align: 'center' });
+        doc.text('Merci pour votre confiance !', 105, doc.internal.pageSize.height - 10, { align: 'center' });
       }
-      
+
       // Save
       doc.save(`Devis-${demand?.fullName.replace(/\s+/g, '-')}-${demand.id?.slice(0, 8) || 'N/A'}.pdf`);
-      
+
     } catch (err) {
       setError('Erreur lors de la génération du devis');
       console.error('PDF generation error:', err);
@@ -688,6 +690,28 @@ const handleTaxPercentageChange = async (demandId: string, value: number) => {
                             <Calendar className="w-4 h-4 mr-2 text-blue-500" />
                             {demand.periodDays} nuitées
                           </div>
+                        {/* NEW: Duration Type */}
+                          <div className="flex items-center">
+                            <Calendar className="w-4 h-4 mr-2 text-blue-500" />
+                            {demand.durationType === 'FLEXIBLE' ? 'Dates flexibles' : 'Dates spécifiques'}
+                          </div>
+                          {/* NEW: Flexible Month (if applicable) */}
+                          {demand.durationType === 'FLEXIBLE' && demand.flexibleMonth && (
+                            <div className="flex items-center">
+                              <Calendar className="w-4 h-4 mr-2 text-blue-500" />
+                              Mois: {demand.flexibleMonth}
+                            </div>
+                          )}
+                          {/* NEW: Hotel Stars */}
+                          {demand.hotelStars && demand.hotelStars.length > 0 && (
+                            <div className="flex items-center">
+                              <Star className="w-4 h-4 mr-2 text-yellow-500" />
+                              {demand.hotelStars.map(star => {
+                                const starLabel = star === '4' ? '4★' : star === '5' ? '5★' : '5★ Deluxe';
+                                return starLabel;
+                              }).join(', ')}
+                            </div>
+                          )}
                         </div>
                         
                         {demand.comment && (

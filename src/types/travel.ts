@@ -133,6 +133,8 @@ export interface ClientInfo {
   tripPeriod: number;
   tripStartDate: string; // Ajouté
   tripEndDate: string;   // Ajouté
+  durationType: 'flexible' | 'specific'; // NEW: Add duration type
+  flexibleMonth?: string; // NEW: For flexible duration
 }
 
 export interface CitySelection {
@@ -154,6 +156,7 @@ export interface ClientDemand {
   createdAt: string;
   updatedAt: string;
   comment?: string;
+  hotelStars?: string[];
 }
 
 // Demand City (Admin completion)
@@ -183,6 +186,7 @@ export interface Demand {
   totalPrice: number;
   cities: DemandCity[];
   comment?: string;
+  hotelStars?: string[];
   globalServices?: {
     service: ServiceOffering;
     quantity: number;

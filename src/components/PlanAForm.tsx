@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import {
   User, Mail, Phone, Baby, Plus, Minus, X, CheckCircle, AlertCircle,
-  MapPin, Star, DollarSign
+  MapPin, Star, DollarSign, Calendar
 } from 'lucide-react';
 import PhoneInput from 'react-phone-input-2';
 import 'react-phone-input-2/lib/style.css';
@@ -31,6 +31,29 @@ interface CitySelectionForm {
   activityIds: string[];
 }
 
+// Hotel star options
+const HOTEL_STAR_OPTIONS = [
+  { value: '4', label: '4 Stars' },
+  { value: '5', label: '5 Stars' },
+  { value: '5_deluxe', label: '5 Stars Deluxe' }
+];
+
+// Month options for flexible duration
+const MONTH_OPTIONS = [
+  { value: 'january', label: 'January' },
+  { value: 'february', label: 'February' },
+  { value: 'march', label: 'March' },
+  { value: 'april', label: 'April' },
+  { value: 'may', label: 'May' },
+  { value: 'june', label: 'June' },
+  { value: 'july', label: 'July' },
+  { value: 'august', label: 'August' },
+  { value: 'september', label: 'September' },
+  { value: 'october', label: 'October' },
+  { value: 'november', label: 'November' },
+  { value: 'december', label: 'December' }
+];
+
 const PlanAForm = ({ isOpen, onClose }: PlanAFormProps) => {
   const [currentStep, setCurrentStep] = useState(1);
   const [cities, setCities] = useState<City[]>([]);
@@ -53,7 +76,10 @@ const PlanAForm = ({ isOpen, onClose }: PlanAFormProps) => {
     citySelections: {} as { [cityId: string]: CitySelectionForm },
     comment: '',
     tripStartDate: '',
-    tripEndDate: ''
+    tripEndDate: '',
+    durationType: 'specific' as 'flexible' | 'specific',
+    flexibleMonth: '',
+    hotelStars: [] as string[]
   });
 
   useEffect(() => {
@@ -241,25 +267,35 @@ const PlanAForm = ({ isOpen, onClose }: PlanAFormProps) => {
     }
   };
 
+  const handleHotelStarChange = (starValue: string, checked: boolean) => {
+    setFormData(prev => {
+      const hotelStars = checked
+        ? [...prev.hotelStars, starValue]
+        : prev.hotelStars.filter(star => star !== starValue);
+      return { ...prev, hotelStars };
+    });
+  };
+
   const isStep1Valid = (): boolean => {
-    if (!formData.mainTraveler.fullName || !formData.mainTraveler.email || !formData.mainTraveler.phone) {
-      return false;
-    }
-    if (phoneError) {
-      return false;
-    }
+    const hasEmail = !!formData.mainTraveler.email;
+    const hasPhone = !!formData.mainTraveler.phone;
+    if (!formData.mainTraveler.fullName) return false;
+    if (!hasEmail && !hasPhone) return false; // At least one required
+    if (phoneError && hasPhone) return false;
+    if (formData.durationType === 'specific' && (!formData.tripStartDate || !formData.tripEndDate)) return false;
+    if (formData.durationType === 'flexible' && !formData.flexibleMonth) return false;
     return formData.childAges.every(age => age > 0);
   };
 
   const isStep2Valid = (): boolean => {
-    if (!formData.tripStartDate || !formData.tripEndDate) return false;
+    if (formData.durationType === 'specific') {
+      if (!formData.tripStartDate || !formData.tripEndDate) return false;
+    }
     return formData.selectedCities.length > 0 &&
       Object.values(formData.citySelections).every(selection =>
         selection.startDate &&
         selection.endDate &&
-        selection.duration > 0 &&
-        selection.startDate >= formData.tripStartDate &&
-        selection.endDate <= formData.tripEndDate
+        selection.duration > 0
       ) &&
       !dateError;
   };
@@ -281,7 +317,9 @@ const PlanAForm = ({ isOpen, onClose }: PlanAFormProps) => {
         travelers,
         tripPeriod: calculateTripPeriod(),
         tripStartDate: formData.tripStartDate,
-        tripEndDate: formData.tripEndDate
+        tripEndDate: formData.tripEndDate,
+        durationType: formData.durationType,
+        flexibleMonth: formData.flexibleMonth
       };
       const demandCities: DemandCity[] = formData.selectedCities.map(cityId => {
         const selection = formData.citySelections[cityId];
@@ -301,7 +339,8 @@ const PlanAForm = ({ isOpen, onClose }: PlanAFormProps) => {
       await demandsAPI.createClientDemand(
         clientInfo,
         demandCities,
-        formData.comment
+        formData.comment,
+        formData.hotelStars
       );
       setFormData({
         mainTraveler: { fullName: '', email: '', phone: '' },
@@ -312,7 +351,10 @@ const PlanAForm = ({ isOpen, onClose }: PlanAFormProps) => {
         citySelections: {},
         comment: '',
         tripStartDate: '',
-        tripEndDate: ''
+        tripEndDate: '',
+        durationType: 'specific',
+        flexibleMonth: '',
+        hotelStars: []
       });
       setCurrentStep(1);
       setDateError(null);
@@ -336,6 +378,19 @@ const PlanAForm = ({ isOpen, onClose }: PlanAFormProps) => {
 
   const prevStep = () => {
     setCurrentStep(prev => prev - 1);
+  };
+
+  const getMonthBoundaries = (monthValue: string): { min: string; max: string } => {
+    if (!monthValue) return { min: '', max: '' };
+    const year = new Date().getFullYear();
+    const monthIndex = MONTH_OPTIONS.findIndex(m => m.value === monthValue);
+    if (monthIndex === -1) return { min: '', max: '' };
+    const firstDay = new Date(year, monthIndex, 1);
+    const lastDay = new Date(year, monthIndex + 1, 0);
+    return {
+      min: firstDay.toISOString().slice(0, 10),
+      max: lastDay.toISOString().slice(0, 10)
+    };
   };
 
   if (!isOpen) return null;
@@ -382,7 +437,7 @@ const PlanAForm = ({ isOpen, onClose }: PlanAFormProps) => {
               <div className="bg-blue-50 rounded-xl p-6 border border-blue-200">
                 <h4 className="font-bold text-gray-800 mb-4 flex items-center">
                   <User className="w-5 h-5 mr-2 text-blue-500" />
-                  Main Traveler (Contact)
+                  Contact
                 </h4>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
@@ -401,34 +456,32 @@ const PlanAForm = ({ isOpen, onClose }: PlanAFormProps) => {
                   <div>
                     <label className="block text-sm font-semibold text-gray-700 mb-2">Email *</label>
                     <input
-                      type="email"
-                      value={formData.mainTraveler.email}
-                      onChange={(e) => setFormData(prev => ({
-                        ...prev,
-                        mainTraveler: { ...prev.mainTraveler, email: e.target.value }
-                      }))}
-                      className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-blue-500 focus:outline-none"
-                      required
-                    />
+                        type="email"
+                        value={formData.mainTraveler.email}
+                        onChange={(e) => setFormData(prev => ({
+                          ...prev,
+                          mainTraveler: { ...prev.mainTraveler, email: e.target.value }
+                        }))}
+                        className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-blue-500 focus:outline-none"
+                      />
                   </div>
                   <div>
                     <label className="block text-sm font-semibold text-gray-700 mb-2">Phone *</label>
                     <PhoneInput
                       country={'ma'}
-                      preferredCountries={['ma', 'fr', 'es', 'us']}
-                      value={formData.mainTraveler.phone}
-                      onChange={handlePhoneChange}
-                      inputProps={{
-                        name: 'phone',
-                        required: true,
-                        className: 'w-full px-4 py-3 pl-16 border-2 border-gray-200 rounded-xl focus:border-blue-500 focus:outline-none'
-                      }}
-                      containerClass="w-full"
-                      buttonClass="!border-2 !border-gray-200 !rounded-l-xl !bg-white hover:!bg-gray-50"
-                      dropdownClass="!bg-white !border !border-gray-200 !rounded-lg !shadow-lg"
-                      searchClass="!bg-gray-50 !border !border-gray-200 !rounded-lg !mx-2 !my-2"
-                      placeholder="Enter your phone number"
-                    />
+                        preferredCountries={['ma', 'fr', 'es', 'us']}
+                        value={formData.mainTraveler.phone}
+                        onChange={handlePhoneChange}
+                        inputProps={{
+                          name: 'phone',
+                          className: 'w-full px-4 py-3 pl-16 border-2 border-gray-200 rounded-xl focus:border-blue-500 focus:outline-none'
+                        }}
+                        containerClass="w-full"
+                        buttonClass="!border-2 !border-gray-200 !rounded-l-xl !bg-white hover:!bg-gray-50"
+                        dropdownClass="!bg-white !border !border-gray-200 !rounded-lg !shadow-lg"
+                        searchClass="!bg-gray-50 !border !border-gray-200 !rounded-lg !mx-2 !my-2"
+                        placeholder="Enter your phone number"
+                      />
                     {phoneError && (
                       <p className="mt-2 text-sm text-red-600 flex items-center">
                         <AlertCircle className="w-4 h-4 mr-1" />
@@ -518,32 +571,196 @@ const PlanAForm = ({ isOpen, onClose }: PlanAFormProps) => {
                   ))}
                 </div>
               )}
-              {/* Trip dates */}
+              {/* Hotel Stars Selection */}
               <div className="bg-gray-50 rounded-xl p-6 border border-gray-200">
-                <h4 className="font-bold text-gray-800 mb-4">Trip Duration</h4>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div>
-                    <label className="block text-sm font-semibold text-gray-700 mb-2">From *</label>
+                <h4 className="font-bold text-gray-800 mb-4 flex items-center">
+                  <Star className="w-5 h-5 mr-2 text-yellow-500" />
+                  Hotel Category Preference
+                </h4>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                  {HOTEL_STAR_OPTIONS.map((option) => (
+                    <div key={option.value} className="relative">
+                      <input
+                        type="checkbox"
+                        id={`hotel-${option.value}`}
+                        checked={formData.hotelStars.includes(option.value)}
+                        onChange={(e) => handleHotelStarChange(option.value, e.target.checked)}
+                        className="sr-only"
+                      />
+                      <label
+                        htmlFor={`hotel-${option.value}`}
+                        className={`block p-4 border-2 rounded-xl cursor-pointer transition-all duration-300 ${
+                          formData.hotelStars.includes(option.value)
+                            ? 'border-blue-500 bg-blue-50'
+                            : 'border-gray-200 hover:border-blue-300'
+                        }`}
+                      >
+                        <div className="flex items-center space-x-3">
+                          <div className={`w-4 h-4 rounded border-2 flex items-center justify-center ${
+                            formData.hotelStars.includes(option.value)
+                              ? 'border-blue-500 bg-blue-500'
+                              : 'border-gray-300'
+                          }`}>
+                            {formData.hotelStars.includes(option.value) && (
+                              <CheckCircle className="w-3 h-3 text-white" />
+                            )}
+                          </div>
+                          <div>
+                            <h4 className="font-bold text-gray-800">{option.label}</h4>
+                          </div>
+                        </div>
+                      </label>
+                    </div>
+                  ))}
+                </div>
+              </div>
+              {/* Trip Duration Type */}
+              <div className="bg-gray-50 rounded-xl p-6 border border-gray-200">
+                <h4 className="font-bold text-gray-800 mb-4 flex items-center">
+                  <Calendar className="w-5 h-5 mr-2 text-blue-500" />
+                  Trip Duration Type
+                </h4>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                  <div className="relative">
                     <input
-                      type="date"
-                      value={formData.tripStartDate}
-                      onChange={e => setFormData(prev => ({ ...prev, tripStartDate: e.target.value }))}
-                      className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-blue-500 focus:outline-none"
-                      required
+                      type="radio"
+                      id="duration-specific"
+                      name="durationType"
+                      checked={formData.durationType === 'specific'}
+                      onChange={() => setFormData(prev => ({ ...prev, durationType: 'specific' }))}
+                      className="sr-only"
                     />
+                    <label
+                      htmlFor="duration-specific"
+                      className={`block p-4 border-2 rounded-xl cursor-pointer transition-all duration-300 ${
+                        formData.durationType === 'specific'
+                          ? 'border-blue-500 bg-blue-50'
+                          : 'border-gray-200 hover:border-blue-300'
+                      }`}
+                    >
+                      <div className="flex items-center space-x-3">
+                        <div className={`w-4 h-4 rounded-full border-2 flex items-center justify-center ${
+                          formData.durationType === 'specific'
+                            ? 'border-blue-500 bg-blue-500'
+                            : 'border-gray-300'
+                        }`}>
+                          {formData.durationType === 'specific' && (
+                            <div className="w-2 h-2 bg-white rounded-full"></div>
+                          )}
+                        </div>
+                        <div>
+                          <h4 className="font-bold text-gray-800">Specific Dates</h4>
+                          <p className="text-sm text-gray-600">I have exact travel dates</p>
+                        </div>
+                      </div>
+                    </label>
                   </div>
-                  <div>
-                    <label className="block text-sm font-semibold text-gray-700 mb-2">To *</label>
+                  <div className="relative">
                     <input
-                      type="date"
-                      value={formData.tripEndDate}
-                      min={formData.tripStartDate}
-                      onChange={e => setFormData(prev => ({ ...prev, tripEndDate: e.target.value }))}
-                      className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-blue-500 focus:outline-none"
-                      required
+                      type="radio"
+                      id="duration-flexible"
+                      name="durationType"
+                      checked={formData.durationType === 'flexible'}
+                      onChange={() => setFormData(prev => ({ ...prev, durationType: 'flexible' }))}
+                      className="sr-only"
                     />
+                    <label
+                      htmlFor="duration-flexible"
+                      className={`block p-4 border-2 rounded-xl cursor-pointer transition-all duration-300 ${
+                        formData.durationType === 'flexible'
+                          ? 'border-blue-500 bg-blue-50'
+                          : 'border-gray-200 hover:border-blue-300'
+                      }`}
+                    >
+                      <div className="flex items-center space-x-3">
+                        <div className={`w-4 h-4 rounded-full border-2 flex items-center justify-center ${
+                          formData.durationType === 'flexible'
+                            ? 'border-blue-500 bg-blue-500'
+                            : 'border-gray-300'
+                        }`}>
+                          {formData.durationType === 'flexible' && (
+                            <div className="w-2 h-2 bg-white rounded-full"></div>
+                          )}
+                        </div>
+                        <div>
+                          <h4 className="font-bold text-gray-800">Flexible Dates</h4>
+                          <p className="text-sm text-gray-600">I'm flexible with my travel dates</p>
+                        </div>
+                      </div>
+                    </label>
                   </div>
                 </div>
+                {/* Specific Dates */}
+                {formData.durationType === 'specific' && (
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-sm font-semibold text-gray-700 mb-2">From *</label>
+                      <input
+                        type="date"
+                        value={formData.tripStartDate}
+                        onChange={e => setFormData(prev => ({ ...prev, tripStartDate: e.target.value }))}
+                        className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-blue-500 focus:outline-none"
+                        required
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-semibold text-gray-700 mb-2">To *</label>
+                      <input
+                        type="date"
+                        value={formData.tripEndDate}
+                        min={formData.tripStartDate}
+                        onChange={e => setFormData(prev => ({ ...prev, tripEndDate: e.target.value }))}
+                        className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-blue-500 focus:outline-none"
+                        required
+                      />
+                    </div>
+                  </div>
+                )}
+                {/* Flexible Dates */}
+                {formData.durationType === 'flexible' && (
+                  <div className="space-y-4">
+                    <div>
+                      <label className="block text-sm font-semibold text-gray-700 mb-2">Preferred Month *</label>
+                      <select
+                        value={formData.flexibleMonth}
+                        onChange={e => setFormData(prev => ({ ...prev, flexibleMonth: e.target.value, tripStartDate: '', tripEndDate: '' }))}
+                        className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-blue-500 focus:outline-none"
+                        required
+                      >
+                        <option value="">Select a month</option>
+                        {MONTH_OPTIONS.map(month => (
+                          <option key={month.value} value={month.value}>{month.label}</option>
+                        ))}
+                      </select>
+                    </div>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div>
+                        <label className="block text-sm font-semibold text-gray-700 mb-2">Preferred Start Date (Optional)</label>
+                        <input
+                          type="date"
+                          value={formData.tripStartDate}
+                          onChange={e => setFormData(prev => ({ ...prev, tripStartDate: e.target.value }))}
+                          min={formData.flexibleMonth ? getMonthBoundaries(formData.flexibleMonth).min : undefined}
+                          max={formData.flexibleMonth ? getMonthBoundaries(formData.flexibleMonth).max : undefined}
+                          disabled={!formData.flexibleMonth}
+                          className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-blue-500 focus:outline-none"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-sm font-semibold text-gray-700 mb-2">Preferred End Date (Optional)</label>
+                        <input
+                          type="date"
+                          value={formData.tripEndDate}
+                          onChange={e => setFormData(prev => ({ ...prev, tripEndDate: e.target.value }))}
+                          min={formData.flexibleMonth ? getMonthBoundaries(formData.flexibleMonth).min : undefined}
+                          max={formData.flexibleMonth ? getMonthBoundaries(formData.flexibleMonth).max : undefined}
+                          disabled={!formData.flexibleMonth}
+                          className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-blue-500 focus:outline-none"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                )}
               </div>
               <div className="flex justify-end mt-8">
                 <button
@@ -633,8 +850,8 @@ const PlanAForm = ({ isOpen, onClose }: PlanAFormProps) => {
                           type="date"
                           value={selection?.startDate || ''}
                           onChange={(e) => updateCitySelection(cityId, 'startDate', e.target.value)}
-                          min={formData.tripStartDate}
-                          max={formData.tripEndDate}
+                          min={formData.tripStartDate || undefined}
+                          max={formData.tripEndDate || undefined}
                           className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-blue-500 focus:outline-none"
                           required
                         />
@@ -650,8 +867,8 @@ const PlanAForm = ({ isOpen, onClose }: PlanAFormProps) => {
                           type="date"
                           value={selection?.endDate || ''}
                           onChange={(e) => updateCitySelection(cityId, 'endDate', e.target.value)}
-                          min={selection?.startDate || formData.tripStartDate}
-                          max={formData.tripEndDate}
+                          min={selection?.startDate || formData.tripStartDate || undefined}
+                          max={formData.tripEndDate || undefined}
                           className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-blue-500 focus:outline-none"
                           required
                         />
@@ -688,10 +905,6 @@ const PlanAForm = ({ isOpen, onClose }: PlanAFormProps) => {
                                 <div className="flex items-start justify-between mb-3">
                                   <div className="flex-1">
                                     <h5 className="font-semibold text-gray-800">{activity.name}</h5>
-                                    {/* <div className="flex items-center mt-1">
-                                      <DollarSign className="w-4 h-4 text-green-600" />
-                                      <span className="text-green-600 font-medium ml-1">{activity.price} MAD</span>
-                                    </div> */}
                                   </div>
                                   <input
                                     type="checkbox"
@@ -754,7 +967,7 @@ const PlanAForm = ({ isOpen, onClose }: PlanAFormProps) => {
               </h3>
               {/* Traveler Information Summary */}
               <div className="bg-green-50 rounded-xl p-6 border border-green-200">
-                <h4 className="font-bold text-gray-800 mb-4">Main Traveler Information</h4>
+                <h4 className="font-bold text-gray-800 mb-4">Contact Informations</h4>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
                     <span className="block text-sm font-semibold text-gray-700">Full Name:</span>
@@ -784,18 +997,67 @@ const PlanAForm = ({ isOpen, onClose }: PlanAFormProps) => {
                   </span>
                 </div>
               </div>
-              {/* Trip Dates Summary */}
+              {/* Hotel Stars Summary */}
               <div className="bg-gray-50 rounded-xl p-6 border border-gray-200">
-                <h4 className="font-bold text-gray-800 mb-4">Trip Dates</h4>
+                <h4 className="font-bold text-gray-800 mb-4">Hotel Category Preference</h4>
+                <div className="flex flex-wrap gap-2">
+                  {formData.hotelStars.length > 0 ? (
+                    formData.hotelStars.map(star => {
+                      const starOption = HOTEL_STAR_OPTIONS.find(option => option.value === star);
+                      return (
+                        <span key={star} className="px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-sm font-medium">
+                          {starOption?.label}
+                        </span>
+                      );
+                    })
+                  ) : (
+                    <span className="text-gray-500">No preference selected</span>
+                  )}
+                </div>
+              </div>
+              {/* Trip Duration Summary */}
+              <div className="bg-gray-50 rounded-xl p-6 border border-gray-200">
+                <h4 className="font-bold text-gray-800 mb-4">Trip Duration</h4>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
-                    <span className="block text-sm font-semibold text-gray-700">Start Date:</span>
-                    <span className="block text-gray-800">{formData.tripStartDate ? new Date(formData.tripStartDate).toLocaleDateString('en-US') : ''}</span>
+                    <span className="block text-sm font-semibold text-gray-700">Duration Type:</span>
+                    <span className="block text-gray-800 capitalize">{formData.durationType}</span>
                   </div>
-                  <div>
-                    <span className="block text-sm font-semibold text-gray-700">End Date:</span>
-                    <span className="block text-gray-800">{formData.tripEndDate ? new Date(formData.tripEndDate).toLocaleDateString('en-US') : ''}</span>
-                  </div>
+                  {formData.durationType === 'specific' ? (
+                    <>
+                      <div>
+                        <span className="block text-sm font-semibold text-gray-700">Start Date:</span>
+                        <span className="block text-gray-800">{formData.tripStartDate ? new Date(formData.tripStartDate).toLocaleDateString('en-US') : ''}</span>
+                      </div>
+                      <div>
+                        <span className="block text-sm font-semibold text-gray-700">End Date:</span>
+                        <span className="block text-gray-800">{formData.tripEndDate ? new Date(formData.tripEndDate).toLocaleDateString('en-US') : ''}</span>
+                      </div>
+                    </>
+                  ) : (
+                    <>
+                      <div>
+                        <span className="block text-sm font-semibold text-gray-700">Preferred Month:</span>
+                        <span className="block text-gray-800 capitalize">
+                          {formData.flexibleMonth ? 
+                            MONTH_OPTIONS.find(m => m.value === formData.flexibleMonth)?.label : 
+                            'Not specified'}
+                        </span>
+                      </div>
+                      {formData.tripStartDate && (
+                        <div>
+                          <span className="block text-sm font-semibold text-gray-700">Preferred Start Date:</span>
+                          <span className="block text-gray-800">{new Date(formData.tripStartDate).toLocaleDateString('en-US')}</span>
+                        </div>
+                      )}
+                      {formData.tripEndDate && (
+                        <div>
+                          <span className="block text-sm font-semibold text-gray-700">Preferred End Date:</span>
+                          <span className="block text-gray-800">{new Date(formData.tripEndDate).toLocaleDateString('en-US')}</span>
+                        </div>
+                      )}
+                    </>
+                  )}
                 </div>
               </div>
               {/* Cities and Activities Summary */}
@@ -832,7 +1094,6 @@ const PlanAForm = ({ isOpen, onClose }: PlanAFormProps) => {
                             cityActivities.map(activity => (
                               <li key={activity.id} className="text-gray-800">
                                 {activity.name} 
-                                {/* - <span className="text-green-600 font-medium">{activity.price} MAD</span>  */}
                               </li>
                             ))
                           ) : (

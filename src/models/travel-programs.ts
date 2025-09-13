@@ -78,12 +78,20 @@ export interface MainTraveler {
   phone: string;
 }
 
+// export interface ClientInfo {
+//   mainTraveler: MainTraveler;
+//   travelers: Traveler[];
+//   tripPeriod: number;
+// }
 export interface ClientInfo {
   mainTraveler: MainTraveler;
   travelers: Traveler[];
   tripPeriod: number;
+  tripStartDate: string; // Ajouté
+  tripEndDate: string;   // Ajouté
+  durationType: 'flexible' | 'specific'; // NEW: Add duration type
+  flexibleMonth?: string; // NEW: For flexible duration
 }
-
 // Update your interfaces to match the component expectations
 export interface DemandCity {
   id?: string;
@@ -110,6 +118,7 @@ export interface Demand {
   totalPrice: number;
   cities: DemandCity[];
   comment?: string;
+  hotelStars?: string[];
   globalServices?: {
     service: ServiceOffering;
     quantity: number;

@@ -51,8 +51,9 @@ const Index = () => {
     <div className="min-h-screen">
       <Navbar />
       <Hero />
-      <IntroSection />
       <AboutSection />
+      <IntroSection />
+      
       {/* <ServicesSection />
       <IntroSection />
       <GalleryCarousel />
@@ -67,7 +68,7 @@ const Index = () => {
       <GalleryCarousel />
       <ImageTextSection />
       <ExperienceCarousel />
-      <DestinationsGrid />
+      {/* <DestinationsGrid /> */}
       <SpecialPackagesSection />
 
       <ContactSection />
