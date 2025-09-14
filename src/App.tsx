@@ -29,6 +29,8 @@ import Tickets from "./pages/dashboard/Tickets";
 import Settings from "./pages/dashboard/Settings";
 import NotFound from "./pages/NotFound";
 import Hotelsc from "./pages/dashboard/Hotels";
+import AboutDetailPage from "./components/AboutDetailPage";
+import PhilosophyPage from "./components/PhilosophyPage";
 
 const queryClient = new QueryClient();
 
@@ -43,6 +45,8 @@ const App = () => (
             <BrowserRouter>
               <Routes>
                 <Route path="/" element={<Index />} />
+                <Route path="/about-us" element={<AboutDetailPage />} />
+                <Route path="/philosophy" element={<PhilosophyPage />} />
                 <Route path="/products" element={<Products />} />
                 <Route path="/products/hotels" element={<Hotels />} />
                 <Route path="/cart" element={<Cart />} />

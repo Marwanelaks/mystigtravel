@@ -1,6 +1,13 @@
-import { Users, Award, Globe, Heart } from 'lucide-react';
+import { Users, Award, Globe, Heart, ArrowRight } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 
 const AboutSection = () => {
+  const navigate = useNavigate();
+
+  const handleViewVisionaries = () => {
+    navigate('/about-us');
+  };
+
   return (
     <section id="about" className="py-20 bg-background">
       <div className="container mx-auto px-6">
@@ -24,8 +31,9 @@ const AboutSection = () => {
                 Mystic Travel was founded in 2024 by Mohammed Badre, Mohammed Bouchareb, and Alaoui Chrifi Kamal. 
                 It bridges ancestral Moroccan wisdom with modern digital finesse.
               </p>
+              
               <h4 className="font-semibold text-foreground mb-4 text-xl">Meet the visionaries</h4>
-              <div className="space-y-4">
+              <div className="space-y-4 mb-8">
                 <div className="border-l-4 border-primary pl-4">
                   <h5 className="font-semibold text-foreground">Mohammed Bouchareb</h5>
                   <p className="text-sm text-muted-foreground">Co-Founder & Technical Director - 58 years in tourism & craftsmanship, guardian of Fes' artisanal traditions.</p>
@@ -39,6 +47,15 @@ const AboutSection = () => {
                   <p className="text-sm text-muted-foreground">Co-Creator & Expert Guide - Native of Fes, deeply rooted in Moroccan tradition, offering soulful guidance.</p>
                 </div>
               </div>
+              
+              {/* View Details Button */}
+              <button 
+                onClick={handleViewVisionaries}
+                className="group flex items-center gap-2 px-6 py-3 bg-primary text-primary-foreground rounded-lg hover:bg-primary-dark transition-all duration-300"
+              >
+                <span>View more</span>
+                <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+              </button>
             </div>
             
             <div className="grid grid-cols-2 gap-6 fade-in-up">
@@ -76,7 +93,7 @@ const AboutSection = () => {
             </div>
           </div>
 
-          <div className="bg-luxury-beige rounded-2xl p-8 fade-in-up">
+          {/* <div className="bg-luxury-beige rounded-2xl p-8 fade-in-up">
             <h3 className="font-serif text-2xl font-bold text-foreground mb-6 text-center">
               Our Values
             </h3>
@@ -103,7 +120,7 @@ const AboutSection = () => {
                 </p>
               </div>
             </div>
-          </div>
+          </div> */}
         </div>
       </div>
     </section>
