@@ -6,7 +6,7 @@ import {
   X, Send, ChevronDown, ChevronUp, Trash2, Edit, Check, XCircle, 
   Save, RefreshCw, FileText, Plus, Minus, User, Users, Calendar, 
   MapPin, Hotel, Activity, Globe, Truck, CreditCard, MessageCircle,
-  Phone, Mail, DollarSign, Percent, Coins
+  Phone, Mail, DollarSign, Percent, Coins, Star, Plane
 } from 'lucide-react';
 import { jsPDF } from 'jspdf';
 import autoTable from 'jspdf-autotable';
@@ -21,6 +21,7 @@ interface DisplayDemand extends Demand {
   durationType?: string; // NEW: Add durationType
   flexibleMonth?: string; // NEW: Add flexibleMonth
   hotelStars?: string[]; // NEW: Add hotelStars
+  flightOption?: string; // NEW: Add flightOption
 }
 
 const Demands = () => {
@@ -65,7 +66,8 @@ const Demands = () => {
       periodDays: demand.clientInfo?.tripPeriod || 0,
       durationType: demand.clientInfo?.durationType, // NEW: Add durationType
       flexibleMonth: demand.clientInfo?.flexibleMonth, // NEW: Add flexibleMonth
-      hotelStars: demand?.hotelStars // NEW: Add hotelStars (check both locations)
+      hotelStars: demand?.hotelStars, // NEW: Add hotelStars (check both locations)
+      flightOption: demand?.clientInfo?.flightOption
     };
   };
 
@@ -712,6 +714,14 @@ const handleTaxPercentageChange = async (demandId: string, value: number) => {
                               }).join(', ')}
                             </div>
                           )}
+                          <div className="flex items-center">
+                            <Plane className="w-4 h-4 mr-2 text-blue-500" />
+                            {demand.clientInfo?.flightOption === 'WITH'
+                              ? 'With flight'
+                              : demand.clientInfo?.flightOption === 'WITHOUT'
+                                ? 'Without flight'
+                                : 'No flight option'}
+                          </div>
                         </div>
                         
                         {demand.comment && (

@@ -77,7 +77,7 @@ const PlanAForm = ({ isOpen, onClose }: PlanAFormProps) => {
     comment: '',
     tripStartDate: '',
     tripEndDate: '',
-    durationType: 'specific' as 'flexible' | 'specific',
+    durationType: 'SPECIFIC' as 'FLEXIBLE' | 'SPECIFIC',
     flexibleMonth: '',
     hotelStars: [] as string[]
   });
@@ -282,13 +282,13 @@ const PlanAForm = ({ isOpen, onClose }: PlanAFormProps) => {
     if (!formData.mainTraveler.fullName) return false;
     if (!hasEmail && !hasPhone) return false; // At least one required
     if (phoneError && hasPhone) return false;
-    if (formData.durationType === 'specific' && (!formData.tripStartDate || !formData.tripEndDate)) return false;
-    if (formData.durationType === 'flexible' && !formData.flexibleMonth) return false;
+    if (formData.durationType === 'SPECIFIC' && (!formData.tripStartDate || !formData.tripEndDate)) return false;
+    if (formData.durationType === 'FLEXIBLE' && !formData.flexibleMonth) return false;
     return formData.childAges.every(age => age > 0);
   };
 
   const isStep2Valid = (): boolean => {
-    if (formData.durationType === 'specific') {
+    if (formData.durationType === 'SPECIFIC') {
       if (!formData.tripStartDate || !formData.tripEndDate) return false;
     }
     return formData.selectedCities.length > 0 &&
@@ -353,7 +353,7 @@ const PlanAForm = ({ isOpen, onClose }: PlanAFormProps) => {
         comment: '',
         tripStartDate: '',
         tripEndDate: '',
-        durationType: 'specific',
+        durationType: 'SPECIFIC',
         flexibleMonth: '',
         hotelStars: []
       });
@@ -625,11 +625,11 @@ const PlanAForm = ({ isOpen, onClose }: PlanAFormProps) => {
                   <label className="flex items-center cursor-pointer">
                     <input
                       type="checkbox"
-                      checked={formData.flightOption === 'with'}
-                      onChange={() => setFormData(prev => ({ ...prev, flightOption: 'with' }))}
+                      checked={formData.flightOption === 'WITH'}
+                      onChange={() => setFormData(prev => ({ ...prev, flightOption: 'WITH' }))}
                       className="sr-only"
                     />
-                    <span className={`p-3 rounded-full border-2 ${formData.flightOption === 'with' ? 'border-blue-500 bg-blue-50' : 'border-gray-200'}`}>
+                    <span className={`p-3 rounded-full border-2 ${formData.flightOption === 'WITH' ? 'border-blue-500 bg-blue-50' : 'border-gray-200'}`}>
                       <Plane className="w-5 h-5 text-blue-500" />
                     </span>
                     <span className="ml-2 font-medium text-gray-700">With flight</span>
@@ -637,11 +637,11 @@ const PlanAForm = ({ isOpen, onClose }: PlanAFormProps) => {
                   <label className="flex items-center cursor-pointer">
                     <input
                       type="checkbox"
-                      checked={formData.flightOption === 'without'}
-                      onChange={() => setFormData(prev => ({ ...prev, flightOption: 'without' }))}
+                      checked={formData.flightOption === 'WITHOUT'}
+                      onChange={() => setFormData(prev => ({ ...prev, flightOption: 'WITHOUT' }))}
                       className="sr-only"
                     />
-                    <span className={`p-3 rounded-full border-2 ${formData.flightOption === 'without' ? 'border-blue-500 bg-blue-50' : 'border-gray-200'}`}>
+                    <span className={`p-3 rounded-full border-2 ${formData.flightOption === 'WITHOUT' ? 'border-blue-500 bg-blue-50' : 'border-gray-200'}`}>
                       <PlaneLanding className="w-5 h-5 text-blue-500" />
                     </span>
                     <span className="ml-2 font-medium text-gray-700">Without flight</span>
@@ -661,25 +661,25 @@ const PlanAForm = ({ isOpen, onClose }: PlanAFormProps) => {
                       type="radio"
                       id="duration-specific"
                       name="durationType"
-                      checked={formData.durationType === 'specific'}
-                      onChange={() => setFormData(prev => ({ ...prev, durationType: 'specific' }))}
+                      checked={formData.durationType === 'SPECIFIC'}
+                      onChange={() => setFormData(prev => ({ ...prev, durationType: 'SPECIFIC' }))}
                       className="sr-only"
                     />
                     <label
                       htmlFor="duration-specific"
                       className={`block p-4 border-2 rounded-xl cursor-pointer transition-all duration-300 ${
-                        formData.durationType === 'specific'
+                        formData.durationType === 'SPECIFIC'
                           ? 'border-blue-500 bg-blue-50'
                           : 'border-gray-200 hover:border-blue-300'
                       }`}
                     >
                       <div className="flex items-center space-x-3">
                         <div className={`w-4 h-4 rounded-full border-2 flex items-center justify-center ${
-                          formData.durationType === 'specific'
+                          formData.durationType === 'SPECIFIC'
                             ? 'border-blue-500 bg-blue-500'
                             : 'border-gray-300'
                         }`}>
-                          {formData.durationType === 'specific' && (
+                          {formData.durationType === 'SPECIFIC' && (
                             <div className="w-2 h-2 bg-white rounded-full"></div>
                           )}
                         </div>
@@ -695,25 +695,25 @@ const PlanAForm = ({ isOpen, onClose }: PlanAFormProps) => {
                       type="radio"
                       id="duration-flexible"
                       name="durationType"
-                      checked={formData.durationType === 'flexible'}
-                      onChange={() => setFormData(prev => ({ ...prev, durationType: 'flexible' }))}
+                      checked={formData.durationType === 'FLEXIBLE'}
+                      onChange={() => setFormData(prev => ({ ...prev, durationType: 'FLEXIBLE' }))}
                       className="sr-only"
                     />
                     <label
                       htmlFor="duration-flexible"
                       className={`block p-4 border-2 rounded-xl cursor-pointer transition-all duration-300 ${
-                        formData.durationType === 'flexible'
+                        formData.durationType === 'FLEXIBLE'
                           ? 'border-blue-500 bg-blue-50'
                           : 'border-gray-200 hover:border-blue-300'
                       }`}
                     >
                       <div className="flex items-center space-x-3">
                         <div className={`w-4 h-4 rounded-full border-2 flex items-center justify-center ${
-                          formData.durationType === 'flexible'
+                          formData.durationType === 'FLEXIBLE'
                             ? 'border-blue-500 bg-blue-500'
                             : 'border-gray-300'
                         }`}>
-                          {formData.durationType === 'flexible' && (
+                          {formData.durationType === 'FLEXIBLE' && (
                             <div className="w-2 h-2 bg-white rounded-full"></div>
                           )}
                         </div>
@@ -726,7 +726,7 @@ const PlanAForm = ({ isOpen, onClose }: PlanAFormProps) => {
                   </div>
                 </div>
                 {/* Specific Dates */}
-                {formData.durationType === 'specific' && (
+                {formData.durationType === 'SPECIFIC' && (
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
                       <label className="block text-sm font-semibold text-gray-700 mb-2">From *</label>
@@ -752,7 +752,7 @@ const PlanAForm = ({ isOpen, onClose }: PlanAFormProps) => {
                   </div>
                 )}
                 {/* Flexible Dates */}
-                {formData.durationType === 'flexible' && (
+                {formData.durationType === 'FLEXIBLE' && (
                   <div className="space-y-4">
                     <div>
                       <label className="block text-sm font-semibold text-gray-700 mb-2">Preferred Month *</label>
@@ -1058,7 +1058,7 @@ const PlanAForm = ({ isOpen, onClose }: PlanAFormProps) => {
                     <span className="block text-sm font-semibold text-gray-700">Duration Type:</span>
                     <span className="block text-gray-800 capitalize">{formData.durationType}</span>
                   </div>
-                  {formData.durationType === 'specific' ? (
+                  {formData.durationType === 'SPECIFIC' ? (
                     <>
                       <div>
                         <span className="block text-sm font-semibold text-gray-700">Start Date:</span>
