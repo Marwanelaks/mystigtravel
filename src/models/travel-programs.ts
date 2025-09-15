@@ -91,6 +91,7 @@ export interface ClientInfo {
   tripEndDate: string;   // Ajouté
   durationType: 'flexible' | 'specific'; // NEW: Add duration type
   flexibleMonth?: string; // NEW: For flexible duration
+  flightOption?: 'with' | 'without'; // NEW
 }
 // Update your interfaces to match the component expectations
 export interface DemandCity {

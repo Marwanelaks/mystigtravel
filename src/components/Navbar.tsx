@@ -27,7 +27,7 @@ const Navbar = () => {
     { name: 'Experiences', href: '#experiences' },
     // { name: 'Destinations', href: '#destinations' },
     { name: 'Journeys & Rituals', href: '#special-packages' },
-    { name: 'Gallery & Destinations', href: '#gallery' },
+    { name: 'Gallery', href: '#gallery' },
     // { name: 'Plan A', href: '#', onClick: () => setShowPlanAForm(true) },
     { name: 'Contact', href: '#contact' },
   ];

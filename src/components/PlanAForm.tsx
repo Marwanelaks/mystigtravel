@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import {
   User, Mail, Phone, Baby, Plus, Minus, X, CheckCircle, AlertCircle,
-  MapPin, Star, DollarSign, Calendar
+  MapPin, Star, DollarSign, Calendar, Plane, PlaneLanding
 } from 'lucide-react';
 import PhoneInput from 'react-phone-input-2';
 import 'react-phone-input-2/lib/style.css';
@@ -319,7 +319,8 @@ const PlanAForm = ({ isOpen, onClose }: PlanAFormProps) => {
         tripStartDate: formData.tripStartDate,
         tripEndDate: formData.tripEndDate,
         durationType: formData.durationType,
-        flexibleMonth: formData.flexibleMonth
+        flexibleMonth: formData.flexibleMonth,
+        flightOption: formData.flightOption // NEW
       };
       const demandCities: DemandCity[] = formData.selectedCities.map(cityId => {
         const selection = formData.citySelections[cityId];
@@ -614,6 +615,40 @@ const PlanAForm = ({ isOpen, onClose }: PlanAFormProps) => {
                   ))}
                 </div>
               </div>
+
+              <div className="bg-gray-50 rounded-xl p-6 border border-gray-200">
+                <h4 className="font-bold text-gray-800 mb-4 flex items-center">
+                  <Plane className="w-5 h-5 mr-2 text-blue-500" />
+                  Flight Option
+                </h4>
+                <div className="flex gap-6">
+                  <label className="flex items-center cursor-pointer">
+                    <input
+                      type="checkbox"
+                      checked={formData.flightOption === 'with'}
+                      onChange={() => setFormData(prev => ({ ...prev, flightOption: 'with' }))}
+                      className="sr-only"
+                    />
+                    <span className={`p-3 rounded-full border-2 ${formData.flightOption === 'with' ? 'border-blue-500 bg-blue-50' : 'border-gray-200'}`}>
+                      <Plane className="w-5 h-5 text-blue-500" />
+                    </span>
+                    <span className="ml-2 font-medium text-gray-700">With flight</span>
+                  </label>
+                  <label className="flex items-center cursor-pointer">
+                    <input
+                      type="checkbox"
+                      checked={formData.flightOption === 'without'}
+                      onChange={() => setFormData(prev => ({ ...prev, flightOption: 'without' }))}
+                      className="sr-only"
+                    />
+                    <span className={`p-3 rounded-full border-2 ${formData.flightOption === 'without' ? 'border-blue-500 bg-blue-50' : 'border-gray-200'}`}>
+                      <PlaneLanding className="w-5 h-5 text-blue-500" />
+                    </span>
+                    <span className="ml-2 font-medium text-gray-700">Without flight</span>
+                  </label>
+                </div>
+              </div>
+
               {/* Trip Duration Type */}
               <div className="bg-gray-50 rounded-xl p-6 border border-gray-200">
                 <h4 className="font-bold text-gray-800 mb-4 flex items-center">
