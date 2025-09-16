@@ -33,9 +33,9 @@ interface CitySelectionForm {
 
 // Hotel star options
 const HOTEL_STAR_OPTIONS = [
-  { value: '4', label: '4 Stars' },
-  { value: '5', label: '5 Stars' },
-  { value: '5_deluxe', label: '5 Stars Deluxe' }
+  { value: '4', label: '4 ⭐' },
+  { value: '5', label: '5 ⭐' },
+  { value: '5_deluxe', label: '5 ⭐ Deluxe' }
 ];
 
 // Month options for flexible duration
@@ -79,6 +79,7 @@ const PlanAForm = ({ isOpen, onClose }: PlanAFormProps) => {
     tripEndDate: '',
     durationType: 'SPECIFIC' as 'FLEXIBLE' | 'SPECIFIC',
     flexibleMonth: '',
+    flexibleYear: new Date().getFullYear(), // NEW: Add year field
     hotelStars: [] as string[]
   });
 
@@ -204,6 +205,9 @@ const PlanAForm = ({ isOpen, onClose }: PlanAFormProps) => {
       return { ...prev, childAges: newAges };
     });
   };
+
+  // Generate age options for dropdown (0-17 years)
+  const ageOptions = Array.from({ length: 18 }, (_, i) => i);
 
   const handleCitySelection = (cityId: string, checked: boolean) => {
     setFormData(prev => {
@@ -381,18 +385,74 @@ const PlanAForm = ({ isOpen, onClose }: PlanAFormProps) => {
     setCurrentStep(prev => prev - 1);
   };
 
-  const getMonthBoundaries = (monthValue: string): { min: string; max: string } => {
+  const getTodayDate = (): string => {
+  return new Date().toISOString().split('T')[0];
+  };
+
+// Update the getMonthBoundaries function to handle current year and future months only
+  const getMonthBoundaries = (monthValue: string, year: number): { min: string; max: string } => {
     if (!monthValue) return { min: '', max: '' };
-    const year = new Date().getFullYear();
+    
+    const today = new Date();
+    const currentYear = today.getFullYear();
+    const currentMonth = today.getMonth();
     const monthIndex = MONTH_OPTIONS.findIndex(m => m.value === monthValue);
+    
     if (monthIndex === -1) return { min: '', max: '' };
+    
     const firstDay = new Date(year, monthIndex, 1);
     const lastDay = new Date(year, monthIndex + 1, 0);
-    return {
-      min: firstDay.toISOString().slice(0, 10),
-      max: lastDay.toISOString().slice(0, 10)
-    };
+    
+    // If selected month/year is current month/year, don't allow past dates
+    if (year === currentYear && monthIndex === currentMonth) {
+      return {
+        min: today.toISOString().slice(0, 10),
+        max: lastDay.toISOString().slice(0, 10)
+      };
+    }
+    
+    // If selected month/year is in the future, allow all dates in that month
+    if (year > currentYear || (year === currentYear && monthIndex > currentMonth)) {
+      return {
+        min: firstDay.toISOString().slice(0, 10),
+        max: lastDay.toISOString().slice(0, 10)
+      };
+    }
+    
+    // If selected month/year is in the past, return empty (shouldn't happen with proper UI constraints)
+    return { min: '', max: '' };
   };
+
+  const getAvailableYears = (selectedMonth: string) => {
+    const currentDate = new Date();
+    const currentYear = currentDate.getFullYear();
+    const currentMonth = currentDate.getMonth();
+    const selectedMonthIndex = MONTH_OPTIONS.findIndex(m => m.value === selectedMonth);
+    
+    // If no month selected or month is in the future, show all years
+    if (!selectedMonth || selectedMonthIndex >= currentMonth) {
+      return Array.from({ length: 6 }, (_, i) => {
+        const year = currentYear + i;
+        return { value: year, label: year.toString() };
+      });
+    }
+    
+    // If month is in the past, exclude current year and show next years
+    return Array.from({ length: 5 }, (_, i) => {
+      const year = currentYear + i + 1; // Start from next year
+      return { value: year, label: year.toString() };
+    });
+  };
+// Update the MONTH_OPTIONS to only show current and future months
+  // const getAvailableMonths = () => {
+  //   const today = new Date();
+  //   const currentMonth = today.getMonth();
+    
+  //   return MONTH_OPTIONS.filter((_, index) => {
+  //     // Show all months from current month onward
+  //     return index >= currentMonth;
+  //   });
+  // };
 
   if (!isOpen) return null;
 
@@ -442,7 +502,7 @@ const PlanAForm = ({ isOpen, onClose }: PlanAFormProps) => {
                 </h4>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-sm font-semibold text-gray-700 mb-2">Full Name *</label>
+                    <label className="block text-sm font-semibold text-gray-700 mb-2">Name *</label>
                     <input
                       type="text"
                       value={formData.mainTraveler.fullName}
@@ -496,53 +556,68 @@ const PlanAForm = ({ isOpen, onClose }: PlanAFormProps) => {
               <div className="bg-gray-50 rounded-xl p-6 border border-gray-200">
                 <h4 className="font-bold text-gray-800 mb-4">Number of Travelers</h4>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  {/* Adults */}
-                  <div className="bg-white rounded-lg p-4 border border-gray-200">
-                    <h5 className="font-semibold text-gray-700 mb-3 flex items-center">
+                {/* Adults */}
+                <div className="bg-white rounded-lg p-4 border border-gray-200">
+                  <div className="flex items-center justify-between mb-3">
+                    <h5 className="font-semibold text-gray-700 flex items-center">
                       <User className="w-4 h-4 mr-2 text-blue-500" />
-                      Number of adults
+                      Adults
                     </h5>
-                    <div className="flex items-center space-x-4">
-                      <button
-                        onClick={() => handleNumberOfAdultsChange(formData.numberOfAdults - 1)}
-                        disabled={formData.numberOfAdults <= 1}
-                        className="p-2 bg-gray-200 rounded-lg disabled:opacity-50"
-                      >
-                        <Minus className="w-4 h-4" />
-                      </button>
-                      <span className="text-lg font-bold">{formData.numberOfAdults} adult(s)</span>
-                      <button
-                        onClick={() => handleNumberOfAdultsChange(formData.numberOfAdults + 1)}
-                        className="p-2 bg-gray-200 rounded-lg"
-                      >
-                        <Plus className="w-4 h-4" />
-                      </button>
-                    </div>
+                    <span className="text-xs text-gray-500 bg-gray-100 px-2 py-1 rounded-full">
+                      18+ years
+                    </span>
                   </div>
-                  {/* Children */}
-                  <div className="bg-white rounded-lg p-4 border border-gray-200">
-                    <h5 className="font-semibold text-gray-700 mb-3 flex items-center">
-                      <Baby className="w-4 h-4 mr-2 text-orange-500" />
-                      Number of children
-                    </h5>
-                    <div className="flex items-center space-x-4">
-                      <button
-                        onClick={() => handleNumberOfChildrenChange(formData.numberOfChildren - 1)}
-                        disabled={formData.numberOfChildren <= 0}
-                        className="p-2 bg-gray-200 rounded-lg disabled:opacity-50"
-                      >
-                        <Minus className="w-4 h-4" />
-                      </button>
-                      <span className="text-lg font-bold">{formData.numberOfChildren} child(ren)</span>
-                      <button
-                        onClick={() => handleNumberOfChildrenChange(formData.numberOfChildren + 1)}
-                        className="p-2 bg-gray-200 rounded-lg"
-                      >
-                        <Plus className="w-4 h-4" />
-                      </button>
-                    </div>
+                  <div className="flex items-center space-x-4">
+                    <button
+                      onClick={() => handleNumberOfAdultsChange(formData.numberOfAdults - 1)}
+                      disabled={formData.numberOfAdults <= 1}
+                      className="p-2 bg-gray-200 rounded-lg disabled:opacity-50 hover:bg-gray-300 transition-colors"
+                    >
+                      <Minus className="w-4 h-4" />
+                    </button>
+                    <span className="text-lg font-bold min-w-[2rem] text-center">
+                      {formData.numberOfAdults}
+                    </span>
+                    <button
+                      onClick={() => handleNumberOfAdultsChange(formData.numberOfAdults + 1)}
+                      className="p-2 bg-gray-200 rounded-lg hover:bg-gray-300 transition-colors"
+                    >
+                      <Plus className="w-4 h-4" />
+                    </button>
                   </div>
                 </div>
+                
+                {/* Children */}
+                <div className="bg-white rounded-lg p-4 border border-gray-200">
+                  <div className="flex items-center justify-between mb-3">
+                    <h5 className="font-semibold text-gray-700 flex items-center">
+                      <Baby className="w-4 h-4 mr-2 text-orange-500" />
+                      Children
+                    </h5>
+                    <span className="text-xs text-gray-500 bg-gray-100 px-2 py-1 rounded-full">
+                      0-17 years
+                    </span>
+                  </div>
+                  <div className="flex items-center space-x-4">
+                    <button
+                      onClick={() => handleNumberOfChildrenChange(formData.numberOfChildren - 1)}
+                      disabled={formData.numberOfChildren <= 0}
+                      className="p-2 bg-gray-200 rounded-lg disabled:opacity-50 hover:bg-gray-300 transition-colors"
+                    >
+                      <Minus className="w-4 h-4" />
+                    </button>
+                    <span className="text-lg font-bold min-w-[2rem] text-center">
+                      {formData.numberOfChildren}
+                    </span>
+                    <button
+                      onClick={() => handleNumberOfChildrenChange(formData.numberOfChildren + 1)}
+                      className="p-2 bg-gray-200 rounded-lg hover:bg-gray-300 transition-colors"
+                    >
+                      <Plus className="w-4 h-4" />
+                    </button>
+                  </div>
+                </div>
+              </div>
                 <div className="mt-4 text-sm text-gray-500">
                   <p>Total: {formData.numberOfAdults + formData.numberOfChildren} traveler(s)</p>
                 </div>
@@ -558,15 +633,19 @@ const PlanAForm = ({ isOpen, onClose }: PlanAFormProps) => {
                       </h5>
                       <div>
                         <label className="block text-sm font-semibold text-gray-700 mb-2">Age *</label>
-                        <input
-                          type="number"
+                        <select
                           value={age}
                           onChange={e => updateChildAge(index, Number(e.target.value))}
-                          min="0"
-                          max="17"
-                          className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-orange-500 focus:outline-none"
+                          className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-orange-500 focus:outline-none focus:ring-2 focus:ring-orange-200 transition-colors"
                           required
-                        />
+                        >
+                          <option value="">Select age</option>
+                          {ageOptions.map(ageValue => (
+                            <option key={ageValue} value={ageValue}>
+                              {ageValue} {ageValue === 1 ? 'year' : 'years'}
+                            </option>
+                          ))}
+                        </select>
                       </div>
                     </div>
                   ))}
@@ -576,7 +655,7 @@ const PlanAForm = ({ isOpen, onClose }: PlanAFormProps) => {
               <div className="bg-gray-50 rounded-xl p-6 border border-gray-200">
                 <h4 className="font-bold text-gray-800 mb-4 flex items-center">
                   <Star className="w-5 h-5 mr-2 text-yellow-500" />
-                  Hotel Category Preference
+                  Hotel Category
                 </h4>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                   {HOTEL_STAR_OPTIONS.map((option) => (
@@ -727,75 +806,148 @@ const PlanAForm = ({ isOpen, onClose }: PlanAFormProps) => {
                 </div>
                 {/* Specific Dates */}
                 {formData.durationType === 'SPECIFIC' && (
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div>
-                      <label className="block text-sm font-semibold text-gray-700 mb-2">From *</label>
-                      <input
-                        type="date"
-                        value={formData.tripStartDate}
-                        onChange={e => setFormData(prev => ({ ...prev, tripStartDate: e.target.value }))}
-                        className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-blue-500 focus:outline-none"
-                        required
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-sm font-semibold text-gray-700 mb-2">To *</label>
-                      <input
-                        type="date"
-                        value={formData.tripEndDate}
-                        min={formData.tripStartDate}
-                        onChange={e => setFormData(prev => ({ ...prev, tripEndDate: e.target.value }))}
-                        className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-blue-500 focus:outline-none"
-                        required
-                      />
-                    </div>
-                  </div>
-                )}
-                {/* Flexible Dates */}
-                {formData.durationType === 'FLEXIBLE' && (
-                  <div className="space-y-4">
-                    <div>
-                      <label className="block text-sm font-semibold text-gray-700 mb-2">Preferred Month *</label>
-                      <select
-                        value={formData.flexibleMonth}
-                        onChange={e => setFormData(prev => ({ ...prev, flexibleMonth: e.target.value, tripStartDate: '', tripEndDate: '' }))}
-                        className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-blue-500 focus:outline-none"
-                        required
-                      >
-                        <option value="">Select a month</option>
-                        {MONTH_OPTIONS.map(month => (
-                          <option key={month.value} value={month.value}>{month.label}</option>
-                        ))}
-                      </select>
-                    </div>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                      <div>
-                        <label className="block text-sm font-semibold text-gray-700 mb-2">Preferred Start Date (Optional)</label>
-                        <input
-                          type="date"
-                          value={formData.tripStartDate}
-                          onChange={e => setFormData(prev => ({ ...prev, tripStartDate: e.target.value }))}
-                          min={formData.flexibleMonth ? getMonthBoundaries(formData.flexibleMonth).min : undefined}
-                          max={formData.flexibleMonth ? getMonthBoundaries(formData.flexibleMonth).max : undefined}
-                          disabled={!formData.flexibleMonth}
-                          className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-blue-500 focus:outline-none"
-                        />
+  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+    <div>
+      <label className="block text-sm font-semibold text-gray-700 mb-2">From *</label>
+      <input
+        type="date"
+        value={formData.tripStartDate}
+        onChange={e => setFormData(prev => ({ 
+          ...prev, 
+          tripStartDate: e.target.value,
+          tripEndDate: e.target.value > prev.tripEndDate ? '' : prev.tripEndDate
+        }))}
+        min={getTodayDate()} // Disable past dates
+        className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-blue-500 focus:outline-none"
+        required
+      />
+    </div>
+    <div>
+      <label className="block text-sm font-semibold text-gray-700 mb-2">To *</label>
+      <input
+        type="date"
+        value={formData.tripEndDate}
+        min={formData.tripStartDate || getTodayDate()} // Can't be before start date or today
+        onChange={e => setFormData(prev => ({ ...prev, tripEndDate: e.target.value }))}
+        className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-blue-500 focus:outline-none"
+        required
+        disabled={!formData.tripStartDate} // Disable until start date is selected
+      />
+    </div>
+  </div>
+                  )}
+
+                  {/* Flexible Dates */}
+                  {formData.durationType === 'FLEXIBLE' && (
+                    <div className="space-y-4">
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                          <label className="block text-sm font-semibold text-gray-700 mb-2">Preferred Month *</label>
+                          <select
+                            value={formData.flexibleMonth}
+                            onChange={e => {
+                              const monthValue = e.target.value;
+                              const availableYears = getAvailableYears(monthValue);
+                              
+                              setFormData(prev => ({ 
+                                ...prev, 
+                                flexibleMonth: monthValue,
+                                // Auto-select the first available year if current selection is not available
+                                flexibleYear: availableYears.some(y => y.value === prev.flexibleYear) 
+                                  ? prev.flexibleYear 
+                                  : availableYears[0]?.value || new Date().getFullYear(),
+                                tripStartDate: '', 
+                                tripEndDate: '' 
+                              }));
+                            }}
+                            className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-blue-500 focus:outline-none transition-colors"
+                            required
+                          >
+                            <option value="">Select a month</option>
+                            {MONTH_OPTIONS.map(month => (
+                              <option key={month.value} value={month.value}>
+                                {month.label}
+                              </option>
+                            ))}
+                          </select>
+                        </div>
+                        <div>
+                          <label className="block text-sm font-semibold text-gray-700 mb-2">Year *</label>
+                          <select
+                            value={formData.flexibleYear}
+                            onChange={e => setFormData(prev => ({ 
+                              ...prev, 
+                              flexibleYear: Number(e.target.value), 
+                              tripStartDate: '', 
+                              tripEndDate: '' 
+                            }))}
+                            className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-blue-500 focus:outline-none transition-colors"
+                            required
+                            disabled={!formData.flexibleMonth}
+                          >
+                            {getAvailableYears(formData.flexibleMonth).map(year => (
+                              <option key={year.value} value={year.value}>
+                                {year.label}
+                              </option>
+                            ))}
+                          </select>
+                          {formData.flexibleMonth && (
+                            <p className="text-xs text-gray-500 mt-1">
+                              {getAvailableYears(formData.flexibleMonth).length === 5 ? 
+                                "Current year not available for selected month" : 
+                                "Available years for selected month"
+                              }
+                            </p>
+                          )}
+                        </div>
                       </div>
-                      <div>
-                        <label className="block text-sm font-semibold text-gray-700 mb-2">Preferred End Date (Optional)</label>
-                        <input
-                          type="date"
-                          value={formData.tripEndDate}
-                          onChange={e => setFormData(prev => ({ ...prev, tripEndDate: e.target.value }))}
-                          min={formData.flexibleMonth ? getMonthBoundaries(formData.flexibleMonth).min : undefined}
-                          max={formData.flexibleMonth ? getMonthBoundaries(formData.flexibleMonth).max : undefined}
-                          disabled={!formData.flexibleMonth}
-                          className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-blue-500 focus:outline-none"
-                        />
+
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                          <label className="block text-sm font-semibold text-gray-700 mb-2">Preferred Start Date (Optional)</label>
+                          <input
+                            type="date"
+                            value={formData.tripStartDate}
+                            onChange={e => setFormData(prev => ({ 
+                              ...prev, 
+                              tripStartDate: e.target.value,
+                              tripEndDate: e.target.value > prev.tripEndDate ? '' : prev.tripEndDate
+                            }))}
+                            min={formData.flexibleMonth ? getMonthBoundaries(formData.flexibleMonth, formData.flexibleYear).min : undefined}
+                            max={formData.flexibleMonth ? getMonthBoundaries(formData.flexibleMonth, formData.flexibleYear).max : undefined}
+                            disabled={!formData.flexibleMonth}
+                            className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-blue-500 focus:outline-none transition-colors disabled:bg-gray-100 disabled:cursor-not-allowed disabled:opacity-70"
+                          />
+                        </div>
+                        <div>
+                          <label className="block text-sm font-semibold text-gray-700 mb-2">Preferred End Date (Optional)</label>
+                          <input
+                            type="date"
+                            value={formData.tripEndDate}
+                            onChange={e => setFormData(prev => ({ ...prev, tripEndDate: e.target.value }))}
+                            min={formData.tripStartDate || (formData.flexibleMonth ? getMonthBoundaries(formData.flexibleMonth, formData.flexibleYear).min : undefined)}
+                            max={formData.flexibleMonth ? getMonthBoundaries(formData.flexibleMonth, formData.flexibleYear).max : undefined}
+                            disabled={!formData.flexibleMonth}
+                            className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-blue-500 focus:outline-none transition-colors disabled:bg-gray-100 disabled:cursor-not-allowed disabled:opacity-70"
+                          />
+                        </div>
                       </div>
+
+                      {formData.flexibleMonth && (
+                        <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                          <div className="flex items-center text-blue-800">
+                            <Calendar className="w-5 h-5 mr-2 flex-shrink-0" />
+                            <div>
+                              <p className="font-medium">Selected period: {MONTH_OPTIONS.find(m => m.value === formData.flexibleMonth)?.label} {formData.flexibleYear}</p>
+                              <p className="text-sm opacity-80">
+                                Available dates: {getMonthBoundaries(formData.flexibleMonth, formData.flexibleYear).min} to {getMonthBoundaries(formData.flexibleMonth, formData.flexibleYear).max}
+                              </p>
+                            </div>
+                          </div>
+                        </div>
+                      )}
                     </div>
-                  </div>
-                )}
+                  )}
               </div>
               <div className="flex justify-end mt-8">
                 <button
@@ -1005,7 +1157,7 @@ const PlanAForm = ({ isOpen, onClose }: PlanAFormProps) => {
                 <h4 className="font-bold text-gray-800 mb-4">Contact Informations</h4>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
-                    <span className="block text-sm font-semibold text-gray-700">Full Name:</span>
+                    <span className="block text-sm font-semibold text-gray-700">Name:</span>
                     <span className="block text-gray-800">{formData.mainTraveler.fullName}</span>
                   </div>
                   <div>
@@ -1023,7 +1175,7 @@ const PlanAForm = ({ isOpen, onClose }: PlanAFormProps) => {
                 <h4 className="font-bold text-gray-800 mb-4">Traveler Details</h4>
                 <div>
                   <span className="block text-sm font-semibold text-gray-700 mb-2">Adults:</span>
-                  <span className="block text-gray-800 mb-4">{formData.numberOfAdults} adult(s)</span>
+                  <span className="block text-gray-800 mb-4">{formData.numberOfAdults}</span>
                   <span className="block text-sm font-semibold text-gray-700 mb-2">Children:</span>
                   <span className="block text-gray-800">
                     {formData.childAges.length > 0
@@ -1034,7 +1186,7 @@ const PlanAForm = ({ isOpen, onClose }: PlanAFormProps) => {
               </div>
               {/* Hotel Stars Summary */}
               <div className="bg-gray-50 rounded-xl p-6 border border-gray-200">
-                <h4 className="font-bold text-gray-800 mb-4">Hotel Category Preference</h4>
+                <h4 className="font-bold text-gray-800 mb-4">Hotel Category</h4>
                 <div className="flex flex-wrap gap-2">
                   {formData.hotelStars.length > 0 ? (
                     formData.hotelStars.map(star => {
