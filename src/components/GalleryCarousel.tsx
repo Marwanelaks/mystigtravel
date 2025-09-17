@@ -1,43 +1,48 @@
 import React, { useState, useEffect } from 'react';
 import { ChevronLeft, ChevronRight, MapPin, Star, Heart } from 'lucide-react';
-
+import marrakech from '@/assets/marrakech-5095887.jpg';
+import fez from '@/assets/fez-1691603.jpg';
+import rabat from '@/assets/rabat-5014427.jpg';
+import chefchaouen from '@/assets/morocco-3735564.jpg';
+import sahara from '@/assets/sahara-4937450.jpg';
+import atlas from '@/assets/morocco-4030733.jpg';
 const GalleryCarousel = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
 
   // Using Unsplash images that match your destination descriptions
   const destinations = [
     {
-      image: "https://images.unsplash.com/photo-1585004607620-fb4c44331e73?q=80&w=870&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1101&q=80",
+      image: marrakech,
       title: "Marrakech",
       subtitle: "The Red City",
       description: "Where dreams come alive in vibrant colors, mesmerizing scents, and echoes of history."
     },
     {
-      image: "https://plus.unsplash.com/premium_photo-1697729887553-b0392581a691?q=80&w=871&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1071&q=80",
+      image: fez,
       title: "Fez",
       subtitle: "The Timeless City",
       description: "Morocco's spiritual and cultural heart, a living museum with labyrinthine medinas."
     },
     {
-      image: "https://images.unsplash.com/photo-1588609715324-78072fc77cee?q=80&w=774&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1174&q=80",
+      image: rabat,
       title: "Rabat",
       subtitle: "Serene Capital by the Sea",
       description: "Where waves kiss shores and history whispers tales of elegance and heritage."
     },
     {
-      image: "https://plus.unsplash.com/premium_photo-1697729733847-0ed51661e005?q=80&w=870&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1172&q=80",
+      image: chefchaouen,
       title: "Chefchaouen",
       subtitle: "A Dream in Blue",
       description: "Not a place you visit, but a place you feel. A town of sapphire streets and azure doorways."
     },
     {
-      image: "https://images.unsplash.com/photo-1592172578991-51bac865e437?q=80&w=870&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80",
+      image: sahara,
       title: "Sahara Desert",
       subtitle: "Sea of Dreams",
       description: "Where golden dunes rise like waves frozen in time, their curves kissed by changing light."
     },
     {
-      image: "https://plus.unsplash.com/premium_photo-1697729782324-c1bf5949df6c?q=80&w=870&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80",
+      image: atlas,
       title: "Atlas Mountains",
       subtitle: "Majestic and Eternal",
       description: "Morocco's ancient backbone, where clouds touch the heart and Berber villages cling to rocks."

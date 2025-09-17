@@ -3,6 +3,7 @@ import { ArrowLeft, Heart, Sparkles, Globe, Users, Star, Target, Eye } from 'luc
 import { useNavigate } from 'react-router-dom';
 import IntroSection from './IntroSection';
 import Navbar from './Navbar';
+import lamp from '@/assets/lamp-7692525.jpg';
 
 const PhilosophyPage = () => {
   const navigate = useNavigate();
@@ -99,7 +100,7 @@ const PhilosophyPage = () => {
             <div className="relative">
               <div className="aspect-square rounded-2xl overflow-hidden shadow-xl">
                 <img 
-                  src="https://images.unsplash.com/photo-1570303345338-e1f0eddf4946?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1071&q=80" 
+                  src={lamp} 
                   alt="Moroccan cultural experience" 
                   className="w-full h-full object-cover"
                 />

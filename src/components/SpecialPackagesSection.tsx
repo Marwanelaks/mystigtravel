@@ -604,7 +604,7 @@
 
 import React, { useState } from 'react';
 import { ChevronLeft, ChevronRight, Calendar, MapPin, Users, Star, X } from 'lucide-react';
-
+import mosque from '@/assets/mosque-5779230.jpg';
 const SpecialPackagesSection = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [selectedProgram, setSelectedProgram] = useState(null);

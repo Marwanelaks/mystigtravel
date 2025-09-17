@@ -1,12 +1,15 @@
 import React, { useState } from 'react';
 import { X, MapPin, Clock, Users, Star, ArrowRight } from 'lucide-react';
-
+import marrakech from '@/assets/morocco-3740618.jpg';
+import essaouira from '@/assets/essaouira-4902881.jpg';
+import rabat from '@/assets/monument-to-the-tower-of-hassan-2219058.jpg';
+import fez from '@/assets/morocco-4775001.jpg';
 const ImageTextSection = () => {
   const [selectedDestination, setSelectedDestination] = useState(null);
 
   const sections = [
     {
-      image: "https://images.unsplash.com/photo-1719084198651-5ac167cb3e6e?q=80&w=869&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1101&q=80",
+      image: marrakech,
       title: 'Marrakech: The Red City',
       description: 'Marrakech is a city where dreams come alive in the form of vibrant colors, mesmerizing scents, and echoes of history. Jemaa el Fnaa, the beating heart of the city, is a spectacle of life musicians serenade the crowd, storytellers spin their magic, and the air fills with the aroma of sizzling spices.',
       imageLeft: true,
@@ -28,7 +31,7 @@ const ImageTextSection = () => {
       }
     },
     {
-      image: "https://plus.unsplash.com/premium_photo-1697730007162-3acd986a87f6?q=80&w=870&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80",
+      image: essaouira,
       title: 'Essaouira: The Coastal Dreamscape',
       description: 'Essaouira is a place where time slows down, and the soul takes flight. The salty breeze carries the melody of seagulls as you wander through the medina, a labyrinth of colorful stalls and artisans weaving stories into their crafts. The ancient ramparts stand guard against the crashing waves.',
       imageLeft: false,
@@ -50,7 +53,7 @@ const ImageTextSection = () => {
       }
     },
     {
-      image: "https://images.unsplash.com/photo-1695061854597-efe4f25a49f7?q=80&w=870&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1174&q=80",
+      image: rabat,
       title: 'Rabat: The Serene Capital',
       description: 'Rabat whispers tales of elegance and history as the waves of the Atlantic kiss its shores. The Kasbah of the Oudayas is a haven of charm, its white and blue streets a painter\'s palette brought to life. The Hassan Tower stands tall, a poetic relic of a grand vision left incomplete.',
       imageLeft: true,
@@ -72,7 +75,7 @@ const ImageTextSection = () => {
       }
     },
     {
-      image: "https://plus.unsplash.com/premium_photo-1694475072465-ef5455203721?q=80&w=877&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1071&q=80",
+      image: fez,
       title: 'Fez: The Timeless City',
       description: 'Fez is Morocco\'s spiritual and cultural heart, a city that feels like a living museum. Within its labyrinthine medina, Fes el Bali artisans work tirelessly, crafting zellij tiles, leather goods, and intricate lanterns. Discover the Al Qarawiyyin University, the world\'s oldest continuously operating university.',
       imageLeft: false,
