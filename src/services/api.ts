@@ -1,5 +1,5 @@
-// const API_BASE_URL = import.meta.env.VITE_BACKEND_API_URL || 'http://localhost:8080/api';
-const API_BASE_URL = 'https://mystic-backend-production.up.railway.app/api';
+const API_BASE_URL = import.meta.env.BACKEND_API_URL || 'http://localhost:8080/api';
+
 // Auth token management (access/refresh)
 const getAccessToken = () => localStorage.getItem('accessToken');
 const setAccessToken = (token: string) => localStorage.setItem('accessToken', token);

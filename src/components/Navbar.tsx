@@ -3,6 +3,7 @@ import { Menu, X, Search, LogIn, ChevronDown } from 'lucide-react';
 import SearchOverlay from './SearchOverlay';
 import PlanAForm from './PlanAForm';
 import { useCart } from '@/contexts/CartContext';
+import logo from '@/assets/mysticLogo.png';
 
 const Navbar = () => {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -44,9 +45,11 @@ const Navbar = () => {
         <div className="flex items-center justify-between">
           {/* Logo */}
           <div className="flex items-center">
-            <h1 className="font-serif text-3xl font-light tracking-wider text-foreground hover:text-primary transition-colors duration-300">
-              MysticTravel
-            </h1>
+            <img 
+              src={logo} 
+              alt="Private Umrah by Mystic Travel" 
+              className="h-14 w-auto sm:h-16 md:h-20 object-contain transition-transform hover:scale-105 duration-300"
+            />
           </div>
 
           {/* Desktop Navigation */}

@@ -1,115 +1,97 @@
+/* Modern fonts loaded via HTML */
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-/* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
-All colors MUST be HSL.
-*/
+/* Islamic-inspired design system for Umrah trip organization */
 
 @layer base {
   :root {
-    /* Luxury Moroccan color palette */
-    --background: 45 25% 97%; /* Soft ivory */
-    --foreground: 30 15% 25%; /* Warm dark brown */
+    /* New Color Palette - Deep Blue & Gold Theme */
+    --background: 0 0% 98%; /* White Smoke #FAFAFA */
+    --foreground: 229 80% 18%; /* Deep Blue #0A144F */
 
-    --card: 44 22% 95%; /* Light beige */
-    --card-foreground: 30 15% 25%;
+    /* Primary - Deep Blue */
+    --primary: 229 80% 18%; /* Deep Blue */
+    --primary-foreground: 0 0% 98%; /* White Smoke */
+    --primary-light: 222 69% 34%; /* Royal Blue */
+    --primary-lighter: 222 50% 85%;
 
-    --popover: 44 22% 95%;
-    --popover-foreground: 30 15% 25%;
+    /* Secondary - Emerald Green */
+    --secondary: 139 41% 31%; /* Emerald Green */
+    --secondary-foreground: 0 0% 98%;
+    --secondary-light: 139 35% 50%;
 
-    --primary: 30 25% 35%; /* Rich brown */
-    --primary-foreground: 45 25% 97%;
+    /* Accent - Gold */
+    --accent: 45 53% 51%; /* Gold #C7A33E */
+    --accent-foreground: 229 80% 18%; /* Deep Blue text on gold */
+    --accent-dark: 45 65% 40%;
+    --accent-light: 45 50% 70%;
 
-    --secondary: 40 20% 90%; /* Sand beige */
-    --secondary-foreground: 30 15% 25%;
+    /* Sand Beige */
+    --sand-beige: 41 56% 89%; /* Sand Beige #F3EAD3 */
+    --sand-beige-dark: 41 50% 80%;
 
-    --muted: 42 18% 88%; /* Soft sand */
-    --muted-foreground: 30 12% 45%;
+    /* Crimson for alerts/destructive */
+    --destructive: 0 70% 36%; /* Crimson Red */
+    --destructive-foreground: 0 0% 98%;
 
-    --accent: 35 25% 85%; /* Warm beige */
-    --accent-foreground: 30 15% 25%;
+    /* Muted Tones */
+    --muted: 0 0% 90%; /* Light Gray */
+    --muted-foreground: 0 0% 20%; /* Charcoal Gray */
+    --muted-dark: 0 0% 85%;
 
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 45 25% 97%;
+    /* Card System */
+    --card: 0 0% 100%; /* Pure White */
+    --card-foreground: 229 80% 18%; /* Deep Blue */
+    --card-sacred: 41 56% 89%; /* Sand Beige */
+    --card-islamic: 41 50% 95%;
 
-    --border: 40 15% 85%;
-    --input: 40 15% 85%;
-    --ring: 30 25% 35%;
+    /* Borders & Inputs */
+    --border: 0 0% 90%; /* Light Gray */
+    --input: 0 0% 95%;
+    --input-border: 0 0% 85%;
+    --ring: 229 80% 18%; /* Deep Blue */
 
-    --radius: 0.5rem;
-    
-    /* Custom luxury tokens */
-    --luxury-ivory: 45 25% 97%;
-    --luxury-beige: 40 20% 90%;
-    --luxury-sand: 42 18% 88%;
-    --luxury-brown: 30 25% 35%;
-    --luxury-dark-brown: 30 15% 25%;
-    
-    /* Gradients */
-    --gradient-luxury: linear-gradient(135deg, hsl(var(--luxury-ivory)), hsl(var(--luxury-beige)));
-    --gradient-overlay: linear-gradient(180deg, rgba(0,0,0,0.4) 0%, rgba(0,0,0,0.1) 50%, rgba(0,0,0,0.4) 100%);
-    
-    /* Shadows */
-    --shadow-luxury: 0 10px 40px -10px hsl(var(--luxury-brown) / 0.1);
-    --shadow-hover: 0 20px 60px -10px hsl(var(--luxury-brown) / 0.15);
-    
-    /* Transitions */
-    --transition-luxury: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    /* Border Radius */
+    --radius: 0.75rem;
+    --radius-lg: 1rem;
+    --radius-xl: 1.5rem;
 
-    --sidebar-background: 0 0% 98%;
+    /* Popover */
+    --popover: 0 0% 100%;
+    --popover-foreground: 229 80% 18%;
 
-    --sidebar-foreground: 240 5.3% 26.1%;
-
-    --sidebar-primary: 240 5.9% 10%;
-
-    --sidebar-primary-foreground: 0 0% 98%;
-
-    --sidebar-accent: 240 4.8% 95.9%;
-
-    --sidebar-accent-foreground: 240 5.9% 10%;
-
-    --sidebar-border: 220 13% 91%;
-
-    --sidebar-ring: 217.2 91.2% 59.8%;
+    /* Islamic themed colors (for backward compatibility) */
+    --islamic-green: 139 41% 31%; /* Emerald Green */
+    --islamic-green-light: 139 35% 50%;
+    --islamic-green-lighter: 139 30% 85%;
+    --islamic-green-dark: 139 50% 20%;
+    --islamic-gold: 45 53% 51%; /* Gold */
+    --islamic-gold-light: 45 50% 70%;
+    --islamic-gold-dark: 45 65% 40%;
+    --islamic-beige: 41 56% 89%; /* Sand Beige */
+    --islamic-beige-dark: 41 50% 80%;
+    --sacred-white: 0 0% 100%;
+    --sacred-cream: 41 40% 97%;
+    --sacred-cream-dark: 41 35% 94%;
   }
 
   .dark {
-    --background: 222.2 84% 4.9%;
-    --foreground: 210 40% 98%;
-
-    --card: 222.2 84% 4.9%;
-    --card-foreground: 210 40% 98%;
-
-    --popover: 222.2 84% 4.9%;
-    --popover-foreground: 210 40% 98%;
-
-    --primary: 210 40% 98%;
-    --primary-foreground: 222.2 47.4% 11.2%;
-
-    --secondary: 217.2 32.6% 17.5%;
-    --secondary-foreground: 210 40% 98%;
-
-    --muted: 217.2 32.6% 17.5%;
-    --muted-foreground: 215 20.2% 65.1%;
-
-    --accent: 217.2 32.6% 17.5%;
-    --accent-foreground: 210 40% 98%;
-
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 210 40% 98%;
-
-    --border: 217.2 32.6% 17.5%;
-    --input: 217.2 32.6% 17.5%;
-    --ring: 212.7 26.8% 83.9%;
-    --sidebar-background: 240 5.9% 10%;
-    --sidebar-foreground: 240 4.8% 95.9%;
-    --sidebar-primary: 224.3 76.3% 48%;
-    --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 240 3.7% 15.9%;
-    --sidebar-accent-foreground: 240 4.8% 95.9%;
-    --sidebar-border: 240 3.7% 15.9%;
-    --sidebar-ring: 217.2 91.2% 59.8%;
+    /* Dark theme for Islamic context */
+    --background: 229 60% 12%;
+    --foreground: 41 56% 89%;
+    --card: 229 50% 15%;
+    --card-foreground: 41 56% 89%;
+    --primary: 45 53% 51%; /* Gold in dark mode */
+    --primary-foreground: 229 80% 18%;
+    --secondary: 139 41% 31%;
+    --secondary-foreground: 0 0% 98%;
+    --muted: 229 40% 18%;
+    --muted-foreground: 0 0% 70%;
+    --border: 229 30% 25%;
+    --input: 229 40% 18%;
   }
 }
 
@@ -119,126 +101,474 @@ All colors MUST be HSL.
   }
 
   body {
-    @apply bg-background text-foreground;
-    font-family: 'Lato', sans-serif;
-    letter-spacing: 0.01em;
+    @apply bg-background text-foreground font-poppins;
+    min-height: 100vh;
+  }
+
+  /* Modern Typography */
+  .font-poppins {
+    font-family: 'Poppins', sans-serif;
   }
   
-  .font-serif {
-    font-family: 'Cormorant Garamond', serif;
+  .font-satisfy {
+    font-family: 'Satisfy', cursive;
   }
   
-  .font-display {
-    font-family: 'Crimson Text', serif;
+  .font-cairo {
+    font-family: 'Cairo', sans-serif;
   }
-  
-  .font-elegant {
-    font-family: 'Source Serif Pro', serif;
-  }
-  
-  .font-sans {
-    font-family: 'Lato', sans-serif;
+
+  .font-montserrat {
+    font-family: 'Montserrat', sans-serif;
   }
 }
 
 @layer components {
-  /* Button luxury style */
-  .btn-luxury {
-    @apply px-8 py-4 bg-primary text-primary-foreground font-medium tracking-wide uppercase transition-all duration-500 hover:bg-primary/90 hover:shadow-luxury-hover hover:scale-105;
-  }
-  
-  /* Advanced scroll animations */
-  .fade-in-up {
-    opacity: 0;
-    transform: translateY(60px) scale(0.98);
-    transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
-  }
-  
-  .fade-in-up.animate {
-    opacity: 1;
-    transform: translateY(0) scale(1);
-  }
-  
-  /* Luxury interactions */
-  .luxury-hover {
-    transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
-  }
-  
-  .luxury-hover:hover {
-    transform: translateY(-8px) scale(1.02);
-    box-shadow: var(--shadow-hover);
-  }
-  
-  /* Typography animations */
-  .text-reveal {
-    overflow: hidden;
-  }
-  
-  .text-reveal::before {
+  /* Islamic Pattern Background */
+  .islamic-pattern::before {
     content: '';
     position: absolute;
     top: 0;
     left: 0;
-    width: 100%;
-    height: 100%;
-    background: var(--background);
-    transform: translateX(-100%);
-    transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+    right: 0;
+    bottom: 0;
+    background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='hsl(229, 80%, 18%)' fill-opacity='0.05'%3E%3Cpath d='M30 30L15 15v30h30V15L30 30zM15 0h30v15L30 30 15 15V0z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* Islamic Geometric Ornament */
+  .islamic-ornament {
+    position: relative;
   }
   
-  .text-reveal.animate::before {
-    transform: translateX(100%);
+  .islamic-ornament::before,
+  .islamic-ornament::after {
+    content: '✦';
+    position: absolute;
+    color: hsl(45, 53%, 51%);
+    font-size: 1.5rem;
+    top: 50%;
+    transform: translateY(-50%);
   }
   
-  /* Gradient overlays */
-  .gradient-overlay {
-    background: var(--gradient-overlay);
+  .islamic-ornament::before {
+    left: -3rem;
   }
   
-  /* Custom shadows */
-  .shadow-luxury {
-    box-shadow: var(--shadow-luxury);
+  .islamic-ornament::after {
+    right: -3rem;
   }
-  
-  .shadow-luxury-hover {
-    box-shadow: var(--shadow-hover);
-  }
-  
-  /* Moroccan-inspired animations */
-  .moroccan-tile {
-    background-image: 
-      radial-gradient(circle at 25% 25%, #f97316 2px, transparent 2px),
-      radial-gradient(circle at 75% 75%, #dc2626 2px, transparent 2px);
-    background-size: 20px 20px;
-    background-position: 0 0, 10px 10px;
-  }
-  
-  .zellij-pattern {
-    background-image: 
-      linear-gradient(45deg, transparent 40%, rgba(249, 115, 22, 0.1) 40%, rgba(249, 115, 22, 0.1) 60%, transparent 60%),
-      linear-gradient(-45deg, transparent 40%, rgba(220, 38, 38, 0.1) 40%, rgba(220, 38, 38, 0.1) 60%, transparent 60%);
-    background-size: 30px 30px;
-  }
-  
+
+  /* Hover Effects */
   .hover-lift {
-    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   }
   
   .hover-lift:hover {
-    transform: translateY(-4px) scale(1.02);
-    box-shadow: 0 20px 40px -10px rgba(249, 115, 22, 0.3);
+    transform: translateY(-2px);
+    box-shadow: 0 10px 30px -10px hsl(229, 80%, 18%, 0.2);
+  }
+
+  /* Form Styling */
+  .form-step {
+    animation: fadeInUp 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  @keyframes fadeInUp {
+    from {
+      opacity: 0;
+      transform: translateY(30px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
   }
   
-  .moroccan-border {
-    border-image: linear-gradient(45deg, #f97316, #dc2626, #eab308) 1;
+  @keyframes slideInFromBottom {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
   }
   
-  .scale-102 {
-    transform: scale(1.02);
+  .animate-in {
+    animation: slideInFromBottom 0.5s ease-out;
   }
   
-  /* Smooth scrolling */
-  html {
-    scroll-behavior: smooth;
+  .slide-in-from-bottom-4 {
+    animation: slideInFromBottom 0.5s ease-out;
+  }
+  
+  .duration-500 {
+    animation-duration: 0.5s;
+  }
+
+  /* Progress Bar */
+  .progress-step {
+    position: relative;
+  }
+  
+  .progress-step::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    right: -50%;
+    width: 100%;
+    height: 2px;
+    background: hsl(45, 12%, 88%);
+    z-index: -1;
+  }
+  
+  .progress-step.completed::after {
+    background: linear-gradient(135deg, hsl(229, 80%, 18%) 0%, hsl(222, 69%, 34%) 100%);
+  }
+
+  /* Islamic Gradient Utilities - New palette */
+  .bg-gradient-islamic {
+    background: linear-gradient(135deg, hsl(229, 80%, 18%) 0%, hsl(222, 69%, 34%) 100%);
+  }
+
+  .bg-gradient-gold {
+    background: linear-gradient(135deg, hsl(45, 65%, 40%) 0%, hsl(45, 53%, 51%) 100%);
+  }
+
+  .bg-gradient-sacred {
+    background: linear-gradient(180deg, hsl(41, 56%, 89%) 0%, hsl(0, 0%, 100%) 100%);
+  }
+
+  .bg-gradient-hero {
+    background: linear-gradient(135deg, hsl(229, 80%, 18%, 0.95) 0%, hsl(222, 69%, 34%, 0.85) 50%, hsl(45, 53%, 51%, 0.3) 100%);
+  }
+
+  /* Custom Underline Input Styling */
+  .input-underline {
+    @apply bg-transparent border-0 border-b-2 border-muted-dark rounded-none px-0 py-4 focus-visible:ring-0 focus-visible:ring-offset-0 focus-visible:border-islamic-green transition-all duration-300 ease-in-out text-base;
+    box-shadow: none !important;
+    min-height: 3rem;
+  }
+  
+  .input-underline:focus {
+    @apply border-islamic-green;
+    box-shadow: 0 3px 0 0 hsl(229, 80%, 18%) !important;
+    transform: translateY(-1px);
+  }
+  
+  .input-underline::placeholder {
+    @apply text-muted-foreground/60 transition-colors duration-300;
+  }
+  
+  .input-underline:focus::placeholder {
+    @apply text-muted-foreground/40;
+  }
+
+  /* Floating Label Effect */
+  .input-group {
+    @apply relative;
+  }
+  
+  .input-group .floating-label {
+    @apply absolute left-0 top-4 text-muted-foreground transition-all duration-300 ease-in-out pointer-events-none;
+    transform-origin: left center;
+  }
+  
+  .input-group .input-underline:focus ~ .floating-label,
+  .input-group .input-underline:not(:placeholder-shown) ~ .floating-label {
+    @apply text-islamic-green text-sm font-medium;
+    transform: translateY(-1.8rem) scale(0.85);
+  }
+
+  /* Enhanced Islamic Pattern */
+  .islamic-pattern-enhanced::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: 
+      url("data:image/svg+xml,%3Csvg width='120' height='120' viewBox='0 0 120 120' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' stroke='hsl(229, 80%, 18%)' stroke-width='0.5' stroke-opacity='0.08'%3E%3Cpath d='M60 60L30 30v60h60V30L60 60z M30 0h60v30L60 60 30 30V0z M0 30h30v30H0V30z M90 30h30v30H90V30z M0 90h30v30H0V90z M90 90h30v30H90V90z'/%3E%3Ccircle cx='60' cy='60' r='20'/%3E%3Cpath d='M40 40l20 20M80 40l-20 20M40 80l20-20M80 80l-20-20'/%3E%3C/g%3E%3C/svg%3E"),
+      radial-gradient(circle at 20% 20%, hsl(139, 41%, 31%, 0.1) 0%, transparent 40%),
+      radial-gradient(circle at 80% 80%, hsl(45, 53%, 51%, 0.1) 0%, transparent 40%);
+    pointer-events: none;
+    z-index: 0;
+  }
+}
+
+@layer components {
+  /* Enhanced Islamic geometric pattern background */
+  .islamic-pattern {
+    background-image: 
+      radial-gradient(circle at 25% 25%, hsl(var(--islamic-green) / 0.08) 0%, transparent 50%),
+      radial-gradient(circle at 75% 75%, hsl(var(--islamic-gold) / 0.08) 0%, transparent 50%),
+      linear-gradient(45deg, transparent 24%, hsl(var(--islamic-green) / 0.03) 25%, hsl(var(--islamic-green) / 0.03) 26%, transparent 27%, transparent 74%, hsl(var(--islamic-green) / 0.03) 75%, hsl(var(--islamic-green) / 0.03) 76%, transparent 77%),
+      linear-gradient(-45deg, transparent 24%, hsl(var(--islamic-gold) / 0.03) 25%, hsl(var(--islamic-gold) / 0.03) 26%, transparent 27%, transparent 74%, hsl(var(--islamic-gold) / 0.03) 75%, hsl(var(--islamic-gold) / 0.03) 76%, transparent 77%);
+    background-size: 60px 60px, 60px 60px, 40px 40px, 40px 40px;
+    background-position: 0 0, 30px 30px, 0 0, 20px 20px;
+  }
+
+  /* RTL Support Classes */
+  .rtl-grid {
+    direction: rtl;
+  }
+  
+  .rtl-grid .md\:grid-cols-2 > * {
+    text-align: right;
+  }
+
+  /* Enhanced stepper styling */
+  .stepper-container {
+    @apply relative;
+  }
+
+  .stepper-container::before {
+    content: '';
+    @apply absolute top-6 left-6 right-6 h-0.5 bg-gradient-to-r from-muted via-islamic-green/30 to-muted;
+    z-index: 0;
+  }
+
+  .stepper-step {
+    @apply relative z-10 bg-card;
+  }
+
+  /* Enhanced form styling */
+  .form-input-floating {
+    @apply relative;
+  }
+
+  .form-input-floating input:focus + label,
+  .form-input-floating input:not(:placeholder-shown) + label {
+    @apply text-xs -top-2 text-islamic-green;
+  }
+
+  .form-input-floating input {
+    width: 100%;
+    padding: 12px 0;
+    background: transparent;
+    border: 0;
+    border-bottom: 2px solid hsl(var(--muted-foreground) / 0.3);
+    color: hsl(var(--foreground));
+    outline: none;
+    transition: all 0.3s ease;
+  }
+
+  .form-input-floating input::placeholder {
+    color: transparent;
+  }
+
+  .form-input-floating input:focus {
+    border-bottom-color: hsl(var(--islamic-green));
+  }
+
+  .form-input-floating label {
+    @apply absolute transition-all duration-300 text-muted-foreground;
+    top: 12px;
+    font-size: 1rem;
+    pointer-events: none;
+  }
+
+  .form-input-floating input:focus + label,
+  .form-input-floating input:not([value=""]) + label {
+    @apply text-xs -top-2 text-islamic-green;
+  }
+
+  /* RTL specific form styling */
+  .rtl .form-input-floating input {
+    @apply text-right font-cairo;
+  }
+
+  .rtl .form-input-floating label {
+    @apply right-0 font-cairo;
+  }
+
+  .ltr .form-input-floating input {
+    @apply text-left font-poppins;
+  }
+
+  .ltr .form-input-floating label {
+    @apply left-0 font-poppins;
+  }
+
+  /* Hero section styling */
+  .hero-overlay {
+    background: var(--gradient-hero);
+  }
+
+  /* Custom button variants */
+  .btn-islamic {
+    @apply bg-primary text-primary-foreground hover:bg-primary/90 shadow-lg hover:shadow-xl;
+    background: var(--gradient-islamic);
+    transition: all 0.3s ease;
+  }
+
+  .btn-islamic:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-islamic);
+  }
+
+  .btn-gold {
+    @apply bg-accent text-accent-foreground hover:bg-accent/90;
+    transition: all 0.3s ease;
+  }
+
+  .btn-gold:hover {
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-gold);
+  }
+
+  /* Form step indicator */
+  .step-indicator {
+    @apply flex items-center justify-center w-8 h-8 rounded-full border-2 text-sm font-semibold;
+  }
+
+  .step-active {
+    @apply bg-primary text-primary-foreground border-primary;
+  }
+
+  .step-completed {
+    @apply bg-accent text-accent-foreground border-accent;
+  }
+
+  .step-inactive {
+    @apply bg-muted text-muted-foreground border-muted-foreground/30;
+  }
+
+  /* Form card styling */
+  .form-card {
+    @apply bg-card p-6 rounded-lg shadow-lg border border-border/50;
+    box-shadow: var(--shadow-islamic);
+  }
+
+  /* Arabic text styling */
+  .arabic-text {
+    font-family: var(--font-arabic);
+    direction: rtl;
+    text-align: right;
+  }
+
+  /* Custom animations */
+  .fade-in-up {
+    animation: fadeInUp 0.6s ease-out;
+  }
+
+  .slide-in-right {
+    animation: slideInRight 0.5s ease-out;
+  }
+
+  @keyframes fadeInUp {
+    from {
+      opacity: 0;
+      transform: translateY(30px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes slideInRight {
+    from {
+      opacity: 0;
+      transform: translateX(30px);
+    }
+    to {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+
+  /* Islamic decorative elements */
+  .decorative-border {
+    position: relative;
+  }
+
+  .decorative-border::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80px;
+    height: 4px;
+    background: var(--gradient-islamic);
+    border-radius: 2px;
+  }
+
+  /* Phone Input Styling */
+  .PhoneInput {
+    display: flex;
+    align-items: center;
+  }
+
+  .PhoneInputInput {
+    flex: 1;
+    border: none;
+    outline: none;
+    background: transparent;
+    font-size: 1rem;
+    padding: 0;
+    margin-left: 8px;
+  }
+
+  .PhoneInputCountry {
+    display: flex;
+    align-items: center;
+    position: relative;
+    padding-right: 8px;
+  }
+
+  .PhoneInputCountrySelect {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    opacity: 0;
+    cursor: pointer;
+  }
+
+  .PhoneInputCountryIcon {
+    width: 24px;
+    height: 24px;
+    border-radius: 2px;
+    overflow: hidden;
+    box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.1);
+  }
+
+  .PhoneInputCountrySelectArrow {
+    margin-left: 4px;
+    color: hsl(var(--islamic-green));
+    opacity: 0.8;
+  }
+
+  .PhoneInput:focus-within .PhoneInputCountrySelectArrow {
+    color: hsl(var(--islamic-green));
+    opacity: 1;
+  }
+
+  /* RTL Support for Phone Input */
+  .rtl .PhoneInput {
+    direction: ltr;
+  }
+
+  .rtl .PhoneInputInput {
+    margin-left: 0;
+    margin-right: 8px;
+    text-align: left;
+  }
+
+  .rtl .PhoneInputCountry {
+    padding-right: 0;
+    padding-left: 8px;
+  }
+
+  .rtl .PhoneInputCountrySelectArrow {
+    margin-left: 0;
+    margin-right: 4px;
   }
 }

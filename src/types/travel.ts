@@ -133,8 +133,9 @@ export interface ClientInfo {
   tripPeriod: number;
   tripStartDate: string; // Ajouté
   tripEndDate: string;   // Ajouté
-  durationType: 'flexible' | 'specific'; // NEW: Add duration type
+  durationType: 'FLEXIBLE' | 'SPECIFIC'; // NEW: Add duration type
   flexibleMonth?: string; // NEW: For flexible duration
+  flightOption?: 'WITH' | 'WITHOUT'; // NEW
 }
 
 export interface CitySelection {

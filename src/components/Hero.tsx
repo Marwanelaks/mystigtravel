@@ -28,7 +28,7 @@ const Hero = () => {
             <p className="font-elegant text-xl md:text-2xl font-light mb-8 leading-relaxed">
               Sacred journeys woven through the soul of Morocco
             </p>
-            <button className="btn-luxury px-8 py-4 text-lg font-medium tracking-wide hover:scale-105 transition-transform duration-300">
+            <button className="btn-luxury bg-primary px-8 py-4 text-lg font-medium tracking-wide hover:scale-105 transition-transform duration-300">
               Begin your journey
             </button>
           </div>

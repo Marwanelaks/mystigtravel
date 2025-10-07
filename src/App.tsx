@@ -31,6 +31,8 @@ import NotFound from "./pages/NotFound";
 import Hotelsc from "./pages/dashboard/Hotels";
 import AboutDetailPage from "./components/AboutDetailPage";
 import PhilosophyPage from "./components/PhilosophyPage";
+import { LanguageProvider } from "./contexts/LanguageContext";
+import IndexUmrah from "./pages/IndexUmrah";
 
 const queryClient = new QueryClient();
 
@@ -40,11 +42,13 @@ const App = () => (
       <AuthProvider>
         <CartProvider>
           <TooltipProvider>
+          <LanguageProvider>
             <Toaster />
             <Sonner />
             <BrowserRouter>
               <Routes>
                 <Route path="/" element={<Index />} />
+                <Route path="/umrah" element={<IndexUmrah />} />
                 <Route path="/about-us" element={<AboutDetailPage />} />
                 <Route path="/philosophy" element={<PhilosophyPage />} />
                 <Route path="/products" element={<Products />} />
@@ -71,6 +75,7 @@ const App = () => (
                 <Route path="*" element={<NotFound />} />
               </Routes>
             </BrowserRouter>
+            </LanguageProvider>
           </TooltipProvider>
         </CartProvider>
       </AuthProvider>
