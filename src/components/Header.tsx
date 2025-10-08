@@ -32,13 +32,14 @@ export const Header: React.FC<HeaderProps> = ({ onNavigateToForm }) => {
   return (
     <header className="fixed top-0 left-0 right-0 z-50 bg-white/80 backdrop-blur-xl border-b border-primary/10 shadow-lg">
       <div className="container mx-auto px-6">
-        <div className="flex items-center justify-between h-20">
+        <div className="flex items-center justify-between h-18">
           {/* Logo */}
           <div className={`flex items-center ${isRTL ? 'flex-row-reverse' : ''}`}>
             <img 
+              style={{ height: '6.5rem' }}
               src={logo} 
               alt="Private Umrah by Mystic Travel" 
-              className="h-14 w-auto sm:h-16 md:h-20 object-contain transition-transform hover:scale-105 duration-300"
+              className="h-17 w-auto sm:h-16 md:h-20 object-contain transition-transform hover:scale-105 duration-300"
             />
           </div>
 
