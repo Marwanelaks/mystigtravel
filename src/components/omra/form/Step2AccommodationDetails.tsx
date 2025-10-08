@@ -320,11 +320,11 @@ export const Step2AccommodationDetails: React.FC = () => {
                         >
                           {isRTL ? category.labelAr : category.labelEn}
                         </Label>
-                        <p className={`text-xs text-muted-foreground line-clamp-2 ${
+                        {/* <p className={`text-xs text-muted-foreground line-clamp-2 ${
                           isRTL ? 'font-amiri' : 'font-inter'
                         }`}>
                           {isRTL ? category.descriptionAr : category.descriptionEn}
-                        </p>
+                        </p> */}
                       </div>
                       <Checkbox
                         id={category.value}
