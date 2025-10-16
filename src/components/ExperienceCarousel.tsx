@@ -1,202 +1,106 @@
 import { useState } from 'react';
-import { ChevronLeft, ChevronRight, X } from 'lucide-react';
-
-// Import your images (you'll need to add these to your assets)
-// import fesCuisineImage from '@/assets/fes-cuisine.jpg';
-// import sephardicCuisineImage from '@/assets/sephardic-cuisine.jpg';
-// import breadMakingImage from '@/assets/bread-making.jpg';
-// import fezTastingImage from '@/assets/fez-tasting.jpg';
-// import carriageTourImage from '@/assets/carriage-tour.jpg';
-// import calligraphyImage from '@/assets/calligraphy.jpg';
-// import spaHammamImage from '@/assets/spa-hammam.jpg';
-// import hennaImage from '@/assets/henna-rituals.jpg';
-// import mountainEscapeImage from '@/assets/mountain-escape.jpg';
-// import copperworkImage from '@/assets/copperwork.jpg';
+import { ChevronLeft, ChevronRight, X, Star, Quote } from 'lucide-react';
+import cultural from '@/assets/santa-fe-2367043.jpg';
 
 const ExperienceCarousel = () => {
   const [selectedExperience, setSelectedExperience] = useState(null);
   const [currentIndex, setCurrentIndex] = useState(0);
 
+  // Updated experiences with your new content
   const experiences = [
     {
-      id: 'culinary-fes',
-      image: "https://riad-layalina-fes.com/wp-content/uploads/tajine-agneau-pruneaux-au-riad-layalina-fes.jpg",
-      title: 'Culinary Masterpieces of Fes',
-      shortDescription: 'Luxurious cooking experience with a skilled chef',
-      category: 'Culinary',
-      details: {
-        description: 'Explore the rich culinary arts of Fes with a professional chef who will guide you through traditional cooking techniques and share the secrets of preparing delicious Fassi dishes.',
-        highlights: [
-          'Discover fresh local ingredients like Fassi spices, olives, and nuts',
-          'Learn to prepare dishes like couscous and tagine',
-          'Visit local markets to purchase ingredients',
-          'Master various cooking techniques'
-        ],
-        duration: '3-4 hours',
-        location: 'Fes'
-      }
-    },
-    {
-      id: 'sephardic-cuisine',
-      image: "https://aish.com/wp-content/uploads/2023/02/What-Is-Sephardi-Food-1240_x_698.jpg",
-      title: 'Sephardic Cuisine Journey',
-      shortDescription: 'Explore flavors, traditions, and history',
-      category: 'Culinary',
-      details: {
-        description: 'Discover the culinary traditions of Jews expelled from Spain and Portugal in the 15th century, enriched with diverse ingredients and cultural influences.',
-        highlights: [
-          'Learn about key ingredients like grains, vegetables, and spices',
-          'Master techniques like slow cooking, grilling, and frying',
-          'Prepare traditional dishes like couscous, hummus, and paella',
-          'Understand cultural influences and celebrations'
-        ],
-        duration: '3-4 hours',
-        location: 'Fes'
-      }
-    },
-    {
-      id: 'bread-pastry',
-      image: "https://kitchenaid.com.au/cdn/shop/articles/Bread_bowl.jpg?v=1689915783",
-      title: 'Moroccan Bread & Pastry Making',
-      shortDescription: 'Hands-on culinary journey in Fes',
-      category: 'Culinary',
-      details: {
-        description: 'Immerse yourself in the world of traditional cooking with specialized workshops that teach the arts of bread and pastry-making.',
-        highlights: [
-          'Learn to select fresh ingredients like flour and yeast',
-          'Practice manual techniques for kneading and mixing',
-          'Bake in traditional ovens that serve as social hubs',
-          'Prepare pastries like Baghrir and Rfisa'
-        ],
-        duration: '2-3 hours',
-        location: 'Fes'
-      }
-    },
-    {
-      id: 'fez-tasting',
-      image: "https://media.tacdn.com/media/attractions-splice-spp-360x240/12/e5/22/a5.jpg",
-      title: 'Enchanting Tasting Experience in Fez',
-      shortDescription: 'Explore culinary heritage through senses',
-      category: 'Culinary',
-      details: {
-        description: 'A rich exploration of Fez\'s culinary heritage, blending tradition, culture, and sensory delight in one of Morocco\'s oldest cities.',
-        highlights: [
-          'Taste iconic Moroccan dishes like tagines, couscous, and pastilla',
-          'Discover the use of spices like saffron, cumin, and cinnamon',
-          'Explore street food culture with grilled meats and sweet pastries',
-          'Participate in the traditional mint tea ritual'
-        ],
-        duration: '2-3 hours',
-        location: 'Fes'
-      }
-    },
-    {
-      id: 'carriage-tour',
-      image: "https://images.myguide-cdn.com/marrakech/companies/marrakech-horse-drawn-carriage-tour/large/marrakech-horse-drawn-carriage-tour-2824038.jpg",
-      title: 'Majestic Carriage Rides in Marrakech',
-      shortDescription: 'Discover Marrakech with horse-drawn carriage',
-      category: 'Sightseeing',
-      details: {
-        description: 'Explore Marrakech in a unique and comfortable way with a magical horse-drawn carriage tour covering historical and beautiful landmarks.',
-        highlights: [
-          'Tour begins at famous Jemaa el-Fnaa square',
-          'Visit landmarks like Majorelle Gardens and ancient palaces',
-          'Enjoy beautiful traditional carriage designs',
-          'Learn from local guide about city history and culture'
-        ],
-        duration: '30-60 minutes',
-        location: 'Marrakech'
-      }
-    },
-    {
-      id: 'calligraphy',
-      image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQLZf0KqjgUl0wP0wDWNzcFRaipWXztVQvuhQ&s",
-      title: 'Arabic Calligraphy Mastery',
-      shortDescription: 'Journey through culture and creativity',
+      id: 'imperial-mystique',
+      image: "https://images.unsplash.com/photo-1543418219-44e30b057fea?w=800&h=600&fit=crop",
+      title: 'Imperial Mystique',
+      shortDescription: 'Unravel Morocco\'s royal cities with private guides',
       category: 'Cultural',
       details: {
-        description: 'Transform into a remarkable journey through time and culture as you learn the art of Arabic calligraphy in the heart of a historic city.',
+        description: 'Unravel Morocco\'s royal cities, Marrakech, Fes, and Rabat with private guides who turn every alley into a story. Discover palaces, sacred medinas, and the whispers of centuries past.',
         highlights: [
-          'Learn about the history and cultural significance of Arabic calligraphy',
-          'Master writing techniques with guidance from a skilled teacher',
-          'Create artistic pieces that reflect your unique style',
-          'Experience the spiritual and meditative aspects of calligraphy'
+          'Private guided tours through imperial cities',
+          'Exclusive access to historical palaces and monuments',
+          'Explore sacred medinas with local experts',
+          'Discover centuries of history and culture'
         ],
-        duration: '2-3 hours',
-        location: 'Fes'
+        duration: 'Full day',
+        location: 'Marrakech, Fes, Rabat'
       }
     },
     {
-      id: 'spa-hammam',
-      image: "https://marrakechbestof.com/wp-content/uploads/2021/07/208711103_320658849704863_2658347928947707253_n-1024x681.jpg",
-      title: 'Tranquility Spa & Hammam Experience',
-      shortDescription: 'Spiritual and therapeutic journey in Fes',
+      id: 'cultural-soulcraft',
+      image: cultural,
+      title: 'Cultural Soulcraft',
+      shortDescription: 'Step into the heart of Moroccan artistry',
+      category: 'Artisan',
+      details: {
+        description: 'Step into the heart of Moroccan artistry. Shape clay with master potters, learn Arabic calligraphy, weave stories into textiles, every encounter is a meeting of hands and heart.',
+        highlights: [
+          'Hands-on pottery workshops with master artisans',
+          'Arabic calligraphy lessons from skilled teachers',
+          'Traditional textile weaving experiences',
+          'Cultural immersion with local craftspeople'
+        ],
+        duration: '3-4 hours',
+        location: 'Fes, Marrakech'
+      }
+    },
+    {
+      id: 'culinary-rituals',
+      image: "https://images.unsplash.com/photo-1514326640560-7d063ef2aed5?w=800&h=600&fit=crop",
+      title: 'Culinary Rituals',
+      shortDescription: 'Where flavors sing like poetry',
+      category: 'Culinary',
+      details: {
+        description: 'Step into a kitchen where flavors sing like poetry, guided by local chefs, summon the spirit of spices. Cook traditional dishes, and share a meal born of your own hands and memories.',
+        highlights: [
+          'Interactive cooking classes with local chefs',
+          'Traditional spice market visits',
+          'Hands-on preparation of authentic Moroccan dishes',
+          'Shared meals in beautiful traditional settings'
+        ],
+        duration: '3-4 hours',
+        location: 'Throughout Morocco'
+      }
+    },
+    {
+      id: 'wellness-renewal',
+      image: "https://images.unsplash.com/photo-1615275219949-b31d641fce23?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=870",
+      title: 'Wellness & Renewal',
+      shortDescription: 'Find yourself again in sacred spaces',
       category: 'Wellness',
       details: {
-        description: 'A unique spiritual and therapeutic journey that blends Moroccan traditions with self-care in a tranquil atmosphere, enhancing inner peace.',
+        description: 'Find yourself again in hammams, spas, and yoga sanctuaries scented with rosewater and silence. Let warmth, steam, and calm bring you back home to yourself.',
         highlights: [
-          'Enjoy steam bath and massage with natural ingredients',
-          'Experience benefits of argan oil, essential oils, and black soap',
-          'Use Moroccan clay for cleansing and detoxifying',
-          'Relax with dried herbs like lavender and sage'
+          'Traditional hammam experiences with expert therapists',
+          'Yoga and meditation in serene settings',
+          'Rosewater and argan oil treatments',
+          'Silent retreats and mindfulness practices'
         ],
-        duration: '2-3 hours',
-        location: 'Fes'
+        duration: '2-4 hours',
+        location: 'Marrakech, Fes, Atlas Mountains'
       }
+    }
+  ];
+
+  // Testimonials data
+  const testimonials = [
+    {
+      id: 1,
+      quote: "From private palace tours to intimate cooking classes, every moment was pure magic!",
+      author: "Sophia, NYC",
+      rating: 5
     },
     {
-      id: 'henna-rituals',
-      image: "https://ich.unesco.org/img/photo/thumb/17547-HUG.jpg",
-      title: 'Henna Rituals',
-      shortDescription: 'Tradition, art, and connection',
-      category: 'Cultural',
-      details: {
-        description: 'Experience the deep spiritual and social dimension of henna in one of the most distinguished palaces in Fes.',
-        highlights: [
-          'Learn about henna as a symbol of protection and blessing',
-          'Receive intricate and beautiful designs on hands and feet',
-          'Enjoy traditional welcome with Moroccan tea and dates',
-          'Participate in festive atmosphere with music and dance'
-        ],
-        duration: '1-2 hours',
-        location: 'Fes'
-      }
+      id: 2,
+      quote: "Mystic Travel felt like a dream I didn't want to end. Every detail was perfect!",
+      author: "James, San Francisco",
+      rating: 5
     },
     {
-      id: 'mountain-escape',
-      image: "https://www.uniqhotels.com/media/hotels/b3-hotel-orig/kasbah-du-toubkal.jpg.938x599_q85_box-0%2C0%2C1595%2C841_crop_detail.jpg",
-      title: 'Zalagh Mountain Escape',
-      shortDescription: 'Spiritual journey through nature',
-      category: 'Adventure',
-      details: {
-        description: 'Combine the beauty of nature with spiritual depth in the Zalagh Mountain range, exploring the Amazigh way of life just 30 minutes from Fes.',
-        highlights: [
-          'Hike through ancient olive groves and stunning landscapes',
-          'Enjoy a picnic lunch in the shade of pine trees at the summit',
-          'Experience tranquility away from city hustle and bustle',
-          'Learn about Amazigh heritage and way of life'
-        ],
-        duration: 'Half day',
-        location: 'Zalagh Mountains near Fes'
-      }
-    },
-    {
-      id: 'copperwork',
-      image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTgeB1c520in3SXMO_-iCQOMJgwrpDRYpTKOQ&s",
-      title: 'Mastering Copperwork Art',
-      shortDescription: 'Echoes of heritage in Fez',
-      category: 'Cultural',
-      details: {
-        description: 'Dive into the essence of traditional arts by learning the ancient craft of copperwork in the handicraft capital of Morocco.',
-        highlights: [
-          'Learn about the history of copperwork dating back to early Islamic eras',
-          'Engage with the metal through precise cutting, shaping, and hammering',
-          'Carve intricate designs with geometric patterns and plant motifs',
-          'Experience the spiritual dimension of this meticulous craft'
-        ],
-        duration: '3-4 hours',
-        location: 'Fes'
-      }
+      id: 3,
+      quote: "The calligraphy and tea ceremonies made me feel part of something ancient and beautiful",
+      author: "Emily, Chicago",
+      rating: 5
     }
   ];
 
@@ -218,92 +122,97 @@ const ExperienceCarousel = () => {
 
   return (
     <>
-      <section id="experiences" className="py-20 bg-luxury-beige/20">
+      <section id="experiences" className="py-20 bg-luxury-beige/10">
         <div className="container mx-auto px-6">
+          {/* Header Section */}
           <div className="text-center mb-16">
             <h2 className="font-serif text-4xl md:text-5xl font-bold text-foreground mb-6">
               Unforgettable Moroccan Experiences
             </h2>
+            <div className="w-24 h-1 bg-gradient-to-r from-primary to-primary-dark mx-auto mb-6"></div>
             <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
               Immerse yourself in the rich culture and traditions of Morocco through these carefully curated experiences
             </p>
           </div>
 
-          {/* Carousel Container */}
-          
-
-          {/* Grid view for larger screens */}
-          <div className="mt-16 hidden md:grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {experiences.map((experience, index) => (
+          {/* Experiences Grid */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-20">
+            {experiences.map((experience) => (
               <div
                 key={experience.id}
-                className="group cursor-pointer bg-white rounded-xl shadow-luxury overflow-hidden hover:shadow-luxury-hover transition-all duration-300"
+                className="group cursor-pointer bg-white rounded-2xl shadow-luxury overflow-hidden hover:shadow-luxury-hover transition-all duration-500 hover:translate-y-2"
                 onClick={() => setSelectedExperience(experience)}
               >
-                <div className="aspect-[4/3] overflow-hidden">
+                <div className="aspect-[16/9] overflow-hidden relative">
                   <img
                     src={experience.image}
                     alt={experience.title}
-                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                   />
-                </div>
-                <div className="p-6">
-                  <div className="uppercase tracking-wide text-xs text-luxury-gold font-semibold">
-                    {experience.category}
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                  <div className="absolute top-4 left-4">
+                    <span className="bg-white/90 backdrop-blur-sm px-3 py-1 rounded-full text-xs font-semibold text-foreground">
+                      {experience.category}
+                    </span>
                   </div>
-                  <h3 className="mt-2 font-serif text-xl font-bold text-foreground">
+                </div>
+                <div className="p-8">
+                  <h3 className="font-serif text-2xl font-bold text-foreground mb-3">
                     {experience.title}
                   </h3>
-                  <p className="mt-2 text-sm text-muted-foreground">
+                  <p className="text-muted-foreground mb-4 leading-relaxed">
                     {experience.shortDescription}
                   </p>
-                  <button className="mt-4 text-luxury-gold hover:text-luxury-gold-dark font-medium">
-                    View Details →
+                  <button className="text-primary hover:text-primary-dark font-semibold transition-colors duration-300 group">
+                    Discover More →
                   </button>
                 </div>
               </div>
             ))}
           </div>
 
-          {/* Mobile view (visible on small screens) */}
-          <div className="mt-8 grid grid-cols-1 gap-6 md:hidden">
-            {experiences.map((experience, index) => (
-              <div
-                key={experience.id}
-                className="group cursor-pointer bg-white rounded-xl shadow-luxury overflow-hidden hover:shadow-luxury-hover transition-all duration-300"
-                onClick={() => setSelectedExperience(experience)}
-              >
-                <div className="aspect-[4/3] overflow-hidden">
-                  <img
-                    src={experience.image}
-                    alt={experience.title}
-                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-                  />
-                </div>
-                <div className="p-6">
-                  <div className="uppercase tracking-wide text-xs text-luxury-gold font-semibold">
-                    {experience.category}
-                  </div>
-                  <h3 className="mt-2 font-serif text-xl font-bold text-foreground">
-                    {experience.title}
-                  </h3>
-                  <p className="mt-2 text-sm text-muted-foreground">
-                    {experience.shortDescription}
-                  </p>
-                  <button className="mt-4 text-luxury-gold hover:text-luxury-gold-dark font-medium">
-                    View Details →
-                  </button>
-                </div>
+          {/* Testimonials Section */}
+          <div className="bg-white rounded-2xl shadow-luxury p-8 md:p-12">
+            <div className="text-center mb-12">
+              <div className="inline-flex items-center gap-2 bg-primary/10 px-4 py-2 rounded-full mb-4">
+                <Quote className="w-4 h-4 text-primary" />
+                <span className="text-sm font-semibold text-primary">Traveler Stories</span>
               </div>
-            ))}
+              <h3 className="font-serif text-3xl md:text-4xl font-bold text-foreground">
+                Voices of Wonder
+              </h3>
+              <p className="text-muted-foreground mt-4 max-w-2xl mx-auto">
+                Discover what our travelers say about their transformative journeys with Mystic Travel
+              </p>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              {testimonials.map((testimonial) => (
+                <div
+                  key={testimonial.id}
+                  className="bg-luxury-beige/30 rounded-xl p-6 hover:bg-luxury-beige/50 transition-all duration-500 hover:translate-y-1"
+                >
+                  <div className="flex mb-4">
+                    {[...Array(testimonial.rating)].map((_, i) => (
+                      <Star key={i} className="w-4 h-4 fill-primary text-primary" />
+                    ))}
+                  </div>
+                  <Quote className="w-8 h-8 text-primary/30 mb-4" />
+                  <p className="text-foreground italic mb-4 leading-relaxed">
+                    "{testimonial.quote}"
+                  </p>
+                  <p className="text-primary font-semibold">{testimonial.author}</p>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       </section>
 
       {/* Experience Detail Modal */}
       {selectedExperience && (
-        <div className="fixed inset-0 bg-black/70 z-50 flex items-center justify-center p-4">
-          <div className="bg-white rounded-xl max-w-4xl w-full max-h-[90vh] overflow-y-auto">
+        <div className="fixed inset-0 bg-black/70 z-50 flex items-center justify-center p-4 animate-fade-in">
+          <div className="bg-white rounded-2xl max-w-4xl w-full max-h-[90vh] overflow-y-auto animate-scale-in">
             <div className="relative">
               <div className="h-64 md:h-80">
                 <img
@@ -314,55 +223,80 @@ const ExperienceCarousel = () => {
               </div>
               <button
                 onClick={() => setSelectedExperience(null)}
-                className="absolute top-4 right-4 bg-white/90 p-2 rounded-full hover:bg-white transition-colors"
+                className="absolute top-4 right-4 bg-white/90 hover:bg-white p-2 rounded-full transition-all duration-300 hover:scale-110"
               >
                 <X className="w-5 h-5" />
               </button>
+              <div className="absolute bottom-4 left-4">
+                <span className="bg-white/90 backdrop-blur-sm px-3 py-1 rounded-full text-sm font-semibold text-foreground">
+                  {selectedExperience.category}
+                </span>
+              </div>
             </div>
 
             <div className="p-6 md:p-8">
-              <div className="uppercase tracking-wide text-sm text-luxury-gold font-semibold">
-                {selectedExperience.category}
-              </div>
-              <h2 className="mt-2 font-serif text-3xl md:text-4xl font-bold text-foreground">
+              <h2 className="font-serif text-3xl md:text-4xl font-bold text-foreground mb-4">
                 {selectedExperience.title}
               </h2>
-              <p className="mt-4 text-muted-foreground">
+              <p className="text-lg text-muted-foreground mb-6 leading-relaxed">
                 {selectedExperience.details.description}
               </p>
 
-              <div className="mt-8">
+              <div className="mb-8">
                 <h3 className="text-xl font-semibold text-foreground mb-4">Experience Highlights</h3>
-                <ul className="space-y-2">
+                <ul className="space-y-3">
                   {selectedExperience.details.highlights.map((highlight, index) => (
-                    <li key={index} className="flex items-start">
-                      <span className="text-luxury-gold mr-2">•</span>
-                      <span>{highlight}</span>
+                    <li key={index} className="flex items-start transition-all duration-300 hover:translate-x-2">
+                      <span className="text-primary mr-3 mt-1">•</span>
+                      <span className="text-foreground">{highlight}</span>
                     </li>
                   ))}
                 </ul>
               </div>
 
-              <div className="mt-8 grid grid-cols-2 gap-4">
-                <div>
-                  <h4 className="text-sm font-semibold text-muted-foreground">Duration</h4>
-                  <p className="text-foreground">{selectedExperience.details.duration}</p>
+              <div className="grid grid-cols-2 gap-6 mb-8">
+                <div className="bg-luxury-beige/30 rounded-lg p-4">
+                  <h4 className="text-sm font-semibold text-muted-foreground mb-1">Duration</h4>
+                  <p className="text-foreground font-medium">{selectedExperience.details.duration}</p>
                 </div>
-                <div>
-                  <h4 className="text-sm font-semibold text-muted-foreground">Location</h4>
-                  <p className="text-foreground">{selectedExperience.details.location}</p>
+                <div className="bg-luxury-beige/30 rounded-lg p-4">
+                  <h4 className="text-sm font-semibold text-muted-foreground mb-1">Location</h4>
+                  <p className="text-foreground font-medium">{selectedExperience.details.location}</p>
                 </div>
               </div>
 
-              <div className="mt-8">
-                <button className="px-6 py-3 bg-luxury-gold text-white rounded-lg hover:bg-luxury-gold-dark transition-colors">
+              <div className="flex gap-4">
+                <button className="flex-1 px-6 py-3 bg-primary text-white rounded-lg hover:bg-primary-dark transition-all duration-300 hover:scale-105 font-semibold">
                   Book This Experience
+                </button>
+                <button 
+                  onClick={() => setSelectedExperience(null)}
+                  className="px-6 py-3 border border-gray-300 text-foreground rounded-lg hover:bg-gray-50 transition-all duration-300"
+                >
+                  Close
                 </button>
               </div>
             </div>
           </div>
         </div>
       )}
+
+      <style jsx>{`
+        @keyframes fade-in {
+          from { opacity: 0; }
+          to { opacity: 1; }
+        }
+        @keyframes scale-in {
+          from { transform: scale(0.9); opacity: 0; }
+          to { transform: scale(1); opacity: 1; }
+        }
+        .animate-fade-in {
+          animation: fade-in 0.3s ease-out;
+        }
+        .animate-scale-in {
+          animation: scale-in 0.3s ease-out;
+        }
+      `}</style>
     </>
   );
 };

@@ -8,70 +8,69 @@
 
 @layer base {
   :root {
-    /* New Color Palette - Deep Blue & Gold Theme */
-    --background: 0 0% 98%; /* White Smoke #FAFAFA */
-    --foreground: 229 80% 18%; /* Deep Blue #0A144F */
-
-    /* Primary - Deep Blue */
-    --primary: 229 80% 18%; /* Deep Blue */
-    --primary-foreground: 0 0% 98%; /* White Smoke */
-    --primary-light: 222 69% 34%; /* Royal Blue */
+    /* Dashboard Design System - Royal Blue & Gold */
+    --dashboard-bg: 210 20% 98%; /* Off White #F9FAFB */
+    --dashboard-sidebar: 224 71% 16%; /* Deep Navy #0B132B */
+    --dashboard-sidebar-hover: 224 71% 20%;
+    --dashboard-text: 0 0% 11%; /* Charcoal #1C1C1C */
+    --dashboard-text-muted: 215 16% 47%; /* Slate Gray #6B7280 */
+    --dashboard-royal-blue: 218 96% 16%; /* Royal Blue #14213D */
+    --dashboard-gold: 43 74% 53%; /* Gold #D4AF37 */
+    --dashboard-gold-hover: 43 74% 45%;
+    
+    /* Keep existing theme for non-dashboard pages */
+    --background: 0 0% 98%;
+    --foreground: 229 80% 18%;
+    
+    --primary: 229 80% 18%;
+    --primary-foreground: 0 0% 98%;
+    --primary-light: 222 69% 34%;
     --primary-lighter: 222 50% 85%;
-
-    /* Secondary - Emerald Green */
-    --secondary: 139 41% 31%; /* Emerald Green */
+    
+    --secondary: 139 41% 31%;
     --secondary-foreground: 0 0% 98%;
     --secondary-light: 139 35% 50%;
-
-    /* Accent - Gold */
-    --accent: 45 53% 51%; /* Gold #C7A33E */
-    --accent-foreground: 229 80% 18%; /* Deep Blue text on gold */
+    
+    --accent: 45 53% 51%;
+    --accent-foreground: 229 80% 18%;
     --accent-dark: 45 65% 40%;
     --accent-light: 45 50% 70%;
-
-    /* Sand Beige */
-    --sand-beige: 41 56% 89%; /* Sand Beige #F3EAD3 */
+    
+    --sand-beige: 41 56% 89%;
     --sand-beige-dark: 41 50% 80%;
-
-    /* Crimson for alerts/destructive */
-    --destructive: 0 70% 36%; /* Crimson Red */
+    
+    --destructive: 0 72% 51%; /* Moroccan Red #B91C1C */
     --destructive-foreground: 0 0% 98%;
-
-    /* Muted Tones */
-    --muted: 0 0% 90%; /* Light Gray */
-    --muted-foreground: 0 0% 20%; /* Charcoal Gray */
+    
+    --muted: 0 0% 90%;
+    --muted-foreground: 0 0% 20%;
     --muted-dark: 0 0% 85%;
-
-    /* Card System */
-    --card: 0 0% 100%; /* Pure White */
-    --card-foreground: 229 80% 18%; /* Deep Blue */
-    --card-sacred: 41 56% 89%; /* Sand Beige */
+    
+    --card: 0 0% 100%;
+    --card-foreground: 229 80% 18%;
+    --card-sacred: 41 56% 89%;
     --card-islamic: 41 50% 95%;
-
-    /* Borders & Inputs */
-    --border: 0 0% 90%; /* Light Gray */
+    
+    --border: 0 0% 90%;
     --input: 0 0% 95%;
     --input-border: 0 0% 85%;
-    --ring: 229 80% 18%; /* Deep Blue */
-
-    /* Border Radius */
+    --ring: 229 80% 18%;
+    
     --radius: 0.75rem;
     --radius-lg: 1rem;
     --radius-xl: 1.5rem;
-
-    /* Popover */
+    
     --popover: 0 0% 100%;
     --popover-foreground: 229 80% 18%;
-
-    /* Islamic themed colors (for backward compatibility) */
-    --islamic-green: 139 41% 31%; /* Emerald Green */
+    
+    --islamic-green: 139 41% 31%;
     --islamic-green-light: 139 35% 50%;
     --islamic-green-lighter: 139 30% 85%;
     --islamic-green-dark: 139 50% 20%;
-    --islamic-gold: 45 53% 51%; /* Gold */
+    --islamic-gold: 45 53% 51%;
     --islamic-gold-light: 45 50% 70%;
     --islamic-gold-dark: 45 65% 40%;
-    --islamic-beige: 41 56% 89%; /* Sand Beige */
+    --islamic-beige: 41 56% 89%;
     --islamic-beige-dark: 41 50% 80%;
     --sacred-white: 0 0% 100%;
     --sacred-cream: 41 40% 97%;
@@ -79,12 +78,11 @@
   }
 
   .dark {
-    /* Dark theme for Islamic context */
     --background: 229 60% 12%;
     --foreground: 41 56% 89%;
     --card: 229 50% 15%;
     --card-foreground: 41 56% 89%;
-    --primary: 45 53% 51%; /* Gold in dark mode */
+    --primary: 45 53% 51%;
     --primary-foreground: 229 80% 18%;
     --secondary: 139 41% 31%;
     --secondary-foreground: 0 0% 98%;
@@ -92,6 +90,12 @@
     --muted-foreground: 0 0% 70%;
     --border: 229 30% 25%;
     --input: 229 40% 18%;
+    
+    /* Dark mode dashboard */
+    --dashboard-bg: 224 71% 7%; /* Deep Navy #0B132B */
+    --dashboard-sidebar: 224 71% 11%;
+    --dashboard-text: 210 20% 98%;
+    --dashboard-text-muted: 215 16% 65%;
   }
 }
 

@@ -25,8 +25,14 @@ const Hero = () => {
               DISCOVER. EXPLORE. AWAKEN
             </h1>
             <div className="w-24 h-px bg-white/60 mx-auto mb-8"></div>
-            <p className="font-elegant text-xl md:text-2xl font-light mb-8 leading-relaxed">
+            {/* Sub-headline */}
+            <p className="font-elegant text-xl md:text-2xl font-light mb-4 leading-relaxed">
               Sacred journeys woven through the soul of Morocco
+            </p>
+            
+            {/* Tagline */}
+            <p className="font-light text-lg md:text-xl mb-8 italic text-white/90">
+              Not just travel - transformation
             </p>
             <button className="btn-luxury bg-primary px-8 py-4 text-lg font-medium tracking-wide hover:scale-105 transition-transform duration-300">
               Begin your journey

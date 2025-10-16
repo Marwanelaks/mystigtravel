@@ -7,6 +7,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
 import { Checkbox } from '@/components/ui/checkbox';
 import { FileText, User, Hotel, Calendar, Users, Bed, Loader2 } from 'lucide-react';
+import { umrahPublicAPI } from '@/services/umrah-api';
 
 interface Step4ReviewProps {
   onSubmit: () => void;
@@ -24,9 +25,46 @@ export const Step4Review: React.FC<Step4ReviewProps> = ({ onSubmit }) => {
 
   const handleSubmit = async () => {
     if (!agreedToTerms) return;
-    
+
     setIsSubmitting(true);
-    await onSubmit();
+    try {
+      // Prepare data ensuring all required fields from both versions
+      const demandData = {
+        fullName: formData.fullName || '',
+        email: formData.email || '',
+        phone: formData.phone || '',
+        phoneCountry: formData.phoneCountry,
+        detectedCountry: formData.detectedCountry,
+        // Accommodation fields
+        hotelCategories: formData.hotelCategories || [],
+        hotelCategory: formData.hotelCategory, // Keep for backward compatibility
+        roomSelections: formData.roomSelections || {},
+        numberOfRooms: formData.numberOfRooms || 1, // Add missing field
+        // Travel party fields
+        travelParty: {
+          adults: formData.travelParty?.adults || 1,
+          children: formData.travelParty?.children || 0,
+          infants: formData.travelParty?.infants || 0,
+          ages: formData.travelParty?.ages || [],
+        },
+        // Date fields
+        dateType: (formData.dateType || 'SPECIFIC') as 'FLEXIBLE' | 'SPECIFIC',
+        flexibleMonth: formData.flexibleMonth,
+        flexibleDurationFrom: formData.flexibleDurationFrom,
+        flexibleDurationTo: formData.flexibleDurationTo,
+        departureDate: formData.departureDate || '',
+        returnDate: formData.returnDate || '',
+        // Additional fields
+        specialRequests: formData.specialRequests || '',
+        // Include any other fields that might be in formData
+        ...formData
+      };
+      
+      await umrahPublicAPI.createDemand(demandData);
+      await onSubmit();
+    } catch (error) {
+      console.error('Submission failed:', error);
+    }
     setIsSubmitting(false);
   };
 
@@ -50,9 +88,103 @@ export const Step4Review: React.FC<Step4ReviewProps> = ({ onSubmit }) => {
       : `${monthNamesEn[monthIndex]} ${year}`;
   };
 
-  // Get travel party data
+  // Get travel party data with defaults
   const travelParty = formData.travelParty || { adults: 1, children: 0, infants: 0, ages: [] };
   const totalGuests = travelParty.adults + travelParty.children + travelParty.infants;
+
+  // Calculate number of rooms - check all possible sources
+  const calculateNumberOfRooms = () => {
+    // First check roomSelections (new structure)
+    if (formData.roomSelections && Object.keys(formData.roomSelections).length > 0) {
+      return Object.keys(formData.roomSelections).length;
+    }
+    // Then check numberOfRooms field
+    if (formData.numberOfRooms && formData.numberOfRooms > 0) {
+      return formData.numberOfRooms;
+    }
+    // Default to 1 room
+    return 1;
+  };
+
+  const numberOfRooms = calculateNumberOfRooms();
+
+  // Format hotel categories display - check both hotelCategories array and hotelCategory string
+  const formatHotelCategories = () => {
+    // Check new structure first (array)
+    if (formData.hotelCategories && formData.hotelCategories.length > 0) {
+      const categoryMap: { [key: string]: { en: string; ar: string } } = {
+        '3-star': { en: '3-Star Hotels', ar: '3 نجوم' },
+        '4-star': { en: '4-Star Hotels', ar: '4 نجوم' },
+        '5-star': { en: '5-Star Hotels', ar: '5 نجوم' },
+        'deluxe': { en: '5-Star Deluxe', ar: '5 نجوم ديلوكس' }
+      };
+
+      return formData.hotelCategories
+        .map(cat => isRTL ? categoryMap[cat]?.ar : categoryMap[cat]?.en)
+        .join(', ');
+    }
+
+    // Check old structure (single category)
+    if (formData.hotelCategory) {
+      const categoryMap: { [key: string]: { en: string; ar: string } } = {
+        '3-star': { en: '3-Star Hotels', ar: '3 نجوم' },
+        '4-star': { en: '4-Star Hotels', ar: '4 نجوم' },
+        '5-star': { en: '5-Star Hotels', ar: '5 نجوم' },
+        'deluxe': { en: '5-Star Deluxe', ar: '5 نجوم ديلوكس' }
+      };
+      
+      return isRTL ? categoryMap[formData.hotelCategory]?.ar : categoryMap[formData.hotelCategory]?.en;
+    }
+
+    return isRTL ? 'لم يتم التحديد' : 'Not specified';
+  };
+
+  // Display room selections if available
+  const renderRoomSelections = () => {
+    if (!formData.roomSelections || Object.keys(formData.roomSelections).length === 0) {
+      return null;
+    }
+
+    return (
+      <div className="mt-4">
+        <span className="font-medium block mb-2">
+          {isRTL ? 'تفاصيل الغرف:' : 'Room Details:'}
+        </span>
+        <div className="space-y-2">
+          {Object.entries(formData.roomSelections).map(([roomKey, room]) => (
+            <div key={roomKey} className="bg-islamic-green/10 rounded-lg p-3 border border-islamic-green/20">
+              <div className="font-medium">
+                {isRTL ? `الغرفة ${parseInt(roomKey) + 1}` : `Room ${parseInt(roomKey) + 1}`}
+              </div>
+              <div className="text-sm text-muted-foreground mt-1">
+                {isRTL ? 
+                  `${room.adults} بالغ، ${room.children} أطفال` : 
+                  `${room.adults} adults, ${room.children} children`
+                }
+                {room.childrenAges && room.childrenAges.length > 0 && (
+                  <div className="text-xs mt-1">
+                    {isRTL ? `أعمار الأطفال: ${room.childrenAges.join(', ')}` : `Children ages: ${room.childrenAges.join(', ')}`}
+                  </div>
+                )}
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    );
+  };
+
+  // Display flexible duration if available
+  const renderFlexibleDuration = () => {
+    if (formData.dateType !== 'FLEXIBLE') return null;
+
+    return (
+      <div>
+        <span className="font-medium">{isRTL ? 'المدة:' : 'Duration:'}</span>{' '}
+        {formData.flexibleDurationFrom} - {formData.flexibleDurationTo} {isRTL ? 'ليالي' : 'nights'}
+      </div>
+    );
+  };
 
   return (
     <div className={`space-y-8 ${isRTL ? 'rtl text-right' : 'ltr text-left'}`}>
@@ -81,14 +213,19 @@ export const Step4Review: React.FC<Step4ReviewProps> = ({ onSubmit }) => {
           </div>
           <div className="grid md:grid-cols-2 gap-4 text-sm">
             <div>
-              <span className="font-medium">{isRTL ? 'الاسم:' : 'Name:'}</span> {formData.fullName}
+              <span className="font-medium">{isRTL ? 'الاسم:' : 'Name:'}</span> {formData.fullName || 'N/A'}
             </div>
             <div>
-              <span className="font-medium">{isRTL ? 'البريد الإلكتروني:' : 'Email:'}</span> {formData.email}
+              <span className="font-medium">{isRTL ? 'البريد الإلكتروني:' : 'Email:'}</span> {formData.email || 'N/A'}
             </div>
             <div>
-              <span className="font-medium">{isRTL ? 'الهاتف:' : 'Phone:'}</span> {formData.phone}
+              <span className="font-medium">{isRTL ? 'الهاتف:' : 'Phone:'}</span> {formData.phone || 'N/A'}
             </div>
+            {formData.phoneCountry && (
+              <div>
+                <span className="font-medium">{isRTL ? 'دولة الهاتف:' : 'Phone Country:'}</span> {formData.phoneCountry}
+              </div>
+            )}
           </div>
         </Card>
 
@@ -166,25 +303,21 @@ export const Step4Review: React.FC<Step4ReviewProps> = ({ onSubmit }) => {
           <div className="space-y-4 text-sm">
             <div>
               <span className="font-medium">{isRTL ? 'فئة الفندق:' : 'Hotel Category:'}</span>{' '}
-              <span className="capitalize">
-                {formData.hotelCategory === '3-star' && (isRTL ? '3 نجوم' : '3-Star Hotels')}
-                {formData.hotelCategory === '4-star' && (isRTL ? '4 نجوم' : '4-Star Hotels')}
-                {formData.hotelCategory === '5-star' && (isRTL ? '5 نجوم' : '5-Star Hotels')}
-                {formData.hotelCategory === 'deluxe' && (isRTL ? '5 نجوم ديلوكس' : '5-Star Deluxe')}
-              </span>
+              <span>{formatHotelCategories()}</span>
             </div>
             <div>
               <span className="font-medium block mb-2">{isRTL ? 'عدد الغرف:' : 'Number of Rooms:'}</span>
               <div className="flex items-center space-x-2 bg-islamic-green/10 rounded-lg p-3 border border-islamic-green/20">
                 <Bed className="w-4 h-4 text-islamic-green" />
                 <span className="font-bold text-lg text-islamic-green">
-                  {formData.numberOfRooms || 1}
+                  {numberOfRooms}
                 </span>
                 <span className="text-muted-foreground">
                   {isRTL ? 'غرفة' : 'room(s)'}
                 </span>
               </div>
             </div>
+            {renderRoomSelections()}
           </div>
         </Card>
 
@@ -199,25 +332,28 @@ export const Step4Review: React.FC<Step4ReviewProps> = ({ onSubmit }) => {
           <div className="grid md:grid-cols-2 gap-4 text-sm">
             <div>
               <span className="font-medium">{isRTL ? 'نوع التاريخ:' : 'Date Type:'}</span>{' '}
-              {formData.dateType === 'flexible' 
+              {formData.dateType === 'FLEXIBLE' 
                 ? (isRTL ? 'مرن' : 'Flexible') 
                 : (isRTL ? 'محدد' : 'Specific')
               }
             </div>
-            {formData.dateType === 'flexible' ? (
-              <div>
-                <span className="font-medium">{isRTL ? 'الشهر:' : 'Month:'}</span>{' '}
-                {formatMonthDisplay(formData.flexibleMonth)}
-              </div>
+            {formData.dateType === 'FLEXIBLE' ? (
+              <>
+                <div>
+                  <span className="font-medium">{isRTL ? 'الشهر:' : 'Month:'}</span>{' '}
+                  {formatMonthDisplay(formData.flexibleMonth)}
+                </div>
+                {renderFlexibleDuration()}
+              </>
             ) : (
               <>
                 <div>
                   <span className="font-medium">{isRTL ? 'تاريخ المغادرة:' : 'Departure Date:'}</span>{' '}
-                  {formData.departureDate}
+                  {formData.departureDate || 'N/A'}
                 </div>
                 <div>
                   <span className="font-medium">{isRTL ? 'تاريخ العودة:' : 'Return Date:'}</span>{' '}
-                  {formData.returnDate}
+                  {formData.returnDate || 'N/A'}
                 </div>
               </>
             )}

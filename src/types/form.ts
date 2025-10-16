@@ -21,7 +21,7 @@ export interface FormData {
   };
 
   // Trip Preferences (Step 3)
-  dateType: 'flexible' | 'specific';
+  dateType: 'FLEXIBLE' | 'SPECIFIC';
   flexibleMonth: string;
   flexibleDurationFrom?: string;
   flexibleDurationTo?: string;
@@ -45,7 +45,7 @@ export const initialFormData: FormData = {
     children: 0,
     ages: []
   },
-  dateType: 'specific',
+  dateType: 'SPECIFIC',
   flexibleMonth: '',
   flexibleDurationFrom: '',
   flexibleDurationTo: '',

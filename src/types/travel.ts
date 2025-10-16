@@ -43,7 +43,12 @@ export interface City {
   name: string;
   region?: string;
   country?: string;
+  description?: string;
+  imageUrl?: string;
   enabled: boolean;
+  isActive?: boolean;
+  createdAt?: string;
+  updatedAt?: string;
 }
 export enum RoomTypeEnum {
   SINGLE = 'SINGLE',
@@ -61,19 +66,39 @@ export interface RoomType {
 export interface Hotel {
   id: string;
   name: string;
-  city: City;
-  roomTypes: RoomType[];
-  stars: number;
-  active: boolean;
+  description?: string;
+  city?: City;
+  cityId?: string;
+  address?: string;
+  roomTypes?: RoomType[];
+  stars?: number;
+  rating?: number;
+  price?: number;
+  pricePerNight?: number;
+  currency?: Currency;
+  amenities?: string[];
+  imageUrl?: string;
+  active?: boolean;
+  isActive?: boolean;
+  createdAt?: string;
+  updatedAt?: string;
 }
 
 export interface Activity {
   id: string;
   name: string;
   description: string;
-  city: City;
+  city?: City;
+  cityId?: string;
   price: number;
-  active: boolean;
+  currency?: Currency;
+  duration?: number;
+  maxParticipants?: number;
+  imageUrl?: string;
+  active?: boolean;
+  isActive?: boolean;
+  createdAt?: string;
+  updatedAt?: string;
 }
 
 export interface ServiceOffering {
@@ -90,9 +115,11 @@ export interface Service {
   description: string;
   type: ServiceType;
   provider: string;
+  providerName?: string; // Alias for backward compatibility
   price: number;
   currency: Currency;
   isActive: boolean;
+  active?: boolean; // Alias for backward compatibility
   createdAt: string;
   updatedAt: string;
 }
@@ -104,10 +131,19 @@ export enum TransportType {
 
 export interface Transport {
   id: string;
-  type: TransportType;
+  name?: string;
+  description?: string;
+  type: TransportType | string;
   company?: string;
-  price: number;
-  active: boolean;
+  cityId?: string;
+  price?: number;
+  pricePerDay?: number;
+  currency?: Currency;
+  capacity?: number;
+  active?: boolean;
+  isActive?: boolean;
+  createdAt?: string;
+  updatedAt?: string;
 }
 
 export enum TravelerType {
@@ -117,7 +153,10 @@ export enum TravelerType {
 }
 // Traveler Interfaces
 export interface Traveler {
+  fullName?: string; // Add for backward compatibility
   age?: number;
+  gender?: Gender;
+  type?: TravelerType;
 }
 
 export interface MainTraveler {
@@ -128,14 +167,19 @@ export interface MainTraveler {
 
 // Client Custom Program Interfaces
 export interface ClientInfo {
-  mainTraveler: MainTraveler;
-  travelers: Traveler[];
-  tripPeriod: number;
-  tripStartDate: string; // Ajouté
-  tripEndDate: string;   // Ajouté
-  durationType: 'FLEXIBLE' | 'SPECIFIC'; // NEW: Add duration type
-  flexibleMonth?: string; // NEW: For flexible duration
-  flightOption?: 'WITH' | 'WITHOUT'; // NEW
+  mainTraveler?: MainTraveler;
+  travelers?: Traveler[];
+  tripPeriod?: number;
+  tripStartDate?: string;
+  tripEndDate?: string;
+  durationType?: 'FLEXIBLE' | 'SPECIFIC' | 'flexible' | 'specific'; // Support both cases
+  flexibleMonth?: string;
+  flightOption?: 'WITH' | 'WITHOUT' | 'with' | 'without'; // Support both cases
+  // Legacy fields for backward compatibility
+  fullName?: string;
+  email?: string;
+  phone?: string;
+  numberOfTravelers?: number;
 }
 
 export interface CitySelection {
@@ -151,13 +195,19 @@ export interface CitySelection {
 export interface ClientDemand {
   id: string;
   clientInfo: ClientInfo;
-  citySelections: CitySelection[];
+  citySelections?: CitySelection[]; // Optional for backward compatibility
+  cities?: DemandCity[]; // Alias for backward compatibility
   status: DemandStatus;
   totalPrice?: number;
   createdAt: string;
   updatedAt: string;
   comment?: string;
   hotelStars?: string[];
+  globalServices?: { service: Service; quantity: number }[];
+  selectedTransport?: Transport;
+  benefitPercentage?: number;
+  taxPercentage?: number;
+  agentId?: string;
 }
 
 // Demand City (Admin completion)

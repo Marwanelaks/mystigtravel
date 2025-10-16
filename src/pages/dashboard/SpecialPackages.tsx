@@ -225,10 +225,10 @@ const SpecialPackages = () => {
 
     Object.entries(citySelections).forEach(([cityId, sel]) => {
       // Add resources
-      selectedHotels.push(...hotels.filter(h => h.city.id === cityId && sel.hotels.includes(h.id)));
-      selectedActivities.push(...activities.filter(a => a.city.id === cityId && sel.activities.includes(a.id)));
-      selectedServices.push(...services.filter(s => s.city.id === cityId && sel.services.includes(s.id)));
-      selectedTransports.push(...transports.filter(t => t.city.id === cityId && sel.transports.includes(t.id)));
+      selectedHotels.push(...hotels.filter(h => (h.city?.id || h.cityId) === cityId && sel.hotels.includes(h.id)));
+      selectedActivities.push(...activities.filter(a => (a.city?.id || a.cityId) === cityId && sel.activities.includes(a.id)));
+      selectedServices.push(...services.filter(s => sel.services.includes(s.id)));
+      selectedTransports.push(...transports.filter(t => sel.transports.includes(t.id)));
       
       // Add city period
       if (sel.periodDays > 0) {
@@ -319,8 +319,9 @@ const SpecialPackages = () => {
     });
 
     (pkg.activities || []).forEach(activity => {
-      if (!selections[activity.city.id]) {
-        selections[activity.city.id] = { 
+      const cityId = activity.city?.id || activity.cityId;
+      if (cityId && !selections[cityId]) {
+        selections[cityId] = { 
           hotels: [], 
           activities: [], 
           services: [], 
@@ -328,33 +329,23 @@ const SpecialPackages = () => {
           periodDays: 1 
         };
       }
-      selections[activity.city.id].activities.push(activity.id);
+      if (cityId) {
+        selections[cityId].activities.push(activity.id);
+      }
     });
 
     (pkg.services || []).forEach(service => {
-      if (!selections[service.city.id]) {
-        selections[service.city.id] = { 
-          hotels: [], 
-          activities: [], 
-          services: [], 
-          transports: [],
-          periodDays: 1 
-        };
-      }
-      selections[service.city.id].services.push(service.id);
+      // Services are global, add them to all city selections
+      Object.keys(selections).forEach(cityId => {
+        selections[cityId].services.push(service.id);
+      });
     });
 
     (pkg.transports || []).forEach(transport => {
-      if (!selections[transport.city.id]) {
-        selections[transport.city.id] = { 
-          hotels: [], 
-          activities: [], 
-          services: [], 
-          transports: [],
-          periodDays: 1 
-        };
-      }
-      selections[transport.city.id].transports.push(transport.id);
+      // Transports are global, add them to all city selections
+      Object.keys(selections).forEach(cityId => {
+        selections[cityId].transports.push(transport.id);
+      });
     });
 
     setCitySelections(selections);
@@ -549,7 +540,7 @@ const SpecialPackages = () => {
                     <div className="mt-4">
                       <label className="block text-sm font-semibold text-gray-700 mb-2">Services</label>
                       <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
-                        {services.filter(s => s.city.id === city.id).map(service => (
+                        {services.map(service => (
                           <div key={service.id} className="flex items-center space-x-2">
                             <input
                               type="checkbox"
@@ -557,7 +548,7 @@ const SpecialPackages = () => {
                               onChange={e => handleResourceSelection(city.id, 'services', service.id, e.target.checked)}
                               className="w-4 h-4 text-purple-500 border-gray-300 rounded"
                             />
-                            <label className="text-sm">{service.providerName}</label>
+                            <label className="text-sm">{service.providerName || service.provider || service.name}</label>
                           </div>
                         ))}
                       </div>
@@ -567,7 +558,7 @@ const SpecialPackages = () => {
                     <div className="mt-4">
                       <label className="block text-sm font-semibold text-gray-700 mb-2">Transports</label>
                       <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
-                        {transports.filter(t => t.city.id === city.id).map(transport => (
+                        {transports.map(transport => (
                           <div key={transport.id} className="flex items-center space-x-2">
                             <input
                               type="checkbox"

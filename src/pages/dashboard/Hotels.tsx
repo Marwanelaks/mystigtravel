@@ -82,7 +82,8 @@ const Hotelsc = () => {
           return {
             ...prevForm,
             roomTypes: [...existingRoomTypes, { 
-              type: roomType as any, 
+              id: `temp-${Date.now()}`, // Add temporary ID
+              type: roomType as any,
               price: 0,
               capacity: defaultCapacity
             }]

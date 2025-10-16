@@ -79,7 +79,8 @@ const PlanAForm = ({ isOpen, onClose }: PlanAFormProps) => {
     tripEndDate: '',
     durationType: 'SPECIFIC' as 'FLEXIBLE' | 'SPECIFIC',
     flexibleMonth: '',
-    flexibleYear: new Date().getFullYear(), // NEW: Add year field
+    flexibleYear: new Date().getFullYear(),
+    flightOption: 'WITH' as 'WITH' | 'WITHOUT',
     hotelStars: [] as string[]
   });
 
@@ -235,7 +236,7 @@ const PlanAForm = ({ isOpen, onClose }: PlanAFormProps) => {
   const updateCitySelection = (cityId: string, field: keyof CitySelectionForm, value: any) => {
     setFormData(prev => {
       const citySelections = { ...prev.citySelections };
-      const selection = citySelections[cityId] || {
+      const selection: any = citySelections[cityId] || {
         cityId,
         startDate: prev.tripStartDate,
         endDate: prev.tripStartDate,
@@ -359,6 +360,8 @@ const PlanAForm = ({ isOpen, onClose }: PlanAFormProps) => {
         tripEndDate: '',
         durationType: 'SPECIFIC',
         flexibleMonth: '',
+        flexibleYear: new Date().getFullYear(),
+        flightOption: 'WITH',
         hotelStars: []
       });
       setCurrentStep(1);

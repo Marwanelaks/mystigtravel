@@ -23,7 +23,7 @@ const IntroSection = () => {
             </h2>
             <div className="w-32 h-1 bg-gradient-to-r from-primary to-primary-dark mx-auto mb-6"></div>
             <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-              Discover the difference of traveling with those who know Morocco's soul
+              Journeys with meaning: Every itinerary is a personal creation, built around your rhythm, your curiosity, your spirit
             </p>
           </div>
           
@@ -32,8 +32,10 @@ const IntroSection = () => {
               <div className="w-16 h-16 bg-gradient-to-br from-primary to-primary-dark rounded-full flex items-center justify-center mx-auto mb-6 text-white group-hover:scale-110 transition-transform duration-300">
                 <Heart className="w-8 h-8" />
               </div>
-              <h3 className="font-serif text-2xl font-semibold mb-4 text-foreground">Tailored journeys of the soul</h3>
-              <p className="text-muted-foreground leading-relaxed">Every voyage is intricately designed to reflect your dreams and inner yearnings</p>
+              <h3 className="font-serif text-2xl font-semibold mb-4 text-foreground">Journeys with meaning</h3>
+              <p className="text-muted-foreground leading-relaxed">
+                Every itinerary is a personal creation, built around your rhythm, your curiosity, your spirit
+              </p>
               <div className="mt-4">
                 <div className="w-8 h-0.5 bg-primary mx-auto group-hover:w-16 transition-all duration-300"></div>
               </div>
@@ -43,8 +45,10 @@ const IntroSection = () => {
               <div className="w-16 h-16 bg-gradient-to-br from-primary to-primary-dark rounded-full flex items-center justify-center mx-auto mb-6 text-white group-hover:scale-110 transition-transform duration-300">
                 <Crown className="w-8 h-8" />
               </div>
-              <h3 className="font-serif text-2xl font-semibold mb-4 text-foreground">Luxury with spirit</h3>
-              <p className="text-muted-foreground leading-relaxed">From opulent riads to secluded desert camps, each detail whispers indulgence and reverence</p>
+              <h3 className="font-serif text-2xl font-semibold mb-4 text-foreground">Luxury with soul</h3>
+              <p className="text-muted-foreground leading-relaxed">
+                From candlelit riads to silent desert nights, every detail reflects Morocco’s poetry and your comfort
+              </p>
               <div className="mt-4">
                 <div className="w-8 h-0.5 bg-primary mx-auto group-hover:w-16 transition-all duration-300"></div>
               </div>
@@ -54,8 +58,10 @@ const IntroSection = () => {
               <div className="w-16 h-16 bg-gradient-to-br from-primary to-primary-dark rounded-full flex items-center justify-center mx-auto mb-6 text-white group-hover:scale-110 transition-transform duration-300">
                 <Zap className="w-8 h-8" />
               </div>
-              <h3 className="font-serif text-2xl font-semibold mb-4 text-foreground">Seamless booking</h3>
-              <p className="text-muted-foreground leading-relaxed">Effortless planning with Google Pay and real-time support from our expert team</p>
+              <h3 className="font-serif text-2xl font-semibold mb-4 text-foreground">Seamless planning</h3>
+              <p className="text-muted-foreground leading-relaxed">
+                Book effortlessly through Google Pay and count on real-time support from our expert team available whenever inspiration strikes
+              </p>
               <div className="mt-4">
                 <div className="w-8 h-0.5 bg-primary mx-auto group-hover:w-16 transition-all duration-300"></div>
               </div>

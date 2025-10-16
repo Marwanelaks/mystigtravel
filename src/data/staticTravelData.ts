@@ -77,6 +77,7 @@ export const staticHotels: Hotel[] = [
     currency: Currency.EUR,
     amenities: ['Wifi', 'Spa', 'Pool', 'Restaurant'],
     imageUrl: '/src/assets/hero-riad.jpg',
+    active: true,
     isActive: true,
     createdAt: '2024-01-01T00:00:00Z',
     updatedAt: '2024-01-01T00:00:00Z'
@@ -91,6 +92,7 @@ export const staticHotels: Hotel[] = [
     pricePerNight: 150,
     currency: Currency.EUR,
     amenities: ['Wifi', 'Parking', 'Restaurant', 'Gym'],
+    active: true,
     isActive: true,
     createdAt: '2024-01-01T00:00:00Z',
     updatedAt: '2024-01-01T00:00:00Z'
@@ -105,6 +107,7 @@ export const staticHotels: Hotel[] = [
     pricePerNight: 80,
     currency: Currency.EUR,
     amenities: ['Wifi', 'Terrace', 'Traditional Breakfast'],
+    active: true,
     isActive: true,
     createdAt: '2024-01-01T00:00:00Z',
     updatedAt: '2024-01-01T00:00:00Z'
@@ -122,6 +125,7 @@ export const staticActivities: Activity[] = [
     currency: Currency.EUR,
     duration: 4,
     maxParticipants: 20,
+    active: true,
     isActive: true,
     createdAt: '2024-01-01T00:00:00Z',
     updatedAt: '2024-01-01T00:00:00Z'
@@ -136,6 +140,7 @@ export const staticActivities: Activity[] = [
     duration: 3,
     maxParticipants: 10,
     imageUrl: '/src/assets/hammam-spa.jpg',
+    active: true,
     isActive: true,
     createdAt: '2024-01-01T00:00:00Z',
     updatedAt: '2024-01-01T00:00:00Z'
@@ -149,6 +154,7 @@ export const staticActivities: Activity[] = [
     currency: Currency.EUR,
     duration: 2,
     maxParticipants: 15,
+    active: true,
     isActive: true,
     createdAt: '2024-01-01T00:00:00Z',
     updatedAt: '2024-01-01T00:00:00Z'
@@ -162,6 +168,7 @@ export const staticActivities: Activity[] = [
     currency: Currency.EUR,
     duration: 3,
     maxParticipants: 12,
+    active: true,
     isActive: true,
     createdAt: '2024-01-01T00:00:00Z',
     updatedAt: '2024-01-01T00:00:00Z'
@@ -176,6 +183,7 @@ export const staticActivities: Activity[] = [
     duration: 4,
     maxParticipants: 8,
     imageUrl: '/src/assets/moroccan-cuisine.jpg',
+    active: true,
     isActive: true,
     createdAt: '2024-01-01T00:00:00Z',
     updatedAt: '2024-01-01T00:00:00Z'
@@ -228,11 +236,13 @@ export const staticTransports: Transport[] = [
     id: '1',
     name: 'Luxury Bus',
     description: 'Air-conditioned bus for group travel',
-    type: 'Bus',
+    type: 'VAN' as any,
     cityId: '1',
+    price: 120,
     pricePerDay: 120,
     currency: Currency.EUR,
     capacity: 25,
+    active: true,
     isActive: true,
     createdAt: '2024-01-01T00:00:00Z',
     updatedAt: '2024-01-01T00:00:00Z'
@@ -241,11 +251,13 @@ export const staticTransports: Transport[] = [
     id: '2',
     name: 'Private Car',
     description: 'Comfortable sedan with driver',
-    type: 'Car',
+    type: 'MINIBUS' as any,
     cityId: '2',
+    price: 80,
     pricePerDay: 80,
     currency: Currency.EUR,
     capacity: 4,
+    active: true,
     isActive: true,
     createdAt: '2024-01-01T00:00:00Z',
     updatedAt: '2024-01-01T00:00:00Z'
@@ -254,11 +266,13 @@ export const staticTransports: Transport[] = [
     id: '3',
     name: 'Minivan',
     description: 'Spacious van for small groups',
-    type: 'Van',
+    type: 'VAN' as any,
     cityId: '3',
+    price: 100,
     pricePerDay: 100,
     currency: Currency.EUR,
     capacity: 8,
+    active: true,
     isActive: true,
     createdAt: '2024-01-01T00:00:00Z',
     updatedAt: '2024-01-01T00:00:00Z'

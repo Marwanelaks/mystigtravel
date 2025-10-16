@@ -67,7 +67,7 @@ const AdminDemandsManagement = () => {
     if (assignment.hotelId) {
       const hotel = staticHotels.find(h => h.id === assignment.hotelId);
       if (hotel) {
-        total += hotel.pricePerNight * assignment.duration;
+        total += hotel.price * assignment.duration;
       }
     }
     
@@ -75,7 +75,7 @@ const AdminDemandsManagement = () => {
     if (assignment.transportId) {
       const transport = staticTransports.find(t => t.id === assignment.transportId);
       if (transport) {
-        total += transport.pricePerDay * assignment.duration;
+        total += transport.price * assignment.duration;
       }
     }
     
@@ -120,14 +120,14 @@ const AdminDemandsManagement = () => {
   const handleSendEmail = (demand: ClientDemand) => {
     const totalPrice = getTotalDemandPrice(demand.id);
     const subject = `Votre programme de voyage personnalisé - ${totalPrice}€`;
-    const body = `Bonjour ${demand.clientInfo.fullName},\n\nVoici votre programme de voyage personnalisé...\n\nPrix total: ${totalPrice}€`;
+    const body = `Bonjour ${demand.clientInfo.mainTraveler.fullName},\n\nVoici votre programme de voyage personnalisé...\n\nPrix total: ${totalPrice}€`;
     
-    window.open(`mailto:${demand.clientInfo.email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`);
+    window.open(`mailto:${demand.clientInfo.mainTraveler.email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`);
   };
 
   const handleWhatsApp = (demand: ClientDemand) => {
-    const message = `Bonjour ${demand.clientInfo.fullName}, votre programme de voyage est prêt!`;
-    window.open(`https://wa.me/${demand.clientInfo.phone.replace(/\D/g, '')}?text=${encodeURIComponent(message)}`);
+    const message = `Bonjour ${demand.clientInfo.mainTraveler.fullName}, votre programme de voyage est prêt!`;
+    window.open(`https://wa.me/${demand.clientInfo.mainTraveler.phone.replace(/\D/g, '')}?text=${encodeURIComponent(message)}`);
   };
 
   return (
@@ -171,9 +171,9 @@ const AdminDemandsManagement = () => {
                           <ChevronRight className="h-4 w-4" />
                         )}
                         <div className="text-left">
-                          <div className="font-medium">{demand.clientInfo.fullName}</div>
+                          <div className="font-medium">{demand.clientInfo.mainTraveler.fullName}</div>
                           <div className="text-sm text-muted-foreground">
-                            {demand.clientInfo.email} • {demand.clientInfo.numberOfTravelers} voyageurs
+                            {demand.clientInfo.mainTraveler.email} • {demand.clientInfo.travelers.length} voyageurs
                           </div>
                         </div>
                       </div>
@@ -258,10 +258,10 @@ const AdminDemandsManagement = () => {
                                       </SelectTrigger>
                                       <SelectContent>
                                         {staticHotels
-                                          .filter(h => h.cityId === citySelection.cityId)
+                                          .filter(h => h.city.id === citySelection.cityId)
                                           .map(hotel => (
                                             <SelectItem key={hotel.id} value={hotel.id}>
-                                              {hotel.name} ({hotel.pricePerNight}€/nuit)
+                                              {hotel.name} ({hotel.price}€/night)
                                             </SelectItem>
                                           ))}
                                       </SelectContent>
@@ -278,13 +278,11 @@ const AdminDemandsManagement = () => {
                                         <SelectValue placeholder="Sélectionner" />
                                       </SelectTrigger>
                                       <SelectContent>
-                                        {staticTransports
-                                          .filter(t => t.cityId === citySelection.cityId)
-                                          .map(transport => (
-                                            <SelectItem key={transport.id} value={transport.id}>
-                                              {transport.name} ({transport.pricePerDay}€/jour)
-                                            </SelectItem>
-                                          ))}
+                                        {staticTransports.map(transport => (
+                                          <SelectItem key={transport.id} value={transport.id}>
+                                            {transport.type} ({transport.price}€/day)
+                                          </SelectItem>
+                                        ))}
                                       </SelectContent>
                                     </Select>
                                   </TableCell>

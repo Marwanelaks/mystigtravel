@@ -603,67 +603,195 @@
 
 
 import React, { useState } from 'react';
-import { ChevronLeft, ChevronRight, Calendar, MapPin, Users, Star, X } from 'lucide-react';
-import mosque from '@/assets/mosque-5779230.jpg';
+import { ChevronLeft, ChevronRight, Calendar, MapPin, Users, Star, X, Music, Mountain, Waves, Utensils, Palette, Sparkles } from 'lucide-react';
+
 const SpecialPackagesSection = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [selectedProgram, setSelectedProgram] = useState(null);
   const [showModal, setShowModal] = useState(false);
+  const [activeCategory, setActiveCategory] = useState('all');
 
+  // Main Programs
   const programs = [
     {
       id: 1,
-      title: 'Mystic Marrakech, Rabat & Fes',
+      title: 'Marrakech, Rabat & Fes',
       duration: 5,
-      description: 'A soul-led immersion through Morocco\'s imperial wonders. Traverse sacred medinas, dine under stars, and stir your senses in a Fassi cooking ceremony, where tradition meets transcendence.',
+      description: 'A soul-led immersion into Morocco\'s imperial past. Wander medinas, dine under stars, and learn the sacred art of Fassi cuisine.',
       image: 'https://plus.unsplash.com/premium_photo-1697730046699-02d93a2ce32d?q=80&w=435&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
       cities: ['Marrakech', 'Rabat', 'Fes'],
-      type: 'Cultural Immersion'
+      type: 'Imperial Journey',
+      category: 'main'
     },
     {
       id: 2,
-      title: 'Mystic Marrakech, Ourika, Rabat & Fes',
+      title: 'Marrakech, Ourika, Rabat & Fes',
       duration: 8,
-      description: 'Journey from city lights to river whispers. Let Ourika\'s waterfalls cleanse your spirit, Rabat\'s silence ground you, and Fes awaken your inner artist. A pilgrimage through contrast and connection.',
+      description: 'From city lights to mountain whispers. Feel the waterfall\'s serenity in Ourika, the calm of Rabat, and the creativity of Fes.',
       image: 'https://images.unsplash.com/photo-1571896349842-33c89424de2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
       cities: ['Marrakech', 'Ourika Valley', 'Rabat', 'Fes'],
-      type: 'Nature & Culture'
+      type: 'Nature & Culture',
+      category: 'main'
     },
     {
       id: 3,
-      title: 'VIP Travel Program: Marrakech & Fes',
+      title: 'VIP Travel Program - Marrakech & Fes',
       duration: 7,
-      description: 'Revel in the sacred heat of hammams, shape your truth in pottery workshops, and retreat into candlelit riads. From Marrakech to Fes, this is an offering to your senses.',
+      description: 'From hammams to pottery workshops, every moment honors the senses. A journey through warmth, craft, and candlelight.',
       image: 'https://images.unsplash.com/photo-1719084198633-9951c4494317?q=80&w=425&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
       cities: ['Marrakech', 'Fes'],
-      type: 'Luxury Experience'
+      type: 'Luxury Experience',
+      category: 'main'
     },
     {
       id: 4,
-      title: 'VIP Tour: Marrakech & Rabat',
+      title: 'VIP Tour - Marrakech & Rabat',
       duration: 4,
-      description: 'Short but soul-stirring. Marrakech and Rabat wrapped in velvet royal gardens, secret alleys, ancestral hammams. A luxurious pause in time.',
+      description: 'Short, rich, and luxurious. Hammams, gardens, and the quiet elegance of Morocco\'s royal capitals.',
       image: 'https://images.unsplash.com/photo-1647998926037-b69d2be7ad8a?q=80&w=774&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
       cities: ['Marrakech', 'Rabat'],
-      type: 'Luxury Getaway'
+      type: 'Luxury Getaway',
+      category: 'main'
     },
     {
       id: 5,
-      title: 'Echoes of the Valley: Marrakech to Ourika Valley, Rabat, and Fes',
+      title: 'Echoes of the Valley',
       duration: 8,
-      description: 'Flow from Marrakech to the arms of the Ourika Valley, onward to Rabat and Fes. Ancient rhythms, sacred stops and poetic hospitality carry you through this gentle odyssey.',
-      image: 'https://plus.unsplash.com/premium_photo-1674156433236-2338418ec4d9?q=80&w=387&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+      description: 'Marrakech to Ourika, Rabat to Fes, a gentle odyssey through ancient rhythms, poetic hospitality, and sacred stops.',
+      image: 'https://plus.unsplash.com/premium_photo-1697729887553-b0392581a691?q=80&w=871&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
       cities: ['Marrakech', 'Ourika Valley', 'Rabat', 'Fes'],
-      type: 'Cultural Journey'
+      type: 'Cultural Journey',
+      category: 'main'
     },
     {
       id: 6,
-      title: 'The Ultimate Luxe Experience in Marrakech and Fes',
+      title: 'The Ultimate Luxe Experience',
       duration: 6,
-      description: 'A luxe love letter to Morocco\'s twin flames, Marrakech and Fes. Culinary rituals, sacred spas, and evenings wrapped in rose-scented steam.',
-      image: 'https://plus.unsplash.com/premium_photo-1697729887553-b0392581a691?q=80&w=871&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+      description: 'A love letter to Marrakech and Fes, culinary rituals, sacred spas, and rose-scented evenings wrapped in Moroccan light.',
+      image: 'https://plus.unsplash.com/premium_photo-1674156433236-2338418ec4d9?q=80&w=387&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
       cities: ['Marrakech', 'Fes'],
-      type: 'Ultimate Luxury'
+      type: 'Ultimate Luxury',
+      category: 'main'
+    }
+  ];
+
+  // Special Editions - Festivals
+  const festivalPrograms = [
+    {
+      id: 'festival-1',
+      title: 'Sacred Music Festival of Fes',
+      description: 'A landscape of sound, Andalusian chants, Sufi whirls, and Sephardic melodies under the desert sky.',
+      image: 'https://images.unsplash.com/photo-1470225620780-dba8ba36b745?w=800&h=600&fit=crop',
+      type: 'Festival Experience',
+      highlights: ['VIP access to all performances', 'Private Sufi music sessions', 'Backstage artist meetings']
+    },
+    {
+      id: 'festival-2',
+      title: 'Mawazine Magic in Rabat',
+      description: 'Rhythms that move the city. Private access, fine dining, and front-row enchantment.',
+      image: 'https://images.unsplash.com/photo-1501281668745-f7f57925c3b4?w=800&h=600&fit=crop',
+      type: 'Festival Experience',
+      highlights: ['Front-row concert access', 'Exclusive after-parties', 'Gourmet dining experiences']
+    },
+    {
+      id: 'festival-3',
+      title: 'Essaouira\'s Gnaoua Spirit',
+      description: 'Where wind, water, and sacred rhythm merge, a soulful celebration by the sea.',
+      image: 'https://images.unsplash.com/photo-1653821355793-80142f9c5063?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=870',
+      type: 'Festival Experience',
+      highlights: ['Private Gnaoua music workshops', 'Befront stage access', 'Cultural immersion experiences']
+    }
+  ];
+
+  // Nature & Adventure Experiences
+  const natureExperiences = [
+    {
+      id: 'nature-1',
+      title: 'The Atlas Mountains',
+      description: 'Walk the holy trails of the High Atlas, Berber villages carved in stone, valleys humming with life, each step a quiet prayer.',
+      icon: <Mountain className="w-6 h-6" />,
+      duration: 'Full day'
+    },
+    {
+      id: 'nature-2',
+      title: 'The Serenity of Ourika',
+      description: 'A valley of waterfalls and Amazigh soul. Dine by the river, breathe mountain air, and let nature\'s rhythm slow you down.',
+      icon: <Mountain className="w-6 h-6" />,
+      duration: 'Half day'
+    },
+    {
+      id: 'nature-3',
+      title: 'Sahara Stargazing',
+      description: 'Under Morocco\'s infinite sky, silence becomes music. Recline on dunes as constellations tell their ancient stories.',
+      icon: <Sparkles className="w-6 h-6" />,
+      duration: 'Overnight'
+    },
+    {
+      id: 'nature-4',
+      title: 'Essaouira\'s Coastal Spirit',
+      description: 'Let the Atlantic wind play with your hair, surf, ride horses, or simply walk the golden shore.',
+      icon: <Waves className="w-6 h-6" />,
+      duration: 'Full day'
+    },
+    {
+      id: 'nature-5',
+      title: 'The Camel Caravan',
+      description: 'Ride through the dunes with nomads who know the desert\'s heart. The Sahara becomes your teacher, patient, eternal.',
+      icon: <Sparkles className="w-6 h-6" />,
+      duration: 'Half day'
+    },
+    {
+      id: 'nature-6',
+      title: 'The Cedar Forests',
+      description: 'Among ancient trees and playful macaques, rediscover stillness and balance.',
+      icon: <Mountain className="w-6 h-6" />,
+      duration: 'Full day'
+    }
+  ];
+
+  // Cultural & Culinary Experiences
+  const culturalExperiences = [
+    {
+      id: 'cultural-1',
+      title: 'Cooking with Spirit',
+      description: 'Join local chefs in kitchens perfumed with saffron and stories, learn to prepare tagine, couscous, and pastilla, food made with memory.',
+      icon: <Utensils className="w-6 h-6" />,
+      duration: '3-4 hours'
+    },
+    {
+      id: 'cultural-2',
+      title: 'Souk Stories',
+      description: 'Wander medinas alive with color and scent. With our guides, every stall becomes a story, every purchase a keepsake of history.',
+      icon: <Sparkles className="w-6 h-6" />,
+      duration: '2-3 hours'
+    },
+    {
+      id: 'cultural-3',
+      title: 'Pottery & Calligraphy Rituals',
+      description: 'Shape clay, trace your name in ink. Guided by artisans, you\'ll create not just art but connection.',
+      icon: <Palette className="w-6 h-6" />,
+      duration: '3-4 hours'
+    },
+    {
+      id: 'cultural-4',
+      title: 'Tasting Walks Through Time',
+      description: 'Savor pastries, sip mint tea and walk the alleys of Fes and Marrakech where flavor meets history.',
+      icon: <Utensils className="w-6 h-6" />,
+      duration: '2-3 hours'
+    },
+    {
+      id: 'cultural-5',
+      title: 'The Moroccan Tea Offering',
+      description: 'More than a drink, a blessing. Pour, share, smile. In Morocco, tea means "you\'re home".',
+      icon: <Utensils className="w-6 h-6" />,
+      duration: '1-2 hours'
+    },
+    {
+      id: 'cultural-6',
+      title: 'Nights of Celebration',
+      description: 'Beneath the stars, music and dance awaken Morocco\'s spirit, a feast of rhythm, laughter, and connection.',
+      icon: <Music className="w-6 h-6" />,
+      duration: 'Evening'
     }
   ];
 
@@ -695,194 +823,279 @@ const SpecialPackagesSection = () => {
 
   const currentProgram = programs[currentIndex];
 
+  const filteredPrograms = activeCategory === 'all' 
+    ? programs 
+    : programs.filter(program => program.category === activeCategory);
+
   return (
-    <section id="special-packages" className="py-20 bg-luxury-beige/20">
+    <section id="journeys-rituals" className="py-20 bg-luxury-beige/10">
       <div className="container mx-auto px-6">
+        {/* Header Section */}
         <div className="text-center mb-16">
           <h2 className="font-serif text-4xl md:text-5xl font-bold text-foreground mb-6">
             Journeys & Rituals
           </h2>
-          <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-            Explore Morocco with exclusive, customizable packages crafted for your preferences. 
-            Whether you're seeking cultural immersion, luxury experiences, or adventure-filled days, 
-            our programs offer a seamless blend of relaxation and exploration.
+          <div className="w-24 h-1 bg-gradient-to-r from-primary to-primary-dark mx-auto mb-6"></div>
+          <p className="text-xl text-muted-foreground max-w-4xl mx-auto leading-relaxed">
+            Discover Morocco through tailor-made journeys blending luxury, culture, and deep connection. 
+            Each program is a carefully crafted ritual of discovery, designed to transform your travel into a meaningful pilgrimage.
           </p>
         </div>
 
-        {/* Carousel Container */}
-        <div className="relative max-w-6xl mx-auto">
-          {/* Main Package Display */}
-          <div className="bg-white rounded-2xl shadow-luxury overflow-hidden">
-            <div className="grid lg:grid-cols-2 gap-0">
-              {/* Package Image */}
-              <div className="relative h-96 lg:h-auto">
-                <img
-                  src={currentProgram.image}
-                  alt={currentProgram.title}
-                  className="w-full h-full object-cover"
-                />
-                <div className="absolute bottom-4 left-4 right-4">
-                  <div className="flex space-x-2 justify-center">
-                    {programs.map((_, index) => (
-                      <button
-                        key={index}
-                        onClick={() => goToSlide(index)}
-                        className={`w-3 h-3 rounded-full transition-all duration-300 ${
-                          index === currentIndex 
-                            ? 'bg-white scale-125' 
-                            : 'bg-white/50 hover:bg-white/75'
-                        }`}
-                      />
-                    ))}
+        {/* Main Programs Carousel */}
+        <div className="mb-20">
+          <div className="relative max-w-6xl mx-auto">
+            <div className="bg-white rounded-2xl shadow-luxury overflow-hidden">
+              <div className="grid lg:grid-cols-2 gap-0">
+                {/* Program Image */}
+                <div className="relative h-96 lg:h-auto">
+                  <img
+                    src={currentProgram.image}
+                    alt={currentProgram.title}
+                    className="w-full h-full object-cover transition-transform duration-500 hover:scale-105"
+                  />
+                  <div className="absolute bottom-4 left-4 right-4">
+                    <div className="flex space-x-2 justify-center">
+                      {programs.map((_, index) => (
+                        <button
+                          key={index}
+                          onClick={() => goToSlide(index)}
+                          className={`w-3 h-3 rounded-full transition-all duration-300 ${
+                            index === currentIndex 
+                              ? 'bg-white scale-125' 
+                              : 'bg-white/50 hover:bg-white/75'
+                          }`}
+                        />
+                      ))}
+                    </div>
                   </div>
                 </div>
-              </div>
 
-              {/* Package Details */}
-              <div className="p-8 lg:p-12">
-                <div className="h-full flex flex-col">
-                  <div className="flex-1">
-                    <div className="inline-block bg-primary/10 text-primary px-3 py-1 rounded-full text-sm font-medium mb-4">
-                      {currentProgram.type}
-                    </div>
-                    <h3 className="font-serif text-3xl lg:text-4xl font-bold text-foreground mb-4">
-                      Program {currentProgram.id}: {currentProgram.title}
-                    </h3>
-                    <p className="text-muted-foreground text-lg leading-relaxed mb-6">
-                      {currentProgram.description}
-                    </p>
+                {/* Program Details */}
+                <div className="p-8 lg:p-12">
+                  <div className="h-full flex flex-col">
+                    <div className="flex-1">
+                      <div className="inline-block bg-primary/10 text-primary px-3 py-1 rounded-full text-sm font-medium mb-4">
+                        Program {currentProgram.id}
+                      </div>
+                      <h3 className="font-serif text-3xl lg:text-4xl font-bold text-foreground mb-4">
+                        {currentProgram.title}
+                      </h3>
+                      <p className="text-muted-foreground text-lg leading-relaxed mb-6">
+                        {currentProgram.description}
+                      </p>
 
-                    {/* Package Stats */}
-                    <div className="grid grid-cols-2 gap-4 mb-8">
-                      <div className="flex items-center space-x-2">
-                        <Calendar className="w-5 h-5 text-primary" />
-                        <span className="text-sm text-muted-foreground">
-                          {currentProgram.duration} Days
-                        </span>
-                      </div>
-                      <div className="flex items-center space-x-2">
-                        <MapPin className="w-5 h-5 text-primary" />
-                        <span className="text-sm text-muted-foreground">
-                          {currentProgram.cities.length} Destinations
-                        </span>
-                      </div>
-                      <div className="flex items-center space-x-2">
-                        <Users className="w-5 h-5 text-primary" />
-                        <span className="text-sm text-muted-foreground">
-                          Private Experience
-                        </span>
-                      </div>
-                      <div className="flex items-center space-x-2">
-                        <Star className="w-5 h-5 text-primary" />
-                        <span className="text-sm text-muted-foreground">
-                          Customizable
-                        </span>
-                      </div>
-                    </div>
-
-                    {/* Destinations */}
-                    <div className="mb-8">
-                      <h4 className="font-semibold text-foreground mb-3">Destinations:</h4>
-                      <div className="flex flex-wrap gap-2">
-                        {currentProgram.cities.map((city, index) => (
-                          <span key={index} className="bg-luxury-beige/30 px-3 py-1 rounded-full text-sm">
-                            {city}
+                      {/* Program Stats */}
+                      <div className="grid grid-cols-2 gap-4 mb-8">
+                        <div className="flex items-center space-x-2">
+                          <Calendar className="w-5 h-5 text-primary" />
+                          <span className="text-sm text-muted-foreground">
+                            {currentProgram.duration} Days
                           </span>
-                        ))}
+                        </div>
+                        <div className="flex items-center space-x-2">
+                          <MapPin className="w-5 h-5 text-primary" />
+                          <span className="text-sm text-muted-foreground">
+                            {currentProgram.cities.length} Destinations
+                          </span>
+                        </div>
+                        <div className="flex items-center space-x-2">
+                          <Users className="w-5 h-5 text-primary" />
+                          <span className="text-sm text-muted-foreground">
+                            Private Experience
+                          </span>
+                        </div>
+                        <div className="flex items-center space-x-2">
+                          <Star className="w-5 h-5 text-primary" />
+                          <span className="text-sm text-muted-foreground">
+                            Customizable
+                          </span>
+                        </div>
+                      </div>
+
+                      {/* Destinations */}
+                      <div className="mb-8">
+                        <h4 className="font-semibold text-foreground mb-3">Journey Through:</h4>
+                        <div className="flex flex-wrap gap-2">
+                          {currentProgram.cities.map((city, index) => (
+                            <span key={index} className="bg-luxury-beige/30 px-3 py-1 rounded-full text-sm">
+                              {city}
+                            </span>
+                          ))}
+                        </div>
                       </div>
                     </div>
-                  </div>
 
-                  {/* CTA */}
-                  <div className="border-t border-gray-200 pt-6">
-                    <div className="flex flex-col sm:flex-row gap-4">
-                      <button 
-                        onClick={() => openModal(currentProgram)}
-                        className="flex-1 bg-primary text-primary-foreground py-3 px-6 rounded-lg font-semibold hover:bg-primary/90 transition-colors duration-300"
-                      >
-                        See Program Details
-                      </button>
-                      <button className="flex-1 border border-primary text-primary py-3 px-6 rounded-lg font-semibold hover:bg-primary/10 transition-colors duration-300">
-                        Customize This Journey
-                      </button>
+                    {/* CTA */}
+                    <div className="border-t border-gray-200 pt-6">
+                      <div className="flex flex-col sm:flex-row gap-4">
+                        <button 
+                          onClick={() => openModal(currentProgram)}
+                          className="flex-1 bg-primary text-white py-3 px-6 rounded-lg font-semibold hover:bg-primary/90 transition-all duration-300 hover:scale-105"
+                        >
+                          Explore This Journey
+                        </button>
+                        <button className="flex-1 border border-primary text-primary py-3 px-6 rounded-lg font-semibold hover:bg-primary/10 transition-all duration-300">
+                          Customize Itinerary
+                        </button>
+                      </div>
                     </div>
                   </div>
                 </div>
               </div>
             </div>
-          </div>
 
-          {/* Navigation Arrows */}
-          <button
-            onClick={prevSlide}
-            className="absolute left-4 top-1/2 transform -translate-y-1/2 bg-white/90 hover:bg-white p-3 rounded-full shadow-lg transition-all duration-300 hover:scale-110"
-          >
-            <ChevronLeft className="w-6 h-6 text-foreground" />
-          </button>
-          <button
-            onClick={nextSlide}
-            className="absolute right-4 top-1/2 transform -translate-y-1/2 bg-white/90 hover:bg-white p-3 rounded-full shadow-lg transition-all duration-300 hover:scale-110"
-          >
-            <ChevronRight className="w-6 h-6 text-foreground" />
-          </button>
+            {/* Navigation Arrows */}
+            <button
+              onClick={prevSlide}
+              className="absolute left-4 top-1/2 transform -translate-y-1/2 bg-white/90 hover:bg-white p-3 rounded-full shadow-lg transition-all duration-300 hover:scale-110"
+            >
+              <ChevronLeft className="w-6 h-6 text-foreground" />
+            </button>
+            <button
+              onClick={nextSlide}
+              className="absolute right-4 top-1/2 transform -translate-y-1/2 bg-white/90 hover:bg-white p-3 rounded-full shadow-lg transition-all duration-300 hover:scale-110"
+            >
+              <ChevronRight className="w-6 h-6 text-foreground" />
+            </button>
+          </div>
         </div>
 
-        {/* Package Thumbnails */}
-        {/* <div className="mt-12 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {programs.map((program, index) => (
-            <div
-              key={program.id}
-              onClick={() => goToSlide(index)}
-              className={`cursor-pointer transition-all duration-300 transform hover:scale-105 ${
-                index === currentIndex ? 'ring-2 ring-primary' : ''
-              }`}
-            >
-              <div className="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300">
-                <div className="relative h-48">
+        {/* Special Editions - Festivals */}
+        <div className="mb-20">
+          <div className="text-center mb-12">
+            <div className="inline-flex items-center gap-2 bg-primary/10 px-4 py-2 rounded-full mb-4">
+              <Music className="w-4 h-4 text-primary" />
+              <span className="text-sm font-semibold text-primary">Limited Edition</span>
+            </div>
+            <h3 className="font-serif text-3xl md:text-4xl font-bold text-foreground mb-4">
+              Special Editions
+            </h3>
+            <p className="text-muted-foreground max-w-2xl mx-auto">
+              Exclusive festival experiences: Limited-time magic. Immerse yourself in Morocco's vibrant festival culture with VIP access and unforgettable moments.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {festivalPrograms.map((festival) => (
+              <div key={festival.id} className="bg-white rounded-2xl shadow-luxury overflow-hidden hover:shadow-luxury-hover transition-all duration-500 hover:translate-y-2">
+                <div className="aspect-[16/9] overflow-hidden">
                   <img
-                    src={program.image}
-                    alt={program.title}
-                    className="w-full h-full object-cover"
+                    src={festival.image}
+                    alt={festival.title}
+                    className="w-full h-full object-cover transition-transform duration-700 hover:scale-110"
                   />
-                  <div className="absolute top-2 left-2 bg-primary/90 text-white px-2 py-1 rounded text-xs font-semibold">
-                    Program {program.id}
-                  </div>
                 </div>
-                <div className="p-4">
-                  <h4 className="font-serif text-lg font-semibold text-foreground mb-2">
-                    {program.title}
-                  </h4>
-                  <div className="flex items-center justify-between text-sm text-muted-foreground mb-3">
-                    <span>{program.duration} Days</span>
-                    <span>{program.cities.length} Destinations</span>
+                <div className="p-6">
+                  <div className="flex items-center gap-2 text-primary mb-3">
+                    <Music className="w-4 h-4" />
+                    <span className="text-sm font-semibold">{festival.type}</span>
                   </div>
-                  <button 
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      openModal(program);
-                    }}
-                    className="w-full mt-2 text-primary hover:text-primary/80 font-medium text-sm"
-                  >
-                    See more details →
+                  <h4 className="font-serif text-xl font-bold text-foreground mb-3">
+                    {festival.title}
+                  </h4>
+                  <p className="text-muted-foreground mb-4 leading-relaxed">
+                    {festival.description}
+                  </p>
+                  <ul className="space-y-2 mb-4">
+                    {festival.highlights.map((highlight, index) => (
+                      <li key={index} className="flex items-center text-sm text-foreground">
+                        <span className="text-primary mr-2">•</span>
+                        {highlight}
+                      </li>
+                    ))}
+                  </ul>
+                  <button className="w-full bg-primary/10 text-primary py-2 px-4 rounded-lg font-semibold hover:bg-primary hover:text-white transition-all duration-300">
+                    Discover Festival Magic
                   </button>
                 </div>
               </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Nature & Sacred Adventure */}
+        <div className="mb-20">
+          <div className="text-center mb-12">
+            <div className="inline-flex items-center gap-2 bg-primary/10 px-4 py-2 rounded-full mb-4">
+              <Mountain className="w-4 h-4 text-primary" />
+              <span className="text-sm font-semibold text-primary">Sacred Adventure</span>
             </div>
-          ))}
-        </div> */}
+            <h3 className="font-serif text-3xl md:text-4xl font-bold text-foreground mb-4">
+              Nature & Sacred Adventure
+            </h3>
+            <p className="text-muted-foreground max-w-2xl mx-auto">
+              Where wilderness turns into wonder and every horizon feels like a message
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {natureExperiences.map((experience) => (
+              <div key={experience.id} className="bg-white rounded-xl p-6 shadow-luxury hover:shadow-luxury-hover transition-all duration-500 hover:translate-y-1 group">
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="p-2 bg-primary/10 rounded-lg text-primary group-hover:scale-110 transition-transform duration-300">
+                    {experience.icon}
+                  </div>
+                  <span className="text-sm font-semibold text-primary">{experience.duration}</span>
+                </div>
+                <h4 className="font-serif text-lg font-bold text-foreground mb-3">
+                  {experience.title}
+                </h4>
+                <p className="text-muted-foreground text-sm leading-relaxed">
+                  {experience.description}
+                </p>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Cultural & Culinary Encounters */}
+        <div>
+          <div className="text-center mb-12">
+            <div className="inline-flex items-center gap-2 bg-primary/10 px-4 py-2 rounded-full mb-4">
+              <Utensils className="w-4 h-4 text-primary" />
+              <span className="text-sm font-semibold text-primary">Living Culture</span>
+            </div>
+            <h3 className="font-serif text-3xl md:text-4xl font-bold text-foreground mb-4">
+              Cultural & Culinary Encounters
+            </h3>
+            <p className="text-muted-foreground max-w-2xl mx-auto">
+              Culture in Morocco isn't something you observe, it's something you live
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {culturalExperiences.map((experience) => (
+              <div key={experience.id} className="bg-white rounded-xl p-6 shadow-luxury hover:shadow-luxury-hover transition-all duration-500 hover:translate-y-1 group">
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="p-2 bg-primary/10 rounded-lg text-primary group-hover:scale-110 transition-transform duration-300">
+                    {experience.icon}
+                  </div>
+                  <span className="text-sm font-semibold text-primary">{experience.duration}</span>
+                </div>
+                <h4 className="font-serif text-lg font-bold text-foreground mb-3">
+                  {experience.title}
+                </h4>
+                <p className="text-muted-foreground text-sm leading-relaxed">
+                  {experience.description}
+                </p>
+              </div>
+            ))}
+          </div>
+        </div>
       </div>
 
       {/* Modal Popup */}
       {showModal && selectedProgram && (
-        <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-2xl max-w-4xl w-full max-h-[90vh] overflow-y-auto">
+        <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50 p-4 animate-fade-in">
+          <div className="bg-white rounded-2xl max-w-4xl w-full max-h-[90vh] overflow-y-auto animate-scale-in">
             <div className="sticky top-0 bg-white flex justify-between items-center p-6 border-b border-gray-200">
               <h3 className="font-serif text-2xl font-bold text-foreground">
                 Program {selectedProgram.id}: {selectedProgram.title}
               </h3>
               <button 
                 onClick={closeModal}
-                className="p-2 hover:bg-gray-100 rounded-full transition-colors"
+                className="p-2 hover:bg-gray-100 rounded-full transition-colors duration-300 hover:scale-110"
               >
                 <X className="w-6 h-6" />
               </button>
@@ -924,7 +1137,7 @@ const SpecialPackagesSection = () => {
               </div>
               
               <div className="mb-8">
-                <h4 className="font-serif text-xl font-bold text-foreground mb-4">Program Description</h4>
+                <h4 className="font-serif text-xl font-bold text-foreground mb-4">Journey Description</h4>
                 <p className="text-muted-foreground leading-relaxed">
                   {selectedProgram.description}
                 </p>
@@ -961,17 +1174,34 @@ const SpecialPackagesSection = () => {
               </div>
               
               <div className="flex flex-col sm:flex-row gap-4">
-                <button className="flex-1 bg-primary text-primary-foreground py-3 px-6 rounded-lg font-semibold hover:bg-primary/90 transition-colors duration-300">
-                  Request Booking
+                <button className="flex-1 bg-primary text-white py-3 px-6 rounded-lg font-semibold hover:bg-primary/90 transition-all duration-300 hover:scale-105">
+                  Begin Your Journey
                 </button>
-                <button className="flex-1 border border-primary text-primary py-3 px-6 rounded-lg font-semibold hover:bg-primary/10 transition-colors duration-300">
-                  Customize This Journey
+                <button className="flex-1 border border-primary text-primary py-3 px-6 rounded-lg font-semibold hover:bg-primary/10 transition-all duration-300">
+                  Customize This Experience
                 </button>
               </div>
             </div>
           </div>
         </div>
       )}
+
+      <style jsx>{`
+        @keyframes fade-in {
+          from { opacity: 0; }
+          to { opacity: 1; }
+        }
+        @keyframes scale-in {
+          from { transform: scale(0.9); opacity: 0; }
+          to { transform: scale(1); opacity: 1; }
+        }
+        .animate-fade-in {
+          animation: fade-in 0.3s ease-out;
+        }
+        .animate-scale-in {
+          animation: scale-in 0.3s ease-out;
+        }
+      `}</style>
     </section>
   );
 };

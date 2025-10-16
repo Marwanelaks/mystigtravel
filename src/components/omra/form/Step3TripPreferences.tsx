@@ -11,15 +11,15 @@ import { FaCalendarAlt } from 'react-icons/fa';
 export const Step3TripPreferences: React.FC = () => {
   const { t, isRTL } = useLanguage();
   const { formData, updateFormData, errors } = useForm();
-  const [dateType, setDateType] = useState<'flexible' | 'specific'>(
-    formData.dateType || 'specific'
+  const [dateType, setDateType] = useState<'FLEXIBLE' | 'SPECIFIC'>(
+    (formData.dateType === 'FLEXIBLE' || formData.dateType === 'SPECIFIC') ? formData.dateType : 'SPECIFIC'
   );
 
   const handleInputChange = (field: string, value: string) => {
     updateFormData({ [field]: value });
   };
 
-  const handleDateTypeChange = (value: 'flexible' | 'specific') => {
+  const handleDateTypeChange = (value: 'FLEXIBLE' | 'SPECIFIC') => {
     setDateType(value);
     updateFormData({ dateType: value });
   };
@@ -93,17 +93,17 @@ export const Step3TripPreferences: React.FC = () => {
         </h4>
         <RadioGroup
           value={dateType}
-          onValueChange={(value) => handleDateTypeChange(value as 'flexible' | 'specific')}
+          onValueChange={(value) => handleDateTypeChange(value as 'FLEXIBLE' | 'SPECIFIC')}
           className="space-y-3"
         >
           <div className="flex items-center space-x-2">
-            <RadioGroupItem value="flexible" id="flexible" />
+            <RadioGroupItem value="FLEXIBLE" id="flexible" />
             <Label htmlFor="flexible" className={isRTL ? 'font-amiri' : 'font-inter'}>
               {isRTL ? 'تاريخ مرن (اختر شهر)' : 'Flexible Date (Select a month)'}
             </Label>
           </div>
           <div className="flex items-center space-x-2">
-            <RadioGroupItem value="specific" id="specific" />
+            <RadioGroupItem value="SPECIFIC" id="specific" />
             <Label htmlFor="specific" className={isRTL ? 'font-amiri' : 'font-inter'}>
               {isRTL ? 'تاريخ محدد' : 'Specific Date'}
             </Label>
@@ -112,7 +112,7 @@ export const Step3TripPreferences: React.FC = () => {
       </Card>
 
       {/* Conditional Date Fields */}
-      {dateType === 'flexible' ? (
+      {dateType === 'FLEXIBLE' ? (
         <div className="space-y-6">
           <div className="space-y-2">
             <Label htmlFor="flexibleMonth" className={isRTL ? 'font-amiri' : 'font-inter'}>

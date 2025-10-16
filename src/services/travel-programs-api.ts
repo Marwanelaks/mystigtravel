@@ -1,6 +1,15 @@
-import { DemandCity, RoomType } from '@/models/travel-programs';
 import { apiRequest } from './api';
-import { ClientDemand, AdminPackage, City, Activity, Service, Hotel, Transport, ClientInfo } from '@/types/travel';
+import { 
+  ClientDemand, 
+  AdminPackage, 
+  City, 
+  Activity, 
+  Service, 
+  Hotel, 
+  Transport, 
+  ClientInfo,
+  DemandCity 
+} from '@/types/travel';
 
 // Type aliases for compatibility
 type Demand = ClientDemand;

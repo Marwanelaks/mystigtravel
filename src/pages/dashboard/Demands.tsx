@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import DashboardLayout from '@/components/dashboard/DashboardLayout';
-import { Demand, DemandStatus } from '@/models/travel-programs';
+import { ClientDemand as Demand, DemandStatus } from '@/types/travel';
 import { demandsAPI, citiesAPI, hotelsAPI, transportsAPI, servicesAPI, activitiesAPI } from '@/services/travel-programs-api';
 import { 
   X, Send, ChevronDown, ChevronUp, Trash2, Edit, Check, XCircle, 
@@ -10,6 +10,15 @@ import {
 } from 'lucide-react';
 import { jsPDF } from 'jspdf';
 import autoTable from 'jspdf-autotable';
+
+// Extend jsPDF type to include autoTable properties
+declare module 'jspdf' {
+  interface jsPDF {
+    lastAutoTable: {
+      finalY: number;
+    };
+  }
+}
 
 // Helper interface for display
 interface DisplayDemand extends Demand {
@@ -716,9 +725,9 @@ const handleTaxPercentageChange = async (demandId: string, value: number) => {
                           )}
                           <div className="flex items-center">
                             <Plane className="w-4 h-4 mr-2 text-blue-500" />
-                            {demand.clientInfo?.flightOption === 'WITH'
+                            {(demand.clientInfo?.flightOption === 'WITH' || demand.clientInfo?.flightOption === 'with')
                               ? 'With flight'
-                              : demand.clientInfo?.flightOption === 'WITHOUT'
+                              : (demand.clientInfo?.flightOption === 'WITHOUT' || demand.clientInfo?.flightOption === 'without')
                                 ? 'Without flight'
                                 : 'No flight option'}
                           </div>

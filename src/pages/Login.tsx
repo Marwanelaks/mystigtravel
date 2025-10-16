@@ -4,6 +4,7 @@ import { useScrollAnimation } from '@/hooks/useScrollAnimation';
 import { login } from '@/services/auth';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
+import { authAPI } from "@/services/api";
 
 const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -23,7 +24,15 @@ const Login = () => {
     try {
       const user = await login(formData.email, formData.password);
       setUser(user);
-      navigate('/dashboard');
+      const userr = await authAPI.getCurrentUser();
+      debugger
+      if (userr.role === "ROLE_ADMIN") {
+        navigate('/dashboard');
+      } else if (userr.role === "ROLE_PARTENAIRE") {
+        navigate('/partner-dashboard');
+      } else {
+        navigate('/login');
+      }
     } catch {
       setError('Email ou mot de passe invalide');
     }

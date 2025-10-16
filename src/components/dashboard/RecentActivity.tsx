@@ -1,44 +1,7 @@
+import { motion } from 'framer-motion';
 import { Clock, MapPin, Users, DollarSign, Star, Calendar } from 'lucide-react';
-import { useTheme } from '@/contexts/ThemeContext';
 
 const RecentActivity = () => {
-  const { theme } = useTheme();
-
-  const getThemeStyles = () => {
-    switch (theme) {
-      case 'dark':
-        return {
-          card: 'bg-gray-900 border-gray-800',
-          text: 'text-gray-100',
-          subtext: 'text-gray-400',
-          accent: 'from-blue-600 to-purple-600'
-        };
-      case 'moroccan':
-        return {
-          card: 'bg-white/90 border-orange-200',
-          text: 'text-gray-800',
-          subtext: 'text-gray-600',
-          accent: 'from-orange-500 to-red-500'
-        };
-      case 'modern':
-        return {
-          card: 'bg-white border-gray-200',
-          text: 'text-gray-900',
-          subtext: 'text-gray-600',
-          accent: 'from-indigo-500 to-purple-500'
-        };
-      default:
-        return {
-          card: 'bg-white border-gray-200',
-          text: 'text-gray-900',
-          subtext: 'text-gray-600',
-          accent: 'from-blue-500 to-indigo-500'
-        };
-    }
-  };
-
-  const themeStyles = getThemeStyles();
-
   const activities = [
     {
       id: 1,
@@ -48,7 +11,7 @@ const RecentActivity = () => {
       amount: '$2,800',
       time: '2h ago',
       icon: MapPin,
-      gradient: 'from-green-500 to-emerald-600'
+      gradient: 'from-emerald-400 to-emerald-600',
     },
     {
       id: 2,
@@ -57,7 +20,7 @@ const RecentActivity = () => {
       description: 'Sarah L. - 5 stars for Riad Marrakech',
       time: '4h ago',
       icon: Star,
-      gradient: 'from-yellow-500 to-orange-600'
+      gradient: 'from-amber-400 to-amber-600',
     },
     {
       id: 3,
@@ -67,7 +30,7 @@ const RecentActivity = () => {
       amount: '$1,500',
       time: '6h ago',
       icon: DollarSign,
-      gradient: 'from-blue-500 to-cyan-600'
+      gradient: 'from-blue-400 to-blue-600',
     },
     {
       id: 4,
@@ -76,56 +39,59 @@ const RecentActivity = () => {
       description: 'Essaouira Excursion - Refund processed',
       time: '1 day ago',
       icon: Calendar,
-      gradient: 'from-red-500 to-pink-600'
+      gradient: 'from-red-400 to-red-600',
     }
   ];
 
   return (
-    <div className={`${themeStyles.card} backdrop-blur-sm rounded-2xl border shadow-lg overflow-hidden`}>
-      <div className={`p-6 bg-gradient-to-r ${theme === 'moroccan' ? 'from-orange-100 to-red-100' : theme === 'dark' ? 'from-gray-800 to-gray-700' : 'from-gray-50 to-gray-100'} border-b`}>
+    <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+      <div className="p-6 border-b border-gray-100">
         <div className="flex items-center space-x-3">
-          <div className={`w-10 h-10 bg-gradient-to-br ${themeStyles.accent} rounded-xl flex items-center justify-center shadow-lg`}>
+          <div className="w-10 h-10 bg-gradient-to-br from-[hsl(var(--dashboard-royal-blue))] to-[hsl(var(--dashboard-gold))] rounded-xl flex items-center justify-center shadow-lg">
             <Clock className="w-5 h-5 text-white" />
           </div>
-          <h2 className={`text-xl font-bold ${themeStyles.text}`}>Recent Activity</h2>
+          <h2 className="text-xl font-bold text-[hsl(var(--dashboard-text))]">Recent Activity</h2>
         </div>
       </div>
       
       <div className="p-6">
         <div className="space-y-4">
           {activities.map((activity, index) => (
-            <div 
-              key={activity.id} 
-              className={`relative p-4 rounded-xl ${themeStyles.card} border hover:shadow-lg transition-all duration-300 hover:scale-102 group overflow-hidden`}
+            <motion.div 
+              key={activity.id}
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: index * 0.1 }}
+              whileHover={{ scale: 1.02, transition: { duration: 0.2 } }}
+              className="p-4 rounded-xl bg-gray-50 border border-gray-100 hover:shadow-md transition-all duration-300 cursor-pointer"
             >
-              <div className="flex items-start space-x-4 relative z-10">
-                <div className={`p-3 rounded-xl bg-gradient-to-br ${activity.gradient} shadow-lg group-hover:scale-110 transition-transform duration-300`}>
+              <div className="flex items-start space-x-4">
+                <div className={`p-3 rounded-xl bg-gradient-to-br ${activity.gradient} shadow-md`}>
                   <activity.icon className="w-5 h-5 text-white" />
                 </div>
                 
                 <div className="flex-1 min-w-0">
-                  <h3 className={`font-bold ${themeStyles.text} mb-1 group-hover:scale-105 transition-transform duration-300`}>
+                  <h3 className="font-bold text-[hsl(var(--dashboard-text))] mb-1">
                     {activity.title}
                   </h3>
-                  <p className={`${themeStyles.subtext} mb-2`}>
+                  <p className="text-[hsl(var(--dashboard-text-muted))] text-sm mb-2">
                     {activity.description}
                   </p>
                   <div className="flex items-center space-x-2">
-                    <Clock className={`w-4 h-4 ${themeStyles.subtext}`} />
-                    <span className={`text-sm ${themeStyles.subtext} font-medium`}>{activity.time}</span>
+                    <Clock className="w-3 h-3 text-[hsl(var(--dashboard-text-muted))]" />
+                    <span className="text-xs text-[hsl(var(--dashboard-text-muted))] font-medium">{activity.time}</span>
                   </div>
                 </div>
                 
                 {activity.amount && (
                   <div className="text-right">
-                    <p className={`font-bold ${themeStyles.text} text-lg`}>
+                    <p className="font-bold text-[hsl(var(--dashboard-text))] text-lg">
                       {activity.amount}
                     </p>
-                    <div className="w-2 h-2 bg-green-500 rounded-full mt-1 shadow-lg"></div>
                   </div>
                 )}
               </div>
-            </div>
+            </motion.div>
           ))}
         </div>
       </div>

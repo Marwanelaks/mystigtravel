@@ -239,7 +239,7 @@ const TransportList = () => {
                         </h3>
                         <div className="flex items-center text-sm text-gray-600 mb-2">
                           <span className="font-semibold">Type:</span> 
-                          <span className="ml-1">{getTransportTypeLabel(transport.type)}</span>
+                          <span className="ml-1">{getTransportTypeLabel(transport.type as TransportType)}</span>
                         </div>
                       </div>
                       <span className={`px-3 py-1 rounded-full text-xs font-semibold ${transport.active ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}`}>

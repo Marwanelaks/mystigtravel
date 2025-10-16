@@ -1,76 +1,182 @@
 import React, { useState, useEffect } from 'react';
-import { ChevronLeft, ChevronRight, MapPin, Star, Heart } from 'lucide-react';
+import { ChevronLeft, ChevronRight, MapPin, Heart, Mountain, Waves, Palette, Sun } from 'lucide-react';
 import marrakech from '@/assets/marrakech-5095887.jpg';
 import fez from '@/assets/fez-1691603.jpg';
 import rabat from '@/assets/rabat-5014427.jpg';
 import chefchaouen from '@/assets/morocco-3735564.jpg';
 import sahara from '@/assets/sahara-4937450.jpg';
 import atlas from '@/assets/morocco-4030733.jpg';
+import essaouira from '@/assets/essaouira.jpg';
+import meknes from '@/assets/meknes.jpg';
+import agadir from '@/assets/agadir.jpg';
+import imlil from '@/assets/imlil.jpg';
+import ourika from '@/assets/morocco-4030733.jpg';
+import toubkal from '@/assets/morocco-3735564.jpg';
+import ouarzazate from '@/assets/sahara-4937450.jpg';
+import zagora from '@/assets/rabat-5014427.jpg';
+
 const GalleryCarousel = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [isTransitioning, setIsTransitioning] = useState(false);
 
-  // Using Unsplash images that match your destination descriptions
   const destinations = [
+    // Imperial Cities
     {
       image: marrakech,
       title: "Marrakech",
       subtitle: "The Red City",
-      description: "Where dreams come alive in vibrant colors, mesmerizing scents, and echoes of history."
+      category: "Imperial Cities",
+      description: "Vibrant, magnetic, alive. Jemaa el Fnaa hums with music and spice, the Majorelle Garden glows in cobalt blue. End your day in a hammam, steam, scrub, and renewal beneath flickering light.",
+      icon: <Sun className="w-5 h-5" />
     },
     {
       image: fez,
       title: "Fez",
       subtitle: "The Timeless City",
-      description: "Morocco's spiritual and cultural heart, a living museum with labyrinthine medinas."
+      category: "Imperial Cities",
+      description: "A living museum of craft and spirit. Wander Fes el Bali, where artisans shape zellij and leather, and scholars still study at Al Qarawiyyin, the world's oldest university.",
+      icon: <Sun className="w-5 h-5" />
     },
     {
       image: rabat,
       title: "Rabat",
-      subtitle: "Serene Capital by the Sea",
-      description: "Where waves kiss shores and history whispers tales of elegance and heritage."
+      subtitle: "The Serene Capital",
+      category: "Imperial Cities",
+      description: "By the Atlantic, Rabat whispers elegance. Blue-white Kasbah streets, Andalusian gardens, and hammams glowing with rosewater and calm.",
+      icon: <Sun className="w-5 h-5" />
     },
+    {
+      image: meknes,
+      title: "Meknes",
+      subtitle: "The Imperial Gem",
+      category: "Imperial Cities",
+      description: "Quietly majestic, palaces, mosques, and the mighty Bab Mansour gate tell tales of empire and artistry.",
+      icon: <Sun className="w-5 h-5" />
+    },
+    // Coastal Towns
+    {
+      image: essaouira,
+      title: "Essaouira",
+      subtitle: "The Coastal Dreamscape",
+      category: "Coastal Towns",
+      description: "Time slows by the ocean breeze. Blue boats, sea-sprayed ramparts, and the joyful pulse of the Gnaoua Festival.",
+      icon: <Waves className="w-5 h-5" />
+    },
+    {
+      image: agadir,
+      title: "Agadir",
+      subtitle: "The Sunshine Haven",
+      category: "Coastal Towns",
+      description: "Golden beaches, endless sun, ocean-inspired hammams. Modern, easy, and full of light.",
+      icon: <Waves className="w-5 h-5" />
+    },
+    // Atlas Mountains
+    {
+      image: imlil,
+      title: "Imlil",
+      subtitle: "Gateway to Serenity",
+      category: "Atlas Mountains",
+      description: "At the foot of Mount Toubkal, Imlil is pure calm, Berber villages, fresh air, and soul-deep peace.",
+      icon: <Mountain className="w-5 h-5" />
+    },
+    {
+      image: ourika,
+      title: "Ourika",
+      subtitle: "A Lush Retreat",
+      category: "Atlas Mountains",
+      description: "Green valleys, gentle waterfalls, and the hum of Amazigh life. A sanctuary just beyond Marrakech.",
+      icon: <Mountain className="w-5 h-5" />
+    },
+    {
+      image: toubkal,
+      title: "Toubkal",
+      subtitle: "The Summit of Morocco",
+      category: "Atlas Mountains",
+      description: "Snow-capped peaks and endless views, a journey for those seeking clarity, silence, and strength.",
+      icon: <Mountain className="w-5 h-5" />
+    },
+    // Hidden Gems
     {
       image: chefchaouen,
       title: "Chefchaouen",
-      subtitle: "A Dream in Blue",
-      description: "Not a place you visit, but a place you feel. A town of sapphire streets and azure doorways."
+      subtitle: "The Blue Dream",
+      category: "Hidden Gems",
+      description: "Blue streets, soft light, mountain air, a watercolor world that feels like a sigh.",
+      icon: <Palette className="w-5 h-5" />
     },
+    {
+      image: ouarzazate,
+      title: "Ouarzazate",
+      subtitle: "The Cinematic Oasis",
+      category: "Hidden Gems",
+      description: "Aït Benhaddou glows gold against the desert, walk through history and film, where stories and sand become one.",
+      icon: <Palette className="w-5 h-5" />
+    },
+    // Sahara Desert
     {
       image: sahara,
-      title: "Sahara Desert",
-      subtitle: "Sea of Dreams",
-      description: "Where golden dunes rise like waves frozen in time, their curves kissed by changing light."
+      title: "Merzouga",
+      subtitle: "The Sea of Sand",
+      category: "Sahara Desert",
+      description: "Dunes that shift with light, stars that seem close enough to touch. Luxury tents, firelight, and the heartbeat of the Sahara.",
+      icon: <Sun className="w-5 h-5" />
     },
     {
-      image: atlas,
-      title: "Atlas Mountains",
-      subtitle: "Majestic and Eternal",
-      description: "Morocco's ancient backbone, where clouds touch the heart and Berber villages cling to rocks."
+      image: zagora,
+      title: "Zagora",
+      subtitle: "The Desert's Quiet Soul",
+      category: "Sahara Desert",
+      description: "Gentle dunes, palm groves, and stillness. Here, time slows and you remember how to listen.",
+      icon: <Sun className="w-5 h-5" />
     }
   ];
 
+  const categories = [
+    { name: "Imperial Cities", icon: <Sun className="w-4 h-4" />, count: 4 },
+    { name: "Coastal Towns", icon: <Waves className="w-4 h-4" />, count: 2 },
+    { name: "Atlas Mountains", icon: <Mountain className="w-4 h-4" />, count: 3 },
+    { name: "Hidden Gems", icon: <Palette className="w-4 h-4" />, count: 2 },
+    { name: "Sahara Desert", icon: <Sun className="w-4 h-4" />, count: 2 }
+  ];
+
   const nextSlide = () => {
-    setCurrentIndex((prevIndex) => 
-      prevIndex === destinations.length - 1 ? 0 : prevIndex + 1
-    );
+    setIsTransitioning(true);
+    setTimeout(() => {
+      setCurrentIndex((prevIndex) => 
+        prevIndex === destinations.length - 1 ? 0 : prevIndex + 1
+      );
+      setIsTransitioning(false);
+    }, 300);
   };
 
   const prevSlide = () => {
-    setCurrentIndex((prevIndex) => 
-      prevIndex === 0 ? destinations.length - 1 : prevIndex - 1
-    );
+    setIsTransitioning(true);
+    setTimeout(() => {
+      setCurrentIndex((prevIndex) => 
+        prevIndex === 0 ? destinations.length - 1 : prevIndex - 1
+      );
+      setIsTransitioning(false);
+    }, 300);
+  };
+
+  const goToSlide = (index: number) => {
+    setIsTransitioning(true);
+    setTimeout(() => {
+      setCurrentIndex(index);
+      setIsTransitioning(false);
+    }, 300);
   };
 
   useEffect(() => {
-    const interval = setInterval(nextSlide, 5000);
+    const interval = setInterval(nextSlide, 6000);
     return () => clearInterval(interval);
   }, []);
 
   return (
-    <section id="gallery" className="py-20 bg-background relative overflow-hidden">
+    <section id="destinations" className="py-20 bg-background relative overflow-hidden">
       {/* Decorative elements */}
-      <div className="absolute top-20 left-10 w-24 h-24 bg-primary/5 rounded-full"></div>
-      <div className="absolute bottom-20 right-10 w-32 h-32 bg-primary/5 rounded-full"></div>
+      <div className="absolute top-20 left-10 w-24 h-24 bg-primary/5 rounded-full animate-pulse"></div>
+      <div className="absolute bottom-20 right-10 w-32 h-32 bg-primary/5 rounded-full animate-pulse"></div>
       
       <div className="container mx-auto px-6 relative z-10">
         <div className="text-center mb-16">
@@ -79,8 +185,30 @@ const GalleryCarousel = () => {
           </h2>
           <div className="w-24 h-1 bg-gradient-to-r from-primary to-primary-dark mx-auto mb-6"></div>
           <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-            Discover the diverse beauty of Morocco through its imperial cities, coastal towns, and majestic landscapes
+            Discover the soul of Morocco through its imperial cities, coastal dreamscapes, majestic mountains, and golden deserts
           </p>
+        </div>
+
+        {/* Category Filter */}
+        <div className="flex flex-wrap justify-center gap-4 mb-12">
+          {categories.map((category, index) => (
+            <button
+              key={category.name}
+              className={`flex items-center gap-2 px-4 py-2 rounded-full border transition-all duration-300 ${
+                destinations[currentIndex].category === category.name
+                  ? 'bg-primary text-white border-primary shadow-lg'
+                  : 'bg-white/80 text-foreground border-gray-200 hover:bg-primary/10 hover:border-primary/30'
+              }`}
+              onClick={() => {
+                const categoryIndex = destinations.findIndex(dest => dest.category === category.name);
+                if (categoryIndex !== -1) goToSlide(categoryIndex);
+              }}
+            >
+              {category.icon}
+              <span className="font-medium">{category.name}</span>
+              <span className="text-xs opacity-70">({category.count})</span>
+            </button>
+          ))}
         </div>
 
         <div className="relative max-w-6xl mx-auto">
@@ -89,20 +217,30 @@ const GalleryCarousel = () => {
             <img
               src={destinations[currentIndex].image}
               alt={destinations[currentIndex].title}
-              className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+              className={`w-full h-full object-cover transition-all duration-500 ${
+                isTransitioning ? 'opacity-70 scale-105' : 'opacity-100 scale-100'
+              } group-hover:scale-105`}
             />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent"></div>
+            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
             
             {/* Destination Info */}
-            <div className="absolute bottom-8 left-8 right-8">
-              <div className="flex items-center gap-2 text-white/80 mb-2">
-                <MapPin className="w-5 h-5" />
-                <span className="text-sm">{destinations[currentIndex].subtitle}</span>
+            <div className={`absolute bottom-8 left-8 right-8 transition-all duration-500 ${
+              isTransitioning ? 'translate-y-4 opacity-0' : 'translate-y-0 opacity-100'
+            }`}>
+              <div className="flex items-center gap-3 text-white/80 mb-3">
+                <div className="flex items-center gap-2 bg-white/20 backdrop-blur-sm px-3 py-1 rounded-full">
+                  {destinations[currentIndex].icon}
+                  <span className="text-sm font-medium">{destinations[currentIndex].category}</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <MapPin className="w-4 h-4" />
+                  <span className="text-sm">{destinations[currentIndex].subtitle}</span>
+                </div>
               </div>
-              <h3 className="font-serif text-4xl md:text-5xl font-bold text-white mb-3">
+              <h3 className="font-serif text-4xl md:text-5xl font-bold text-white mb-4">
                 {destinations[currentIndex].title}
               </h3>
-              <p className="text-white/90 text-lg max-w-2xl">
+              <p className="text-white/90 text-lg max-w-2xl leading-relaxed">
                 {destinations[currentIndex].description}
               </p>
             </div>
@@ -116,26 +254,26 @@ const GalleryCarousel = () => {
           {/* Navigation Arrows */}
           <button
             onClick={prevSlide}
-            className="absolute left-4 top-1/2 transform -translate-y-1/2 bg-white/20 backdrop-blur-sm hover:bg-white/30 p-3 rounded-full transition-all duration-300 group hidden md:block"
+            className="absolute left-4 top-1/2 transform -translate-y-1/2 bg-white/20 backdrop-blur-sm hover:bg-white/30 p-4 rounded-full transition-all duration-300 group hidden md:block hover:scale-110"
           >
             <ChevronLeft className="w-6 h-6 text-white group-hover:scale-110" />
           </button>
           <button
             onClick={nextSlide}
-            className="absolute right-4 top-1/2 transform -translate-y-1/2 bg-white/20 backdrop-blur-sm hover:bg-white/30 p-3 rounded-full transition-all duration-300 group hidden md:block"
+            className="absolute right-4 top-1/2 transform -translate-y-1/2 bg-white/20 backdrop-blur-sm hover:bg-white/30 p-4 rounded-full transition-all duration-300 group hidden md:block hover:scale-110"
           >
             <ChevronRight className="w-6 h-6 text-white group-hover:scale-110" />
           </button>
 
           {/* Dot Indicators */}
-          <div className="flex justify-center mt-8 space-x-3">
+          <div className="flex justify-center mt-8 space-x-2">
             {destinations.map((_, index) => (
               <button
                 key={index}
-                onClick={() => setCurrentIndex(index)}
-                className={`w-3 h-3 rounded-full transition-all duration-300 ${
+                onClick={() => goToSlide(index)}
+                className={`w-2 h-2 rounded-full transition-all duration-300 ${
                   index === currentIndex
-                    ? 'bg-primary scale-125'
+                    ? 'bg-primary scale-125 w-8'
                     : 'bg-gray-300 hover:bg-primary/50'
                 }`}
               />
@@ -143,50 +281,27 @@ const GalleryCarousel = () => {
           </div>
         </div>
 
-        {/* Destination Categories */}
-        {/* <div className="mt-16 grid grid-cols-1 md:grid-cols-3 gap-8">
-          <div className="text-center p-6 bg-white/80 backdrop-blur-sm rounded-xl border border-gray-100">
-            <div className="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4">
-              <Star className="w-6 h-6 text-primary" />
-            </div>
-            <h3 className="font-semibold text-foreground mb-3">Imperial Cities</h3>
-            <p className="text-muted-foreground text-sm">
-              Discover the royal heritage of Marrakech, Fes, Rabat, and Meknes
-            </p>
+        {/* Current Category Display */}
+        <div className="text-center mt-12">
+          <div className="inline-flex items-center gap-3 bg-primary/10 px-6 py-3 rounded-full">
+            {destinations[currentIndex].icon}
+            <span className="font-semibold text-foreground">
+              Exploring: {destinations[currentIndex].category}
+            </span>
           </div>
-          
-          <div className="text-center p-6 bg-white/80 backdrop-blur-sm rounded-xl border border-gray-100">
-            <div className="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4">
-              <MapPin className="w-6 h-6 text-primary" />
-            </div>
-            <h3 className="font-semibold text-foreground mb-3">Coastal Towns</h3>
-            <p className="text-muted-foreground text-sm">
-              Experience the Atlantic charm of Essaouira and Agadir
-            </p>
-          </div>
-          
-          <div className="text-center p-6 bg-white/80 backdrop-blur-sm rounded-xl border border-gray-100">
-            <div className="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4">
-              <Heart className="w-6 h-6 text-primary" />
-            </div>
-            <h3 className="font-semibold text-foreground mb-3">Natural Wonders</h3>
-            <p className="text-muted-foreground text-sm">
-              Explore the Atlas Mountains, Sahara Desert, and hidden valleys
-            </p>
-          </div>
-        </div> */}
+        </div>
 
         {/* Mobile Navigation */}
         <div className="flex justify-center mt-8 space-x-4 md:hidden">
           <button
             onClick={prevSlide}
-            className="bg-primary text-white p-3 rounded-full transition-all duration-300 hover:bg-primary-dark"
+            className="bg-primary text-white p-4 rounded-full transition-all duration-300 hover:bg-primary-dark hover:scale-110 shadow-lg"
           >
             <ChevronLeft className="w-5 h-5" />
           </button>
           <button
             onClick={nextSlide}
-            className="bg-primary text-white p-3 rounded-full transition-all duration-300 hover:bg-primary-dark"
+            className="bg-primary text-white p-4 rounded-full transition-all duration-300 hover:bg-primary-dark hover:scale-110 shadow-lg"
           >
             <ChevronRight className="w-5 h-5" />
           </button>
